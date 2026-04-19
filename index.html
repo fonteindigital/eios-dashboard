@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EIOS Dashboard</title>
+<style>
+:root {
+  --bg:#0f0f0e;--bg2:#1c1c1a;--bg3:#272724;--bg4:#313130;
+  --text:#f1efe8;--text2:#b4b2a9;--text3:#6b6a65;
+  --border:rgba(241,239,232,0.08);--border2:rgba(241,239,232,0.16);
+  --r:6px;--rl:10px;
+  --font:'DM Mono',ui-monospace,monospace;
+  --stability:#378ADD;--expansion:#1D9E75;--limp:#BA7517;--recovery:#9B7FCC;--undecl:#6b6a65;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1.25rem 1.5rem;max-width:920px;margin:0 auto;font-size:13px;}
+
+/* Status bar */
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;padding-bottom:.75rem;border-bottom:.5px solid var(--border);}
+.topbar-left{font-size:11px;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;}
+.topbar-right{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text3);}
+.sdot{width:6px;height:6px;border-radius:50%;background:#1D9E75;flex-shrink:0;}
+.sdot.loading{background:#BA7517;animation:pulse 1s infinite;}
+.sdot.error{background:#E24B4A;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+
+/* Section label */
+.slabel{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin:0 0 8px;}
+
+/* Summary row */
+.sum-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-bottom:1rem;}
+.scard{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--r);padding:10px 12px;}
+.scard.hi{border-color:var(--border2);}
+.scard-tag{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;}
+.scard-val{font-size:20px;font-weight:400;line-height:1;margin-bottom:3px;}
+.scard-sub{font-size:10px;color:var(--text3);}
+.scard.streak .scard-val{color:#1D9E75;}
+.scard.streak.warn .scard-val{color:#BA7517;}
+
+/* Rolling pills */
+.roll-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:1rem;}
+.rpill{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--r);padding:10px 12px;display:flex;align-items:center;gap:10px;}
+.rpill-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
+.rpill-info{flex:1;}
+.rpill-label{font-size:11px;color:var(--text2);margin-bottom:2px;}
+.rpill-sub{font-size:10px;color:var(--text3);}
+.rpill-val{font-size:18px;font-weight:400;}
+.rpill-diff{font-size:10px;margin-top:2px;}
+
+/* Charts */
+.chart-section{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--rl);padding:14px 14px 10px;margin-bottom:.75rem;}
+.chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.chart-title{font-size:11px;color:var(--text2);}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:10px;color:var(--text3);}
+.legend span{display:flex;align-items:center;gap:4px;}
+.ldot{width:7px;height:7px;border-radius:2px;flex-shrink:0;}
+.ldash{width:12px;height:1.5px;flex-shrink:0;border-radius:1px;}
+.chart-wrap{position:relative;width:100%;}
+.chart-wrap.main{height:200px;}
+.chart-wrap.index{height:130px;}
+
+/* DT legend */
+.dt-legend{display:flex;gap:10px;margin-top:8px;font-size:10px;color:var(--text3);}
+.dt-legend span{display:flex;align-items:center;gap:3px;}
+.dt-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+
+/* Quarter / breakdown */
+.quarter{border:.5px solid var(--border2);border-radius:var(--rl);margin-bottom:6px;overflow:hidden;}
+.q-header{display:flex;align-items:center;gap:8px;padding:9px 13px;background:var(--bg2);cursor:pointer;user-select:none;}
+.q-header:hover{background:var(--bg3);}
+.q-tag{font-size:12px;font-weight:400;min-width:52px;color:var(--text);}
+.q-nums{display:flex;gap:12px;flex-wrap:wrap;flex:1;}
+.q-num{font-size:11px;color:var(--text3);}
+.q-num strong{color:var(--text2);font-weight:400;}
+.q-chips{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto;}
+.chip{font-size:9px;color:var(--text3);background:var(--bg3);border:.5px solid var(--border);border-radius:3px;padding:2px 5px;white-space:nowrap;}
+.chev{font-size:8px;color:var(--text3);transition:transform .15s;flex-shrink:0;}
+.chev.open{transform:rotate(90deg);}
+.q-body{display:none;padding:0 5px 5px;}
+.q-body.open{display:block;}
+.month{margin-top:4px;}
+.m-header{display:flex;align-items:center;gap:7px;padding:6px 10px;background:var(--bg);border:.5px solid var(--border);border-radius:var(--r);cursor:pointer;user-select:none;}
+.m-header:hover{background:var(--bg2);}
+.m-header.open{border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom-color:transparent;}
+.m-tag{font-size:11px;min-width:64px;color:var(--text2);}
+.m-nums{display:flex;gap:8px;flex-wrap:wrap;flex:1;font-size:11px;color:var(--text3);}
+.m-nums strong{color:var(--text2);font-weight:400;}
+.m-chips{display:flex;gap:3px;flex-wrap:wrap;}
+.m-chip{font-size:9px;color:var(--text3);background:var(--bg2);border-radius:3px;padding:1px 4px;}
+.m-body{display:none;background:var(--bg);border:.5px solid var(--border);border-top:none;border-bottom-left-radius:var(--r);border-bottom-right-radius:var(--r);}
+.m-body.open{display:block;}
+.w-row{display:flex;align-items:center;gap:7px;padding:5px 10px;border-bottom:.5px solid var(--border);}
+.w-row:last-child{border-bottom:none;}
+.w-row.today{background:rgba(55,138,221,0.07);}
+.w-label{font-size:10px;color:var(--text3);min-width:88px;}
+.w-val{font-size:11px;min-width:26px;}
+.w-bar-bg{flex:1;height:3px;background:var(--bg3);border-radius:2px;max-width:90px;}
+.w-bar{height:3px;border-radius:2px;background:#378ADD;}
+.w-bar.hi{background:#1D9E75;}
+.w-days{font-size:10px;color:var(--text3);min-width:16px;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-left" id="range-label">Loading…</span>
+  <div class="topbar-right"><span class="sdot loading" id="sdot"></span><span id="stext">Connecting…</span></div>
+</div>
+
+<p class="slabel">Summary</p>
+<div class="sum-grid">
+  <div class="scard"><p class="scard-tag">YTD · ED avg</p><p class="scard-val" id="ytd-e">—</p><p class="scard-sub" id="ytd-e-sub">&nbsp;</p></div>
+  <div class="scard"><p class="scard-tag">YTD · TD avg</p><p class="scard-val" id="ytd-t">—</p><p class="scard-sub" id="ytd-t-sub">&nbsp;</p></div>
+  <div class="scard hi"><p class="scard-tag">MTD · ED avg</p><p class="scard-val" id="mtd-e">—</p><p class="scard-sub" id="mtd-e-sub">&nbsp;</p></div>
+  <div class="scard hi"><p class="scard-tag">MTD · TD avg</p><p class="scard-val" id="mtd-t">—</p><p class="scard-sub" id="mtd-t-sub">&nbsp;</p></div>
+  <div class="scard streak" id="streak-card"><p class="scard-tag">Streak ≥8.5 ED</p><p class="scard-val" id="streak-val">—</p><p class="scard-sub" id="streak-sub">&nbsp;</p></div>
+</div>
+
+<p class="slabel">10-day rolling</p>
+<div class="roll-row">
+  <div class="rpill">
+    <span class="rpill-dot" style="background:#7BBFEE;"></span>
+    <div class="rpill-info"><div class="rpill-label">Effort doros · 10-day avg</div><div class="rpill-sub">floor: 8.5</div></div>
+    <div style="text-align:right;"><div class="rpill-val" id="roll-e">—</div><div class="rpill-diff" id="roll-e-diff">&nbsp;</div></div>
+  </div>
+  <div class="rpill">
+    <span class="rpill-dot" style="background:#5EC4A0;"></span>
+    <div class="rpill-info"><div class="rpill-label">Total doros · 10-day avg</div><div class="rpill-sub">floor: 10.0</div></div>
+    <div style="text-align:right;"><div class="rpill-val" id="roll-t">—</div><div class="rpill-diff" id="roll-t-diff">&nbsp;</div></div>
+  </div>
+</div>
+
+<div class="chart-section">
+  <div class="chart-header">
+    <span class="chart-title">Movement · last 3 months</span>
+    <div class="legend">
+      <span><span class="ldot" style="background:#378ADD;opacity:.5;border-radius:50%;"></span>ED daily</span>
+      <span><span class="ldot" style="background:#1D9E75;opacity:.5;border-radius:50%;"></span>TD daily</span>
+      <span><span class="ldot" style="background:#7BBFEE;"></span>ED 10-day</span>
+      <span><span class="ldot" style="background:#5EC4A0;"></span>TD 10-day</span>
+      <span><span class="ldash" style="background:#BA7517;"></span>8.5</span>
+      <span><span class="ldash" style="background:#D85A30;"></span>10.0</span>
+    </div>
+  </div>
+  <div class="chart-wrap main"><canvas id="mainChart" role="img" aria-label="Daily doro movement over last 3 months with 10-day rolling averages">Daily movement chart.</canvas></div>
+  <div class="dt-legend">
+    <span><span class="dt-dot" style="background:var(--stability);"></span>Stability</span>
+    <span><span class="dt-dot" style="background:var(--expansion);"></span>Expansion</span>
+    <span><span class="dt-dot" style="background:var(--limp);"></span>Limp Mode</span>
+    <span><span class="dt-dot" style="background:var(--recovery);"></span>Recovery</span>
+  </div>
+</div>
+
+<div class="chart-section">
+  <div class="chart-header">
+    <span class="chart-title">Index scores · last 3 months</span>
+    <div class="legend">
+      <span><span class="ldot" style="background:#9B7FCC;"></span>RWR</span>
+      <span><span class="ldot" style="background:#378ADD;"></span>MM</span>
+      <span><span class="ldot" style="background:#1D9E75;"></span>LF</span>
+      <span><span class="ldot" style="background:#BA7517;"></span>PS</span>
+      <span><span class="ldot" style="background:#D85A30;"></span>FITT</span>
+    </div>
+  </div>
+  <div class="chart-wrap index"><canvas id="indexChart" role="img" aria-label="Index scores over last 3 months">Index scores chart.</canvas></div>
+</div>
+
+<p class="slabel" style="margin-top:.25rem;">Year breakdown</p>
+<div id="quarters"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vSEwNS2RuMUEPU50zZAgJdDwNfCWS3TA_r1lmOYB-YUGv_bo6_jknLdKpDhZUQwiFc8eiJ9Kbie2Rxu/pub?gid=78857917&single=true&output=csv';
+
+const DT_COLORS={'stability day':'#378ADD','expansion day':'#1D9E75','expansion':'#1D9E75','limp mode':'#BA7517','recovery day':'#9B7FCC','recovery':'#9B7FCC','off day':null,'undeclared':'#6b6a65','':"#6b6a65"};
+
+function parseRow(r){const a=[];let c='',q=false;for(let i=0;i<r.length;i++){const ch=r[i];if(ch==='"'){q=!q;}else if(ch===','&&!q){a.push(c.trim());c='';}else{c+=ch;}}a.push(c.trim());return a;}
+function qOf(m){const n=parseInt(m);return n<=3?'Q1':n<=6?'Q2':n<=9?'Q3':'Q4';}
+function monday(ds){const d=new Date(ds+'T00:00:00'),dy=d.getDay(),df=dy===0?-6:1-dy;d.setDate(d.getDate()+df);return d.toISOString().slice(0,10);}
+function fmtWeek(ms){const d=new Date(ms+'T00:00:00'),e=new Date(d);e.setDate(d.getDate()+6);const dm=d.toLocaleString('default',{month:'short'}),em=e.toLocaleString('default',{month:'short'});return dm===em?dm+' '+d.getDate()+'–'+e.getDate():dm+' '+d.getDate()+' – '+em+' '+e.getDate();}
+function mName(ym){const[y,m]=ym.split('-');return new Date(+y,+m-1,1).toLocaleString('default',{month:'long'});}
+function avg(a){const v=a.filter(x=>x!==null&&!isNaN(x));return v.length?v.reduce((s,x)=>s+x,0)/v.length:null;}
+function tot(a){return a.filter(x=>x!==null&&!isNaN(x)).reduce((s,x)=>s+x,0);}
+function curYM(){const n=new Date();return n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0');}
+function todayStr(){const n=new Date();return n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0');}
+function newP(){return{doros:[],totals:[],rwr:[],mm:[],lf:[],ps:[],fitt:[],months:{}};}
+function newM(){return{doros:[],totals:[],rwr:[],mm:[],lf:[],ps:[],fitt:[],weeks:{}};}
+const SK=[{k:'rwr',l:'RWR'},{k:'mm',l:'MM'},{k:'lf',l:'LF'},{k:'ps',l:'PS'},{k:'fitt',l:'FITT'}];
+function chips(d,cls){return SK.map(s=>{const a=avg(d[s.k]);return a!==null?'<span class="'+cls+'">'+s.l+' '+a.toFixed(1)+'</span>':''}).join('');}
+
+let ci1=null,ci2=null;
+
+async function init(){
+  try{
+    const resp=await fetch(CSV_URL);
+    if(!resp.ok) throw new Error('HTTP '+resp.status);
+    const text=await resp.text();
+    const lines=text.split('\n').filter(l=>l.trim());
+
+    let hi=-1,cols={};
+    for(let i=0;i<lines.length;i++){
+      const row=parseRow(lines[i]),lower=row.map(c=>c.toLowerCase().trim());
+      if(lower[0]==='date'){
+        hi=i;
+        lower.forEach((h,j)=>{
+          if(h==='date') cols.date=j;
+          if(h==='day type') cols.dt=j;
+          if(h==='doros') cols.doros=j;
+          if(h==='total doros') cols.total=j;
+          if(h==='rwr index/5') cols.rwr=j;
+          if(h==='mm index/5') cols.mm=j;
+          if(h==='lf index/5') cols.lf=j;
+          if(h==='ps score/5') cols.ps=j;
+          if(h==='fitt score/5') cols.fitt=j;
+        });
+        break;
+      }
+    }
+    if(hi===-1) throw new Error('header not found');
+
+    const gs=v=>{if(v===undefined)return null;const s=(v||'').trim();return s!==''&&!isNaN(+s)?+s:null;};
+    const flat=[],years={},allD=[],allT=[];
+
+    for(let i=hi+1;i<lines.length;i++){
+      const row=parseRow(lines[i]);
+      const ds=(row[cols.date]||'').trim();
+      if(!/^\d{4}-\d{2}-\d{2}/.test(ds)) continue;
+      const dtRaw=(cols.dt!==undefined?row[cols.dt]||'':'').trim().toLowerCase();
+      if(dtRaw==='off day') continue;
+      const dr=(row[cols.doros]||'').trim();
+      if(dr==='') continue;
+      const doros=parseFloat(dr);
+      if(isNaN(doros)) continue;
+      const tr=(cols.total!==undefined?(row[cols.total]||''):'').trim();
+      const total=tr!==''&&!isNaN(+tr)?+tr:doros;
+      const yr=ds.slice(0,4),ym=ds.slice(0,7),mo=ds.slice(5,7),q=qOf(mo),mon=monday(ds);
+      const rwr=gs(row[cols.rwr]),mm=gs(row[cols.mm]),lf=gs(row[cols.lf]),ps=gs(row[cols.ps]),fitt=gs(row[cols.fitt]);
+      const dtColor=DT_COLORS[dtRaw]||'#6b6a65';
+
+      flat.push({ds,ym,doros,total,dtColor,rwr,mm,lf,ps,fitt});
+
+      if(!years[yr]) years[yr]={};
+      if(!years[yr][q]) years[yr][q]=newP();
+      const qd=years[yr][q];
+      qd.doros.push(doros);qd.totals.push(total);
+      if(rwr!==null)qd.rwr.push(rwr);if(mm!==null)qd.mm.push(mm);
+      if(lf!==null)qd.lf.push(lf);if(ps!==null)qd.ps.push(ps);if(fitt!==null)qd.fitt.push(fitt);
+
+      if(!qd.months[ym]) qd.months[ym]=newM();
+      const md=qd.months[ym];
+      md.doros.push(doros);md.totals.push(total);
+      if(rwr!==null)md.rwr.push(rwr);if(mm!==null)md.mm.push(mm);
+      if(lf!==null)md.lf.push(lf);if(ps!==null)md.ps.push(ps);if(fitt!==null)md.fitt.push(fitt);
+
+      if(!md.weeks[mon]) md.weeks[mon]={doros:[],totals:[],dates:[]};
+      md.weeks[mon].doros.push(doros);md.weeks[mon].totals.push(total);md.weeks[mon].dates.push(ds);
+
+      allD.push(doros);allT.push(total);
+    }
+
+    if(flat.length===0) throw new Error('no data');
+
+    const cym=curYM(),today=todayStr();
+    const mtdRows=flat.filter(r=>r.ym===cym);
+    const roll10E=avg(flat.slice(-10).map(r=>r.doros));
+    const roll10T=avg(flat.slice(-10).map(r=>r.total));
+
+    // Streak
+    let streak=0;
+    for(let i=flat.length-1;i>=0;i--){if(flat[i].doros>=8.5)streak++;else break;}
+
+    // YTD / MTD
+    document.getElementById('ytd-e').textContent=avg(allD)?.toFixed(2)||'—';
+    document.getElementById('ytd-e-sub').textContent=tot(allD).toFixed(0)+' doros · '+allD.length+'d';
+    document.getElementById('ytd-t').textContent=avg(allT)?.toFixed(2)||'—';
+    document.getElementById('ytd-t-sub').textContent=tot(allT).toFixed(0)+' total · '+allD.length+'d';
+    document.getElementById('mtd-e').textContent=avg(mtdRows.map(r=>r.doros))?.toFixed(2)||'—';
+    document.getElementById('mtd-e-sub').textContent=mtdRows.length+' days this month';
+    document.getElementById('mtd-t').textContent=avg(mtdRows.map(r=>r.total))?.toFixed(2)||'—';
+    document.getElementById('mtd-t-sub').textContent=tot(mtdRows.map(r=>r.total)).toFixed(0)+' total doros';
+
+    // Streak card
+    const sc=document.getElementById('streak-card');
+    document.getElementById('streak-val').textContent=streak;
+    document.getElementById('streak-sub').textContent=streak>=8.5?'consecutive days':'days in a row';
+    if(streak<3) sc.classList.add('warn');
+
+    // Rolling pills
+    if(roll10E!==null){
+      document.getElementById('roll-e').textContent=roll10E.toFixed(2);
+      const de=roll10E-8.5,el=document.getElementById('roll-e-diff');
+      el.textContent=(de>=0?'+':'')+de.toFixed(2)+' vs floor';
+      el.style.color=de>=0?'#1D9E75':'#E24B4A';
+    }
+    if(roll10T!==null){
+      document.getElementById('roll-t').textContent=roll10T.toFixed(2);
+      const dt=roll10T-10.0,el=document.getElementById('roll-t-diff');
+      el.textContent=(dt>=0?'+':'')+dt.toFixed(2)+' vs floor';
+      el.style.color=dt>=0?'#1D9E75':'#E24B4A';
+    }
+
+    // 3-month window
+    const cutoff=new Date();cutoff.setDate(cutoff.getDate()-92);
+    const win=flat.filter(r=>new Date(r.ds+'T00:00:00')>=cutoff);
+
+    // Per-day rolling for window
+    const roll10eW=[],roll10tW=[];
+    win.forEach((_,wi)=>{
+      const globalIdx=flat.findIndex(f=>f===win[wi]);
+      const slice=flat.slice(Math.max(0,globalIdx-9),globalIdx+1);
+      roll10eW.push(+(avg(slice.map(r=>r.doros))||0).toFixed(2));
+      roll10tW.push(+(avg(slice.map(r=>r.total))||0).toFixed(2));
+    });
+
+    const labels=win.map(r=>{
+      const d=new Date(r.ds+'T00:00:00');
+      return d.toLocaleString('default',{month:'short',day:'numeric'});
+    });
+
+    // Main chart
+    if(ci1) ci1.destroy();
+    ci1=new Chart(document.getElementById('mainChart'),{
+      type:'scatter',
+      data:{
+        labels,
+        datasets:[
+          {
+            label:'ED daily',type:'scatter',
+            data:win.map((r,i)=>({x:i,y:r.doros})),
+            backgroundColor:win.map(r=>r.dtColor+'99'),
+            borderColor:win.map(r=>r.dtColor),
+            borderWidth:1,pointRadius:4,pointHoverRadius:6,
+            order:3
+          },
+          {
+            label:'TD daily',type:'scatter',
+            data:win.map((r,i)=>({x:i,y:r.total})),
+            backgroundColor:win.map(()=>'rgba(29,158,117,0.3)'),
+            borderColor:win.map(()=>'#1D9E75'),
+            borderWidth:1,pointRadius:3,pointHoverRadius:5,pointStyle:'triangle',
+            order:4
+          },
+          {
+            label:'ED 10-day',type:'line',
+            data:roll10eW,
+            borderColor:'#7BBFEE',backgroundColor:'transparent',
+            borderWidth:2,pointRadius:0,tension:0.3,
+            order:1
+          },
+          {
+            label:'TD 10-day',type:'line',
+            data:roll10tW,
+            borderColor:'#5EC4A0',backgroundColor:'transparent',
+            borderWidth:2,pointRadius:0,tension:0.3,borderDash:[3,2],
+            order:2
+          },
+          {
+            label:'8.5 target',type:'line',
+            data:win.map(()=>8.5),
+            borderColor:'#BA7517',backgroundColor:'transparent',
+            borderWidth:1,pointRadius:0,borderDash:[5,4],
+            order:5
+          },
+          {
+            label:'10.0 floor',type:'line',
+            data:win.map(()=>10.0),
+            borderColor:'#D85A30',backgroundColor:'transparent',
+            borderWidth:1,pointRadius:0,borderDash:[5,4],
+            order:5
+          }
+        ]
+      },
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{
+          legend:{display:false},
+          tooltip:{callbacks:{
+            title:ctxArr=>{const i=ctxArr[0].dataIndex;return win[i]?.ds||'';},
+            label:ctx=>{
+              const ds=ctx.datasetIndex,di=ctx.dataIndex;
+              if(ds===0) return 'ED: '+win[di].doros+(win[di].dtColor?' · '+Object.keys(DT_COLORS).find(k=>DT_COLORS[k]===win[di].dtColor)||'':'');
+              if(ds===1) return 'TD: '+win[di].total;
+              return ctx.dataset.label+': '+ctx.parsed.y.toFixed(2);
+            }
+          }}
+        },
+        scales:{
+          x:{type:'linear',min:0,max:win.length-1,ticks:{stepSize:Math.ceil(win.length/10),color:'#6b6a65',font:{size:9},callback:(v)=>{const r=win[Math.round(v)];return r?new Date(r.ds+'T00:00:00').toLocaleString('default',{month:'short',day:'numeric'}):''}},grid:{color:'rgba(255,255,255,0.04)'}},
+          y:{min:0,max:14,ticks:{stepSize:2,color:'#6b6a65',font:{size:9}},grid:{color:'rgba(255,255,255,0.04)'}}
+        }
+      }
+    });
+
+    // Index chart
+    const rwrD=win.map(r=>r.rwr),mmD=win.map(r=>r.mm),lfD=win.map(r=>r.lf),psD=win.map(r=>r.ps),fittD=win.map(r=>r.fitt);
+    if(ci2) ci2.destroy();
+    ci2=new Chart(document.getElementById('indexChart'),{
+      type:'line',
+      data:{
+        datasets:[
+          {label:'RWR',data:win.map((r,i)=>({x:i,y:r.rwr})),borderColor:'#9B7FCC',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,tension:0.3,spanGaps:true},
+          {label:'MM', data:win.map((r,i)=>({x:i,y:r.mm})), borderColor:'#378ADD',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,tension:0.3,spanGaps:true},
+          {label:'LF', data:win.map((r,i)=>({x:i,y:r.lf})), borderColor:'#1D9E75',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,tension:0.3,spanGaps:true},
+          {label:'PS', data:win.map((r,i)=>({x:i,y:r.ps})), borderColor:'#BA7517',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,tension:0.3,spanGaps:true},
+          {label:'FITT',data:win.map((r,i)=>({x:i,y:r.fitt})),borderColor:'#D85A30',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,tension:0.3,spanGaps:true}
+        ]
+      },
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{title:ctxArr=>{return win[ctxArr[0].dataIndex]?.ds||'';},label:ctx=>ctx.dataset.label+': '+(ctx.parsed.y||0).toFixed(1)}}},
+        scales:{
+          x:{type:'linear',min:0,max:win.length-1,ticks:{color:'#6b6a65',font:{size:9},stepSize:Math.ceil(win.length/10),callback:(v)=>{const r=win[Math.round(v)];return r?new Date(r.ds+'T00:00:00').toLocaleString('default',{month:'short',day:'numeric'}):''}},grid:{color:'rgba(255,255,255,0.04)'}},
+          y:{min:0,max:5,ticks:{stepSize:1,color:'#6b6a65',font:{size:9}},grid:{color:'rgba(255,255,255,0.04)'}}
+        }
+      }
+    });
+
+    // Range label
+    const yrs=Object.keys(years).sort();
+    const totalDays=allD.length;
+    document.getElementById('range-label').textContent=yrs.join('/')+'  ·  '+totalDays+' active days tracked';
+
+    // Year breakdown Q4 2025+
+    const container=document.getElementById('quarters');container.innerHTML='';
+    const CUTOFF_Q='2025-Q4';
+    const curQ=qOf(parseInt(cym.slice(5,7)));
+
+    yrs.forEach(yr=>{
+      ['Q1','Q2','Q3','Q4'].forEach(q=>{
+        if(yr+'-'+q<CUTOFF_Q) return;
+        const qd=years[yr]?.[q];
+        const months=qd?Object.keys(qd.months).sort():[];
+        const hasData=qd&&qd.doros.length>0;
+        const qMN={'Q1':[1,2,3],'Q2':[4,5,6],'Q3':[7,8,9],'Q4':[10,11,12]};
+        const now=new Date(),qF=new Date(+yr,qMN[q][0]-1,1);
+        if(!hasData&&qF>now) return;
+
+        const isCurrentQ=yr===yrs[yrs.length-1]&&q===curQ;
+        const isOpen=isCurrentQ&&hasData;
+        const qTotD=hasData?tot(qd.totals).toFixed(0):'—';
+        const qAvgE=hasData?avg(qd.doros)?.toFixed(2):'—';
+        const qDays=hasData?qd.doros.length:0;
+
+        const qDiv=document.createElement('div');qDiv.className='quarter';
+        qDiv.innerHTML=
+          '<div class="q-header" onclick="toggleQ(this)">'+
+            '<span class="q-tag">'+q+' '+yr+'</span>'+
+            '<div class="q-nums">'+
+              '<span class="q-num"><strong>'+qTotD+'</strong> total doros</span>'+
+              '<span class="q-num"><strong>'+qAvgE+'</strong> avg effort</span>'+
+              (qDays?'<span class="q-num">'+qDays+'d</span>':'')+
+            '</div>'+
+            (hasData?'<div class="q-chips">'+chips(qd,'chip')+'</div>':'')+
+            '<span class="chev'+(isOpen?' open':'')+'">▶</span>'+
+          '</div>'+
+          '<div class="q-body'+(isOpen?' open':'')+'">'+
+          (!hasData?'<p style="font-size:11px;color:var(--text3);padding:9px 13px;">No data yet.</p>':
+            months.map(ym=>{
+              const md=qd.months[ym];
+              const mAvgE=avg(md.doros)?.toFixed(2)||'—';
+              const mTotD=tot(md.totals).toFixed(0);
+              const mDays=md.doros.length;
+              const isCurM=ym===cym;
+              const weeks=Object.keys(md.weeks).sort();
+              const maxW=Math.max(...weeks.map(w=>avg(md.weeks[w].doros)||0),1);
+              return '<div class="month">'+
+                '<div class="m-header'+(isCurM?' open':'')+'" onclick="toggleM(this)">'+
+                  '<span class="m-tag">'+mName(ym)+'</span>'+
+                  '<div class="m-nums">'+
+                    '<span class="m-num"><strong>'+mAvgE+'</strong> avg</span>'+
+                    '<span class="m-num"><strong>'+mTotD+'</strong> total</span>'+
+                    '<span class="m-num">'+mDays+'d</span>'+
+                  '</div>'+
+                  '<div class="m-chips">'+chips(md,'m-chip')+'</div>'+
+                  '<span class="chev'+(isCurM?' open':'')+'">▶</span>'+
+                '</div>'+
+                '<div class="m-body'+(isCurM?' open':'')+'">'+
+                weeks.map(mon=>{
+                  const wd=md.weeks[mon],wA=avg(wd.doros)||0,pct=Math.round((wA/maxW)*100);
+                  const isToday=wd.dates&&wd.dates.includes(today);
+                  return '<div class="w-row'+(isToday?' today':'')+'">'+
+                    '<span class="w-label">'+fmtWeek(mon)+'</span>'+
+                    '<span class="w-val">'+wA.toFixed(1)+'</span>'+
+                    '<div class="w-bar-bg"><div class="w-bar'+(wA>=8.5?' hi':'')+'" style="width:'+pct+'%"></div></div>'+
+                    '<span class="w-days">'+wd.doros.length+'d</span>'+
+                  '</div>';
+                }).join('')+
+                '</div></div>';
+            }).join('')
+          )+'</div>';
+        container.appendChild(qDiv);
+      });
+    });
+
+    document.getElementById('sdot').className='sdot';
+    document.getElementById('stext').textContent='Live · '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+
+  }catch(e){
+    document.getElementById('sdot').className='sdot error';
+    document.getElementById('stext').textContent='Error: '+e.message;
+    console.error(e);
+  }
+}
+
+function toggleQ(h){const b=h.nextElementSibling,c=h.querySelector('.chev'),o=b.classList.toggle('open');c.classList.toggle('open',o);}
+function toggleM(h){const b=h.nextElementSibling,c=h.querySelector('.chev'),o=b.classList.toggle('open');c.classList.toggle('open',o);h.classList.toggle('open',o);}
+
+init();
+</script>
+</body>
+</html>
