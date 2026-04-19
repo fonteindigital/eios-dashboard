@@ -24,16 +24,13 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1.25
 .sdot.error{background:var(--red);}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
 
-/* Today row */
 .today-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-bottom:.85rem;padding:.75rem 1rem;background:var(--bg2);border:.5px solid var(--border2);border-radius:var(--rl);}
-.td-item{}
 .td-label{font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:var(--text3);margin-bottom:3px;}
 .td-val{font-size:14px;color:var(--text);}
 .td-sub{font-size:10px;color:var(--text3);margin-top:2px;}
 
 .slabel{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin:0 0 7px;}
 
-/* Summary grid */
 .sum-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-bottom:.85rem;}
 .scard{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--r);padding:10px 12px;}
 .scard.hi{border-color:var(--border2);}
@@ -42,7 +39,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1.25
 .scard-sub{font-size:10px;color:var(--text3);}
 .delta{font-size:10px;margin-left:5px;}
 
-/* Rolling pills */
 .roll-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:.85rem;}
 .rpill{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--r);padding:10px 13px;display:flex;align-items:center;gap:10px;}
 .rpill-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
@@ -53,7 +49,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1.25
 .rpill-val{font-size:19px;line-height:1;}
 .rpill-traj{font-size:11px;margin-top:2px;color:var(--text3);}
 
-/* Chart sections */
 .csection{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--rl);padding:13px 14px 11px;margin-bottom:.75rem;}
 .csection-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;flex-wrap:wrap;gap:6px;}
 .ctitle{font-size:11px;color:var(--text2);}
@@ -62,11 +57,10 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1.25
 .ldot{width:7px;height:7px;border-radius:2px;flex-shrink:0;}
 .ldash{width:12px;height:1.5px;flex-shrink:0;border-radius:1px;}
 .chart-wrap{position:relative;width:100%;}
-.chart-wrap.tall{height:260px;}
+.chart-wrap.tall{height:270px;}
 .chart-wrap.med{height:160px;}
 .chart-wrap.sm{height:130px;}
 
-/* Pill row below charts */
 .pill-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:.5px solid var(--border);}
 .pill{border-radius:var(--r);padding:7px 10px;flex:1;min-width:80px;background:var(--bg3);}
 .pill.best{background:rgba(29,158,117,0.15);border:.5px solid rgba(29,158,117,0.3);}
@@ -74,7 +68,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1.25
 .pill-label{font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:var(--text3);margin-bottom:3px;}
 .pill-val{font-size:15px;}
 
-/* Quarter breakdown */
 .quarter{border:.5px solid var(--border2);border-radius:var(--rl);margin-bottom:6px;overflow:hidden;}
 .q-header{display:flex;align-items:center;gap:8px;padding:9px 13px;background:var(--bg2);cursor:pointer;user-select:none;}
 .q-header:hover{background:var(--bg3);}
@@ -116,15 +109,13 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1.25
   <div class="topbar-right"><span class="sdot loading" id="sdot"></span><span id="stext">Connecting…</span></div>
 </div>
 
-<!-- Today row -->
 <div class="today-row">
-  <div class="td-item"><p class="td-label">Today</p><p class="td-val" id="td-date">—</p></div>
-  <div class="td-item"><p class="td-label">Day type</p><p class="td-val" id="td-dtype">—</p><p class="td-sub" id="td-dsub">&nbsp;</p></div>
-  <div class="td-item"><p class="td-label">Doros today</p><p class="td-val" id="td-doros">—</p></div>
-  <div class="td-item"><p class="td-label">10-day ED position</p><p class="td-val" id="td-pos">—</p><p class="td-sub" id="td-pos-sub">&nbsp;</p></div>
+  <div><p class="td-label">Today</p><p class="td-val" id="td-date">—</p></div>
+  <div><p class="td-label">Day type</p><p class="td-val" id="td-dtype">—</p><p class="td-sub" id="td-dsub">&nbsp;</p></div>
+  <div><p class="td-label">Doros today</p><p class="td-val" id="td-doros">—</p></div>
+  <div><p class="td-label">10-day ED position</p><p class="td-val" id="td-pos">—</p><p class="td-sub" id="td-pos-sub">&nbsp;</p></div>
 </div>
 
-<!-- Summary -->
 <p class="slabel">Summary</p>
 <div class="sum-grid">
   <div class="scard"><p class="scard-tag">YTD · ED avg</p><p class="scard-val" id="ytd-e">—</p><p class="scard-sub" id="ytd-e-sub">&nbsp;</p></div>
@@ -134,7 +125,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1.25
   <div class="scard hi" id="streak-card"><p class="scard-tag">Streak</p><p class="scard-val" id="streak-val">—</p><p class="scard-sub" id="streak-sub">&nbsp;</p></div>
 </div>
 
-<!-- 10-day rolling -->
 <p class="slabel">10-day rolling</p>
 <div class="roll-row">
   <div class="rpill">
@@ -149,15 +139,14 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1.25
   </div>
 </div>
 
-<!-- Movement chart -->
 <div class="csection">
   <div class="csection-header">
     <span class="ctitle">Movement · last 3 months</span>
     <div class="legend">
-      <span><span class="ldot" style="background:#378ADD;border-radius:50%;"></span>ED daily</span>
-      <span><span class="ldot" style="background:#1D9E75;border-radius:50%;"></span>TD daily</span>
-      <span><span class="ldot" style="background:#7BBFEE;"></span>ED 10-day</span>
-      <span><span class="ldot" style="background:#5EC4A0;"></span>TD 10-day</span>
+      <span><span class="ldot" style="background:#378ADD;"></span>ED daily</span>
+      <span><span class="ldot" style="background:#1D9E75;"></span>TD daily</span>
+      <span><span class="ldot" style="background:#7BBFEE;opacity:.8;"></span>ED 10-day</span>
+      <span><span class="ldot" style="background:#5EC4A0;opacity:.8;"></span>TD 10-day</span>
       <span><span class="ldash" style="background:#BA7517;"></span>8.5</span>
       <span><span class="ldash" style="background:#D85A30;"></span>10.0</span>
     </div>
@@ -165,12 +154,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1.25
   <div class="chart-wrap tall"><canvas id="mainChart" role="img" aria-label="Daily doro movement last 3 months">Movement chart.</canvas></div>
 </div>
 
-<!-- Index scores -->
 <div class="csection">
   <div class="csection-header">
     <span class="ctitle">Index scores · last 3 months</span>
     <div class="legend">
-      <span><span class="ldot" style="background:#f1efe8;"></span>Index avg</span>
+      <span><span class="ldot" style="background:#EF9F27;"></span>Index avg</span>
       <span><span class="ldot" style="background:#1D9E75;"></span>LF</span>
     </div>
   </div>
@@ -178,7 +166,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1.25
   <div class="pill-row" id="index-pills"></div>
 </div>
 
-<!-- Bonus section -->
 <div class="csection">
   <div class="csection-header">
     <span class="ctitle">Execution bonuses · last 3 months</span>
@@ -192,7 +179,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1.25
   <div class="pill-row" id="bonus-pills"></div>
 </div>
 
-<!-- Year breakdown -->
 <p class="slabel">Year breakdown</p>
 <div id="quarters"></div>
 
@@ -205,7 +191,7 @@ function qOf(m){const n=parseInt(m);return n<=3?'Q1':n<=6?'Q2':n<=9?'Q3':'Q4';}
 function monday(ds){const d=new Date(ds+'T00:00:00'),dy=d.getDay(),df=dy===0?-6:1-dy;d.setDate(d.getDate()+df);return d.toISOString().slice(0,10);}
 function fmtWeek(ms){const d=new Date(ms+'T00:00:00'),e=new Date(d);e.setDate(d.getDate()+6);const dm=d.toLocaleString('default',{month:'short'}),em=e.toLocaleString('default',{month:'short'});return dm===em?dm+' '+d.getDate()+'–'+e.getDate():dm+' '+d.getDate()+' – '+em+' '+e.getDate();}
 function mName(ym){const[y,m]=ym.split('-');return new Date(+y,+m-1,1).toLocaleString('default',{month:'long'});}
-function avg(a){const v=a.filter(x=>x!==null&&!isNaN(x)&&x!==undefined);return v.length?v.reduce((s,x)=>s+x,0)/v.length:null;}
+function avg(a){const v=a.filter(x=>x!==null&&x!==undefined&&!isNaN(x));return v.length?v.reduce((s,x)=>s+x,0)/v.length:null;}
 function tot(a){return a.filter(x=>x!==null&&!isNaN(x)).reduce((s,x)=>s+x,0);}
 function curYM(){const n=new Date();return n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0');}
 function todayStr(){const n=new Date();return n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0');}
@@ -215,19 +201,22 @@ function newM(){return{doros:[],totals:[],rwr:[],mm:[],lf:[],ps:[],fitt:[],ancho
 const SK=[{k:'rwr',l:'RWR'},{k:'mm',l:'MM'},{k:'lf',l:'LF'},{k:'ps',l:'PS'},{k:'fitt',l:'FITT'},{k:'idxAvg',l:'Index Avg'}];
 function chips(d,cls){return SK.slice(0,5).map(s=>{const a=avg(d[s.k]);return a!==null?'<span class="'+cls+'">'+s.l+' '+a.toFixed(1)+'</span>':''}).join('');}
 
+function idxColor(v){
+  if(v===null) return '#6b6a65';
+  if(v>=3) return '#EF9F27';
+  if(v>=2) return '#1D9E75';
+  return '#BA7517';
+}
+
 function trajArrow(cur,prev){
   if(prev===null||cur===null) return '';
   const d=cur-prev;
   if(d>0.3) return '<span style="color:#1D9E75">↑ +'+d.toFixed(1)+'</span>';
   if(d<-0.3) return '<span style="color:#E24B4A">↓ '+d.toFixed(1)+'</span>';
-  return '<span style="color:#6b6a65">→ ~</span>';
+  return '<span style="color:#6b6a65">→</span>';
 }
 
-function streakState(doros){
-  if(doros>=10) return 'ghost';
-  if(doros>=8.5) return 'cascade';
-  return 'below';
-}
+function streakState(d){return d>=10?'ghost':d>=8.5?'cascade':'below';}
 
 let ci1=null,ci2=null,ci3=null;
 
@@ -281,7 +270,6 @@ async function init(){
       const tr=(cols.total!==undefined?(row[cols.total]||''):'').trim();
       const total=tr!==''&&!isNaN(+tr)?+tr:doros;
       const yr=ds.slice(0,4),ym=ds.slice(0,7),mo=ds.slice(5,7),q=qOf(mo),mon=monday(ds);
-
       const rwr=gs(row[cols.rwr]),mm=gs(row[cols.mm]),lf=gs(row[cols.lf]),ps=gs(row[cols.ps]),fitt=gs(row[cols.fitt]);
       const idxAvg=gs(row[cols.idxAvg]);
       const anc=gs(row[cols.anc]),lev=gs(row[cols.lev]),clu=gs(row[cols.clu]);
@@ -314,93 +302,67 @@ async function init(){
 
     // Today row
     const todayRow=flat.find(r=>r.ds===today)||flat[flat.length-1];
+    const isTodayActual=todayRow.ds===today;
     document.getElementById('td-date').textContent=fmtDate(todayRow.ds);
     document.getElementById('td-dtype').textContent=todayRow.dtRaw||'—';
-    const isTodayActual=todayRow.ds===today;
     document.getElementById('td-dsub').textContent=isTodayActual?'':'Most recent logged day';
     document.getElementById('td-doros').textContent=isTodayActual?todayRow.doros:'—';
     const roll10Etoday=avg(flat.slice(-10).map(r=>r.doros));
-    const posLabel=roll10Etoday===null?'—':roll10Etoday.toFixed(2);
     const posEl=document.getElementById('td-pos');
-    posEl.textContent=posLabel;
-    if(roll10Etoday!==null){
-      posEl.style.color=roll10Etoday>=10?'#EF9F27':roll10Etoday>=8.5?'#1D9E75':'#E24B4A';
-    }
-    const posState=roll10Etoday===null?'':roll10Etoday>=10?'ghost zone':roll10Etoday>=8.5?'cascade':'below floor';
-    document.getElementById('td-pos-sub').textContent=posState;
+    posEl.textContent=roll10Etoday!==null?roll10Etoday.toFixed(2):'—';
+    if(roll10Etoday!==null) posEl.style.color=roll10Etoday>=10?'#EF9F27':roll10Etoday>=8.5?'#1D9E75':'#E24B4A';
+    document.getElementById('td-pos-sub').textContent=roll10Etoday===null?'':roll10Etoday>=10?'ghost zone':roll10Etoday>=8.5?'cascade':'below floor';
 
     // YTD / MTD
-    const mtdRows=flat.filter(r=>r.ym===cym);
     const ytdE=avg(allD),ytdT=avg(allT);
+    const mtdRows=flat.filter(r=>r.ym===cym);
     const mtdE=avg(mtdRows.map(r=>r.doros)),mtdT=avg(mtdRows.map(r=>r.total));
+
     document.getElementById('ytd-e').textContent=ytdE?.toFixed(2)||'—';
     document.getElementById('ytd-e-sub').textContent=tot(allD).toFixed(0)+' doros · '+allD.length+'d';
     document.getElementById('ytd-t').textContent=ytdT?.toFixed(2)||'—';
     document.getElementById('ytd-t-sub').textContent=tot(allT).toFixed(0)+' total · '+allD.length+'d';
 
-    const mtdEEl=document.getElementById('mtd-e');
-    mtdEEl.textContent=mtdE?.toFixed(2)||'—';
-    if(mtdE!==null&&ytdE!==null){
-      const d=mtdE-ytdE;
-      const arr=d>0.05?'↑':d<-0.05?'↓':'→';
-      const col=d>0.05?'#1D9E75':d<-0.05?'#E24B4A':'#6b6a65';
-      mtdEEl.innerHTML=(mtdE?.toFixed(2)||'—')+'<span class="delta" style="color:'+col+'">'+arr+'</span>';
+    function setMtdCard(elId,subId,val,ref,subText){
+      const el=document.getElementById(elId);
+      if(val!==null&&ref!==null){
+        const d=val-ref,arr=d>0.05?'↑':d<-0.05?'↓':'→',col=d>0.05?'#1D9E75':d<-0.05?'#E24B4A':'#6b6a65';
+        el.innerHTML=val.toFixed(2)+'<span class="delta" style="color:'+col+'">'+arr+'</span>';
+      } else { el.textContent=val?.toFixed(2)||'—'; }
+      document.getElementById(subId).textContent=subText;
     }
-    document.getElementById('mtd-e-sub').textContent=mtdRows.length+' days this month';
-    const mtdTEl=document.getElementById('mtd-t');
-    mtdTEl.textContent=mtdT?.toFixed(2)||'—';
-    if(mtdT!==null&&ytdT!==null){
-      const d=mtdT-ytdT;
-      const arr=d>0.05?'↑':d<-0.05?'↓':'→';
-      const col=d>0.05?'#1D9E75':d<-0.05?'#E24B4A':'#6b6a65';
-      mtdTEl.innerHTML=(mtdT?.toFixed(2)||'—')+'<span class="delta" style="color:'+col+'">'+arr+'</span>';
-    }
-    document.getElementById('mtd-t-sub').textContent=tot(mtdRows.map(r=>r.total)).toFixed(0)+' total doros';
+    setMtdCard('mtd-e','mtd-e-sub',mtdE,ytdE,mtdRows.length+' days this month');
+    setMtdCard('mtd-t','mtd-t-sub',mtdT,ytdT,tot(mtdRows.map(r=>r.total)).toFixed(0)+' total doros');
 
-    // Streak — count consecutive days in current state from most recent
+    // Streak
     let streak=0;
     const lastState=streakState(flat[flat.length-1].doros);
-    for(let i=flat.length-1;i>=0;i--){
-      if(streakState(flat[i].doros)===lastState) streak++;
-      else break;
-    }
-    const sc=document.getElementById('streak-card');
-    const sv=document.getElementById('streak-val');
-    const ss=document.getElementById('streak-sub');
+    for(let i=flat.length-1;i>=0;i--){if(streakState(flat[i].doros)===lastState)streak++;else break;}
+    const sv=document.getElementById('streak-val'),ss=document.getElementById('streak-sub');
     sv.textContent=streak;
-    if(lastState==='ghost'){
-      sv.style.color='#EF9F27';
-      ss.textContent=streak+' days in ghost';
-      if(streak>=10) ss.textContent='★ ghost streak active';
-    } else if(lastState==='cascade'){
-      sv.style.color='#1D9E75';
-      ss.textContent=streak+' days in cascade';
-    } else {
-      sv.style.color='#E24B4A';
-      ss.textContent=streak+' days below 8.5';
-    }
+    if(lastState==='ghost'){sv.style.color='#EF9F27';ss.textContent=streak>=10?'★ ghost streak active':streak+' days in ghost';}
+    else if(lastState==='cascade'){sv.style.color='#1D9E75';ss.textContent=streak+' days in cascade';}
+    else{sv.style.color='#E24B4A';ss.textContent=streak+' days below 8.5';}
 
-    // Rolling pills with trajectory
+    // Rolling pills
     const roll10E=avg(flat.slice(-10).map(r=>r.doros));
     const roll10T=avg(flat.slice(-10).map(r=>r.total));
     const prev10E=avg(flat.slice(-20,-10).map(r=>r.doros));
     const prev10T=avg(flat.slice(-20,-10).map(r=>r.total));
-
     const reEl=document.getElementById('roll-e');
     reEl.textContent=roll10E?.toFixed(2)||'—';
     reEl.style.color=roll10E>=8.5?'#1D9E75':'#E24B4A';
     document.getElementById('roll-e-traj').innerHTML=trajArrow(roll10E,prev10E);
-
     const rtEl=document.getElementById('roll-t');
     rtEl.textContent=roll10T?.toFixed(2)||'—';
-    rtEl.style.color=roll10T>=10.0?'#1D9E75':'#E24B4A';
+    rtEl.style.color=roll10T>=10?'#1D9E75':'#E24B4A';
     document.getElementById('roll-t-traj').innerHTML=trajArrow(roll10T,prev10T);
 
     // 3-month window
     const cutoff=new Date();cutoff.setDate(cutoff.getDate()-92);
     const win=flat.filter(r=>new Date(r.ds+'T00:00:00')>=cutoff);
 
-    // Rolling per day in window
+    // Per-day rolling for window
     const roll10eW=[],roll10tW=[];
     win.forEach((_,wi)=>{
       const gi=flat.findIndex(f=>f===win[wi]);
@@ -409,64 +371,67 @@ async function init(){
       roll10tW.push(+(avg(sl.map(r=>r.total))||0).toFixed(2));
     });
 
-    // Main chart
+    const xTick=v=>{const r=win[Math.round(v)];return r?new Date(r.ds+'T00:00:00').toLocaleString('default',{month:'short',day:'numeric'}):''};
+    const xScale={type:'linear',min:0,max:Math.max(win.length-1,1),ticks:{stepSize:Math.ceil(win.length/10),color:'#6b6a65',font:{size:9},callback:xTick},grid:{color:'rgba(255,255,255,0.03)'}};
+
+    // Main chart — ALL LINES
     if(ci1) ci1.destroy();
     ci1=new Chart(document.getElementById('mainChart'),{
-      type:'scatter',
+      type:'line',
       data:{
         datasets:[
-          {label:'ED daily',type:'scatter',data:win.map((r,i)=>({x:i,y:r.doros})),backgroundColor:'rgba(55,138,221,0.45)',borderColor:'rgba(55,138,221,0.7)',borderWidth:1,pointRadius:3.5,pointHoverRadius:5,order:4},
-          {label:'TD daily',type:'scatter',data:win.map((r,i)=>({x:i,y:r.total})),backgroundColor:'rgba(29,158,117,0.35)',borderColor:'rgba(29,158,117,0.6)',borderWidth:1,pointRadius:3,pointHoverRadius:5,pointStyle:'triangle',order:5},
-          {label:'ED 10-day',type:'line',data:roll10eW,borderColor:'#7BBFEE',backgroundColor:'transparent',borderWidth:2,pointRadius:0,tension:0.35,order:1},
-          {label:'TD 10-day',type:'line',data:roll10tW,borderColor:'#5EC4A0',backgroundColor:'transparent',borderWidth:2,pointRadius:0,tension:0.35,borderDash:[3,2],order:2},
-          {label:'8.5',type:'line',data:win.map(()=>8.5),borderColor:'#BA7517',backgroundColor:'transparent',borderWidth:1,pointRadius:0,borderDash:[5,4],order:6},
-          {label:'10.0',type:'line',data:win.map(()=>10.0),borderColor:'#D85A30',backgroundColor:'transparent',borderWidth:1,pointRadius:0,borderDash:[5,4],order:6}
+          {label:'ED daily',data:win.map((r,i)=>({x:i,y:r.doros})),borderColor:'#378ADD',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,pointHoverRadius:4,tension:0.2,order:3},
+          {label:'TD daily',data:win.map((r,i)=>({x:i,y:r.total})),borderColor:'#1D9E75',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,pointHoverRadius:4,tension:0.2,borderDash:[2,2],order:4},
+          {label:'ED 10-day',data:win.map((_,i)=>({x:i,y:roll10eW[i]})),borderColor:'#7BBFEE',backgroundColor:'transparent',borderWidth:2.5,pointRadius:0,tension:0.35,order:1},
+          {label:'TD 10-day',data:win.map((_,i)=>({x:i,y:roll10tW[i]})),borderColor:'#5EC4A0',backgroundColor:'transparent',borderWidth:2.5,pointRadius:0,tension:0.35,order:2},
+          {label:'8.5',data:win.map((_,i)=>({x:i,y:8.5})),borderColor:'#BA7517',backgroundColor:'transparent',borderWidth:1,pointRadius:0,borderDash:[5,4],order:5},
+          {label:'10.0',data:win.map((_,i)=>({x:i,y:10.0})),borderColor:'#D85A30',backgroundColor:'transparent',borderWidth:1,pointRadius:0,borderDash:[5,4],order:5}
         ]
       },
       options:{
         responsive:true,maintainAspectRatio:false,
-        plugins:{legend:{display:false},tooltip:{callbacks:{title:ctx=>{return win[ctx[0].dataIndex]?.ds||'';},label:ctx=>{const di=ctx.dataIndex,ds=ctx.datasetIndex;if(ds===0)return 'ED: '+win[di].doros;if(ds===1)return 'TD: '+win[di].total;return ctx.dataset.label+': '+ctx.parsed.y.toFixed(2);}}}},
-        scales:{
-          x:{type:'linear',min:0,max:win.length-1,ticks:{stepSize:Math.ceil(win.length/10),color:'#6b6a65',font:{size:9},callback:v=>{const r=win[Math.round(v)];return r?new Date(r.ds+'T00:00:00').toLocaleString('default',{month:'short',day:'numeric'}):''}},grid:{color:'rgba(255,255,255,0.03)'}},
-          y:{min:0,max:16,ticks:{stepSize:2,color:'#6b6a65',font:{size:9}},grid:{color:'rgba(255,255,255,0.03)'}}
-        }
+        plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{title:ctx=>{return win[ctx[0].dataIndex]?.ds||'';},label:ctx=>ctx.dataset.label+': '+ctx.parsed.y.toFixed(2)}}},
+        scales:{x:xScale,y:{min:0,max:16,ticks:{stepSize:2,color:'#6b6a65',font:{size:9}},grid:{color:'rgba(255,255,255,0.03)'}}}
       }
     });
 
-    // Index chart — Index Avg + LF
+    // Index chart — dynamic colour for Index Avg line based on current 10-day avg
+    const last10=flat.slice(-10);
+    const curIdxAvg=avg(last10.map(r=>r.idxAvg));
+    const idxLineColor=idxColor(curIdxAvg);
+
     if(ci2) ci2.destroy();
     ci2=new Chart(document.getElementById('indexChart'),{
       type:'line',
       data:{
         datasets:[
-          {label:'Index avg',data:win.map((r,i)=>({x:i,y:r.idxAvg})),borderColor:'#f1efe8',backgroundColor:'transparent',borderWidth:2,pointRadius:0,tension:0.3,spanGaps:true},
-          {label:'LF',data:win.map((r,i)=>({x:i,y:r.lf})),borderColor:'#1D9E75',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,tension:0.3,spanGaps:true}
+          {label:'Index avg',data:win.map((r,i)=>({x:i,y:r.idxAvg})),borderColor:idxLineColor,backgroundColor:'transparent',borderWidth:2.5,pointRadius:0,tension:0.3,spanGaps:true,order:1},
+          {label:'LF',data:win.map((r,i)=>({x:i,y:r.lf})),borderColor:'#1D9E75',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,tension:0.3,spanGaps:true,order:2}
         ]
       },
       options:{
         responsive:true,maintainAspectRatio:false,
-        plugins:{legend:{display:false},tooltip:{callbacks:{title:ctx=>win[ctx[0].dataIndex]?.ds||'',label:ctx=>ctx.dataset.label+': '+(ctx.parsed.y||0).toFixed(2)}}},
-        scales:{
-          x:{type:'linear',min:0,max:win.length-1,ticks:{stepSize:Math.ceil(win.length/10),color:'#6b6a65',font:{size:9},callback:v=>{const r=win[Math.round(v)];return r?new Date(r.ds+'T00:00:00').toLocaleString('default',{month:'short',day:'numeric'}):''}},grid:{color:'rgba(255,255,255,0.03)'}},
-          y:{min:0,max:5,ticks:{stepSize:1,color:'#6b6a65',font:{size:9}},grid:{color:'rgba(255,255,255,0.03)'}}
-        }
+        plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{title:ctx=>win[ctx[0].dataIndex]?.ds||'',label:ctx=>ctx.dataset.label+': '+(ctx.parsed.y||0).toFixed(2)}}},
+        scales:{x:xScale,y:{min:0,max:5,ticks:{stepSize:1,color:'#6b6a65',font:{size:9}},grid:{color:'rgba(255,255,255,0.03)'}}}
       }
     });
 
-    // Index pills — 10-day avgs, highlight best/worst
+    // Index pills — 10-day avgs, best/worst, idxAvg state-coloured
     const idxPillDefs=[
-      {k:'idxAvg',l:'Index avg'},{k:'lf',l:'LF'},{k:'rwr',l:'RWR'},{k:'mm',l:'MM'},{k:'ps',l:'PS'},{k:'fitt',l:'FITT'}
+      {k:'idxAvg',l:'Index avg',special:true},{k:'lf',l:'LF'},{k:'rwr',l:'RWR'},{k:'mm',l:'MM'},{k:'ps',l:'PS'},{k:'fitt',l:'FITT'}
     ];
-    const last10=flat.slice(-10);
     const idxVals=idxPillDefs.map(p=>({...p,val:avg(last10.map(r=>r[p.k]))}));
-    const validIdx=idxVals.filter(p=>p.val!==null&&p.k!=='idxAvg');
-    const bestIdx=validIdx.length?validIdx.reduce((a,b)=>b.val>a.val?b:a):null;
-    const worstIdx=validIdx.length?validIdx.reduce((a,b)=>b.val<a.val?b:a):null;
-    const ipContainer=document.getElementById('index-pills');
-    ipContainer.innerHTML=idxVals.map(p=>{
+    const validForRank=idxVals.filter(p=>p.val!==null&&!p.special);
+    const bestIdx=validForRank.length?validForRank.reduce((a,b)=>b.val>a.val?b:a):null;
+    const worstIdx=validForRank.length?validForRank.reduce((a,b)=>b.val<a.val?b:a):null;
+    document.getElementById('index-pills').innerHTML=idxVals.map(p=>{
       const isBest=bestIdx&&p.k===bestIdx.k;
       const isWorst=worstIdx&&p.k===worstIdx.k;
-      return '<div class="pill'+(isBest?' best':isWorst?' worst':'')+'"><p class="pill-label">'+p.l+'</p><p class="pill-val">'+(p.val!==null?p.val.toFixed(2):'—')+'</p></div>';
+      const valColor=p.special?idxColor(p.val):'inherit';
+      return '<div class="pill'+(isBest?' best':isWorst?' worst':'')+'">'+
+        '<p class="pill-label">'+p.l+'</p>'+
+        '<p class="pill-val" style="color:'+valColor+'">'+(p.val!==null?p.val.toFixed(2):'—')+'</p>'+
+      '</div>';
     }).join('');
 
     // Bonus chart
@@ -482,24 +447,23 @@ async function init(){
       },
       options:{
         responsive:true,maintainAspectRatio:false,
-        plugins:{legend:{display:false},tooltip:{callbacks:{title:ctx=>win[ctx[0].dataIndex]?.ds||'',label:ctx=>ctx.dataset.label+': '+(ctx.parsed.y||0).toFixed(1)}}},
-        scales:{
-          x:{type:'linear',min:0,max:win.length-1,ticks:{stepSize:Math.ceil(win.length/10),color:'#6b6a65',font:{size:9},callback:v=>{const r=win[Math.round(v)];return r?new Date(r.ds+'T00:00:00').toLocaleString('default',{month:'short',day:'numeric'}):''}},grid:{color:'rgba(255,255,255,0.03)'}},
-          y:{min:0,ticks:{stepSize:1,color:'#6b6a65',font:{size:9}},grid:{color:'rgba(255,255,255,0.03)'}}
-        }
+        plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{title:ctx=>win[ctx[0].dataIndex]?.ds||'',label:ctx=>ctx.dataset.label+': '+(ctx.parsed.y||0).toFixed(1)}}},
+        scales:{x:xScale,y:{min:0,ticks:{stepSize:1,color:'#6b6a65',font:{size:9}},grid:{color:'rgba(255,255,255,0.03)'}}}
       }
     });
 
     // Bonus pills
     const bonusDefs=[{k:'anc',l:'Anchor'},{k:'lev',l:'Leverage'},{k:'clu',l:'Clutch'}];
     const bonusVals=bonusDefs.map(p=>({...p,val:avg(last10.map(r=>r[p.k]))}));
-    const bestBonus=bonusVals.filter(p=>p.val!==null).reduce((a,b)=>b.val>a.val?b:a,{val:-Infinity,k:null});
-    const worstBonus=bonusVals.filter(p=>p.val!==null).reduce((a,b)=>b.val<a.val?b:a,{val:Infinity,k:null});
-    const bpContainer=document.getElementById('bonus-pills');
-    bpContainer.innerHTML=bonusVals.map(p=>{
-      const isBest=p.k===bestBonus.k;
-      const isWorst=p.k===worstBonus.k&&bonusVals.filter(x=>x.val!==null).length>1;
-      return '<div class="pill'+(isBest?' best':isWorst?' worst':'')+'"><p class="pill-label">'+p.l+' 10d avg</p><p class="pill-val">'+(p.val!==null?p.val.toFixed(2):'—')+'</p></div>';
+    const validB=bonusVals.filter(p=>p.val!==null);
+    const bestB=validB.length?validB.reduce((a,b)=>b.val>a.val?b:a):{k:null};
+    const worstB=validB.length>1?validB.reduce((a,b)=>b.val<a.val?b:a):{k:null};
+    document.getElementById('bonus-pills').innerHTML=bonusVals.map(p=>{
+      const isBest=p.k===bestB.k;const isWorst=p.k===worstB.k&&validB.length>1;
+      return '<div class="pill'+(isBest?' best':isWorst?' worst':'')+'">'+
+        '<p class="pill-label">'+p.l+' 10d avg</p>'+
+        '<p class="pill-val">'+(p.val!==null?p.val.toFixed(2):'—')+'</p>'+
+      '</div>';
     }).join('');
 
     // Range label
@@ -537,7 +501,6 @@ async function init(){
             months.map(ym=>{
               const md=qd.months[ym];
               const mAvgE=avg(md.doros)?.toFixed(2)||'—';
-              const mTotD=tot(md.totals).toFixed(0);
               const isCurM=ym===cym;
               const weeks=Object.keys(md.weeks).sort();
               const maxW=Math.max(...weeks.map(w=>avg(md.weeks[w].doros)||0),1);
@@ -546,7 +509,7 @@ async function init(){
                   '<span class="m-tag">'+mName(ym)+'</span>'+
                   '<div class="m-nums">'+
                     '<span class="m-num"><strong>'+mAvgE+'</strong> avg</span>'+
-                    '<span class="m-num"><strong>'+mTotD+'</strong> total</span>'+
+                    '<span class="m-num"><strong>'+tot(md.totals).toFixed(0)+'</strong> total</span>'+
                     '<span class="m-num">'+md.doros.length+'d</span>'+
                   '</div>'+
                   '<div class="m-chips">'+chips(md,'m-chip')+'</div>'+
@@ -555,7 +518,7 @@ async function init(){
                 '<div class="m-body'+(isCurM?' open':'')+'">'+
                 weeks.map(mon=>{
                   const wd=md.weeks[mon],wA=avg(wd.doros)||0,pct=Math.round((wA/maxW)*100);
-                  const isThisWeek=wd.dates&&wd.dates.some(d=>d<=today)&&wd.dates.some(d=>d>=monday(today));
+                  const isThisWeek=wd.dates&&wd.dates.some(d=>d>=monday(today))&&wd.dates.some(d=>d<=today);
                   return '<div class="w-row'+(isThisWeek?' today-week':'')+'">'+
                     '<span class="w-label">'+fmtWeek(mon)+'</span>'+
                     '<span class="w-val">'+wA.toFixed(1)+'</span>'+
