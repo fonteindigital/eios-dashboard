@@ -822,7 +822,8 @@ async function init(){
 
     // Signal cards
     const seEl=document.getElementById('sig-e');
-    seEl.textContent=f2(roll10E);seEl.style.color=roll10E>=8.5?'#1D9E75':'#E24B4A';
+    // 10D ED: gold when Ghost authorized (≥10 ED + somatic ≥3, both conditions); else green ≥8.5, red below
+    seEl.textContent=f2(roll10E);seEl.style.color=lastState==='ghost'?'#EF9F27':roll10E>=8.5?'#1D9E75':'#E24B4A';
     document.getElementById('sig-e-traj').innerHTML=traj(roll10E,prev10E);
     document.getElementById('sig-e-sub').textContent='floor 8.5 · peak '+f2(peakE);
     const stEl=document.getElementById('sig-t');
@@ -921,11 +922,13 @@ async function init(){
     const bavgEl=document.getElementById('sig-bavg');
     if(bonusAvg!==null){
       bavgEl.textContent=f2(bonusAvg);
+      // gold ≥ 2.0, green ≥ 1.0, red below 1.0 (operator direction 2026-05-14)
+      bavgEl.style.color=bonusAvg>=2?'#EF9F27':bonusAvg>=1?'#1D9E75':'#E24B4A';
       document.getElementById('sig-bavg-sub').textContent='B '+f1(l10anc||0)+' · S '+f1(l10lev||0)+' · C '+f1(l10clu||0);
     }
 
     // Signal cards · Row 2 — Context · 10D
-    // 10D Index Avg
+    // 10D Index Avg — gold ≥ 3.0, green ≥ 2.0, red below 2.0
     const iavgEl=document.getElementById('sig-iavg');
     if(l10idxA!==null){
       iavgEl.textContent=f2(l10idxA);
@@ -933,11 +936,13 @@ async function init(){
       const idxSub=l10idxA>=3?'gold zone (ghost authorized)':l10idxA>=2?'on track':'below tripwire';
       document.getElementById('sig-iavg-sub').textContent='floor 2.0 · ghost 3.0 · '+idxSub;
     }
-    // Fontein Investment Ratio (Onfontéin ÷ Infontéin)
+    // Fontein Investment Ratio (Onfontéin ÷ Infontéin) — green inside band [0.5, 1.5], red outside
     const firEl=document.getElementById('sig-fir');
     if(eOn10!==null&&eIn10!==null&&eIn10>0){
       const fir=eOn10/eIn10;
       firEl.textContent=f2(fir);
+      // Band-target metric: 0.5 < fir < 1.5 = green; outside band = red. No gold (no exceptional band).
+      firEl.style.color=(fir>0.5&&fir<1.5)?'#1D9E75':'#E24B4A';
       document.getElementById('sig-fir-sub').textContent='On '+f1(eOn10)+' ÷ In '+f1(eIn10);
     }
 
