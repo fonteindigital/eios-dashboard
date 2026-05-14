@@ -192,36 +192,26 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
 /* Section divider */
 .sdivider{border:none;border-top:.5px solid var(--border2);margin:.85rem 0 .75rem;}
 
-/* ── Today strip — second row ── */
-.today-strip-r2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:.75rem;padding:.65rem 1rem .65rem 1.1rem;background:var(--bg2);border:.5px solid var(--border);border-radius:var(--rl);}
-.td-pill{display:flex;align-items:baseline;gap:6px;}
-.td-engine{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;font-size:13px;}
-.td-engine .e-pair{display:flex;gap:3px;align-items:baseline;}
-.td-engine .e-lbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;}
-.td-engine .e-val{font-size:14px;}
-.td-engine .e-dom{color:var(--gold);}
+/* (today-strip-r2 removed 2026-05-14 — dashboard tuned for 2-3 day check cadence) */
 
-/* ── Engines section ── */
+/* ── Engines section — share-as-headline (v2 2026-05-14) ── */
 .engine-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
-.ecard{background:var(--bg3);border:.5px solid var(--border);border-radius:var(--r);padding:10px 12px;}
-.ecard-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;padding-bottom:5px;border-bottom:.5px solid var(--border);}
+.ecard{background:var(--bg3);border:.5px solid var(--border);border-radius:var(--r);padding:12px 14px;}
+.ecard-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:.5px solid var(--border);gap:10px;}
+.ecard-titles{display:flex;flex-direction:column;}
 .ecard-name{font-size:10px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--text2);}
-.ecard-tag{font-size:9px;color:var(--text3);}
+.ecard-tag{font-size:9px;color:var(--text3);margin-top:2px;}
+.ecard-headline{text-align:right;line-height:1;}
+.ecard-headline-val{font-size:24px;font-weight:400;color:var(--text);}
+.ecard-headline-lbl{display:block;font-size:9px;color:var(--text3);margin-top:3px;letter-spacing:.04em;}
+.ecard-body{}
 .ecard-row{display:flex;justify-content:space-between;align-items:baseline;font-size:11px;padding:3px 0;}
-.ecard-row .row-lbl{color:var(--text3);font-size:10px;}
-.ecard-row .row-val{font-size:13px;}
+.ecard-row .row-lbl{color:var(--text3);font-size:10px;text-transform:lowercase;letter-spacing:.04em;}
+.ecard-row .row-val{font-size:13px;color:var(--text2);}
 .ecard-band{margin-top:8px;padding-top:6px;border-top:.5px solid var(--border);font-size:10px;color:var(--text3);}
-.ecard-band.ok{color:var(--green);}
-.ecard-band.warn{color:var(--amber);}
-.ecard-band.breach{color:var(--red);}
+/* Engine band is reference-only — no green/amber/red judgment per operator direction 2026-05-14 */
 
-/* ── Engine balance bar ── */
-.balance-bar{display:flex;height:18px;border-radius:var(--r);overflow:hidden;background:var(--bg3);margin-top:5px;border:.5px solid var(--border);}
-.balance-seg{font-size:9px;color:var(--bg);display:flex;align-items:center;justify-content:center;font-weight:500;transition:flex-basis .25s;}
-.balance-seg.on{background:#9B7FCC;}
-.balance-seg.in{background:#378ADD;}
-.balance-seg.out{background:#EF9F27;}
-.balance-targets{display:flex;justify-content:space-between;font-size:9px;color:var(--text3);margin-top:3px;}
+/* (Engine balance bar removed 2026-05-14 — rigid 60/25/15 retired; soft target shown as footer text in engine cards) */
 </style>
 </head>
 <body>
@@ -250,17 +240,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
   <div><p class="td-label">Somatic avg · today</p><p class="td-val" id="td-somatic">—</p><p class="td-sub" id="td-somatic-sub">&nbsp;</p></div>
 </div>
 
-<!-- Today strip row 2: Posture, Anchor, Engine split -->
-<div class="today-strip-r2">
-  <div><p class="td-label">Posture</p><p class="td-val" id="td-posture">—</p><p class="td-sub" id="td-posture-sub">&nbsp;</p></div>
-  <div><p class="td-label">Anchor</p><p class="td-val" id="td-anchor">—</p><p class="td-sub" id="td-anchor-sub">&nbsp;</p></div>
-  <div>
-    <p class="td-label">Engine split today</p>
-    <div class="td-engine" id="td-engine">—</div>
-  </div>
-</div>
+<!-- Today strip row 2 removed 2026-05-14 — dashboard optimized for 2-3 day check cadence, not daily snapshots -->
 
-<!-- Signal cards -->
+<!-- Signal cards · Row 1 — Performance · 10D -->
 <div class="signal-grid">
   <div class="sig-card">
     <div class="sig-label">
@@ -279,6 +261,20 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
     <div class="sig-sub" id="sig-t-sub">floor 10.0</div>
   </div>
   <div class="sig-card">
+    <div class="sig-label"><span>10d Bonus Avg</span></div>
+    <div class="sig-val" id="sig-bavg">—</div>
+    <div class="sig-sub" id="sig-bavg-sub">Builder · Shooter · Clutch avg</div>
+  </div>
+</div>
+
+<!-- Signal cards · Row 2 — Context · 10D -->
+<div class="signal-grid">
+  <div class="sig-card">
+    <div class="sig-label"><span>10d Index Avg</span></div>
+    <div class="sig-val" id="sig-iavg">—</div>
+    <div class="sig-sub" id="sig-iavg-sub">floor 2.0 · ghost 3.0</div>
+  </div>
+  <div class="sig-card">
     <div class="sig-label">
       <span>Streak</span>
       <span id="momentum-badge" class="momentum-badge"></span>
@@ -286,25 +282,10 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
     <div class="sig-val" id="sig-streak">—</div>
     <div class="sig-sub" id="sig-streak-sub">&nbsp;</div>
   </div>
-</div>
-
-<!-- Engine signal cards (NEW row 2) -->
-<div class="signal-grid">
   <div class="sig-card">
     <div class="sig-label"><span>Fontein Investment · 10d</span></div>
     <div class="sig-val" id="sig-fir">—</div>
     <div class="sig-sub" id="sig-fir-sub">Onfontéin ÷ Infontéin</div>
-  </div>
-  <div class="sig-card">
-    <div class="sig-label"><span>Non-Fontein Share · 10d</span></div>
-    <div class="sig-val" id="sig-nfs">—</div>
-    <div class="sig-sub" id="sig-nfs-sub">Outfontéin ÷ Total · cap 15%</div>
-  </div>
-  <div class="sig-card">
-    <div class="sig-label"><span>Engine Balance · 10d</span></div>
-    <div class="balance-bar" id="sig-balance-bar"><div class="balance-seg on" style="flex-basis:0%"></div><div class="balance-seg in" style="flex-basis:0%"></div><div class="balance-seg out" style="flex-basis:0%"></div></div>
-    <div class="balance-targets"><span>On 60%</span><span>In 25%</span><span>Out 15%</span></div>
-    <div class="sig-sub" id="sig-balance-sub" style="margin-top:5px;">&nbsp;</div>
   </div>
 </div>
 
@@ -322,28 +303,43 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
   <div class="csec-body" id="csec-engines-body">
     <div class="engine-grid">
       <div class="ecard" id="ecard-on">
-        <div class="ecard-hdr"><span class="ecard-name">Onfontéin</span><span class="ecard-tag">build the business</span></div>
-        <div class="ecard-row"><span class="row-lbl">Today</span><span class="row-val" id="on-today">—</span></div>
-        <div class="ecard-row"><span class="row-lbl">10d avg</span><span class="row-val" id="on-10d">—</span></div>
-        <div class="ecard-row"><span class="row-lbl">MTD share</span><span class="row-val" id="on-mtd">—</span></div>
-        <div class="ecard-row"><span class="row-lbl">QTD share</span><span class="row-val" id="on-qtd">—</span></div>
-        <div class="ecard-band" id="on-band">target 60%</div>
+        <div class="ecard-hdr">
+          <div class="ecard-titles"><span class="ecard-name">Onfontéin</span><span class="ecard-tag">build the business</span></div>
+          <div class="ecard-headline"><span class="ecard-headline-val" id="on-headline">—</span><span class="ecard-headline-lbl">share · 10d</span></div>
+        </div>
+        <div class="ecard-body">
+          <div class="ecard-row"><span class="row-lbl">avg</span><span class="row-val" id="on-avg">—</span></div>
+          <div class="ecard-row"><span class="row-lbl">today</span><span class="row-val" id="on-today">—</span></div>
+          <div class="ecard-row"><span class="row-lbl">month</span><span class="row-val" id="on-mtd">—</span></div>
+          <div class="ecard-row"><span class="row-lbl">quarter</span><span class="row-val" id="on-qtd">—</span></div>
+        </div>
+        <div class="ecard-band" id="on-band">soft target 40%</div>
       </div>
       <div class="ecard" id="ecard-in">
-        <div class="ecard-hdr"><span class="ecard-name">Infontéin</span><span class="ecard-tag">client work</span></div>
-        <div class="ecard-row"><span class="row-lbl">Today</span><span class="row-val" id="in-today">—</span></div>
-        <div class="ecard-row"><span class="row-lbl">10d avg</span><span class="row-val" id="in-10d">—</span></div>
-        <div class="ecard-row"><span class="row-lbl">MTD share</span><span class="row-val" id="in-mtd">—</span></div>
-        <div class="ecard-row"><span class="row-lbl">QTD share</span><span class="row-val" id="in-qtd">—</span></div>
-        <div class="ecard-band" id="in-band">target 25%</div>
+        <div class="ecard-hdr">
+          <div class="ecard-titles"><span class="ecard-name">Infontéin</span><span class="ecard-tag">client work</span></div>
+          <div class="ecard-headline"><span class="ecard-headline-val" id="in-headline">—</span><span class="ecard-headline-lbl">share · 10d</span></div>
+        </div>
+        <div class="ecard-body">
+          <div class="ecard-row"><span class="row-lbl">avg</span><span class="row-val" id="in-avg">—</span></div>
+          <div class="ecard-row"><span class="row-lbl">today</span><span class="row-val" id="in-today">—</span></div>
+          <div class="ecard-row"><span class="row-lbl">month</span><span class="row-val" id="in-mtd">—</span></div>
+          <div class="ecard-row"><span class="row-lbl">quarter</span><span class="row-val" id="in-qtd">—</span></div>
+        </div>
+        <div class="ecard-band" id="in-band">soft target 40%</div>
       </div>
       <div class="ecard" id="ecard-out">
-        <div class="ecard-hdr"><span class="ecard-name">Outfontéin</span><span class="ecard-tag">non-Fontein</span></div>
-        <div class="ecard-row"><span class="row-lbl">Today</span><span class="row-val" id="out-today">—</span></div>
-        <div class="ecard-row"><span class="row-lbl">10d avg</span><span class="row-val" id="out-10d">—</span></div>
-        <div class="ecard-row"><span class="row-lbl">MTD share</span><span class="row-val" id="out-mtd">—</span></div>
-        <div class="ecard-row"><span class="row-lbl">QTD share</span><span class="row-val" id="out-qtd">—</span></div>
-        <div class="ecard-band" id="out-band">cap 15% · floor 2/wk</div>
+        <div class="ecard-hdr">
+          <div class="ecard-titles"><span class="ecard-name">Outfontéin</span><span class="ecard-tag">non-Fontein</span></div>
+          <div class="ecard-headline"><span class="ecard-headline-val" id="out-headline">—</span><span class="ecard-headline-lbl">share · 10d</span></div>
+        </div>
+        <div class="ecard-body">
+          <div class="ecard-row"><span class="row-lbl">avg</span><span class="row-val" id="out-avg">—</span></div>
+          <div class="ecard-row"><span class="row-lbl">today</span><span class="row-val" id="out-today">—</span></div>
+          <div class="ecard-row"><span class="row-lbl">month</span><span class="row-val" id="out-mtd">—</span></div>
+          <div class="ecard-row"><span class="row-lbl">quarter</span><span class="row-val" id="out-qtd">—</span></div>
+        </div>
+        <div class="ecard-band" id="out-band">soft target 20%</div>
       </div>
     </div>
   </div>
@@ -873,20 +869,7 @@ async function init(){
     somEl.textContent=todayRow.idxAvg!==null?f2(todayRow.idxAvg):'—';
     if(todayRow.idxAvg!==null){somEl.style.color=idxColor(todayRow.idxAvg,gm);document.getElementById('td-somatic-sub').textContent=todayRow.idxAvg>=3?'gold zone':todayRow.idxAvg>=2?'on track':'needs attention';}
 
-    // ── Today strip row 2: Posture, Anchor, Engine Split ────
-    document.getElementById('td-posture').textContent=todayRow.posture||'—';
-    document.getElementById('td-posture-sub').textContent=todayRow.posture?'declared at MM':'(MAC column missing)';
-    const anchorTxt=todayRow.ancName||(todayRow.ancSub?'(unnamed)':'');
-    document.getElementById('td-anchor').textContent=anchorTxt||'—';
-    document.getElementById('td-anchor-sub').textContent=todayRow.ancSub?'sub-type: '+todayRow.ancSub:(todayRow.ancName?'sub-type: —':'(MAC columns missing)');
-    const engineEl=document.getElementById('td-engine');
-    if(todayRow.eIn!==null||todayRow.eOn!==null||todayRow.eOut!==null){
-      const vIn=todayRow.eIn||0,vOn=todayRow.eOn||0,vOut=todayRow.eOut||0;
-      const maxE=Math.max(vIn,vOn,vOut);
-      const tag=(name,v,dom)=>'<span class="e-pair"><span class="e-lbl">'+name+'</span><span class="e-val'+(dom?' e-dom':'')+'">'+(dom?'★ ':'')+v+'</span></span>';
-      engineEl.innerHTML=tag('On',vOn,vOn===maxE&&maxE>0)+tag('In',vIn,vIn===maxE&&maxE>0&&vIn!==vOn)+tag('Out',vOut,vOut===maxE&&maxE>0&&vOut!==vOn&&vOut!==vIn);
-    } else engineEl.textContent='—';
-
+    // (Today strip row 2 removed 2026-05-14 — dashboard optimized for 2-3 day check cadence)
     // (engine aggregates moved below Intelligence — they need last10 and qtdRows)
 
     // ── Summary ───────────────────────────────────────
@@ -925,45 +908,40 @@ async function init(){
     const l10anc=avg(last10.map(r=>r.anc)),l10lev=avg(last10.map(r=>r.lev)),l10clu=avg(last10.map(r=>r.clu));
     const l10bonusAvg=avg([l10anc,l10lev,l10clu].filter(v=>v!==null));
 
-    // ── Engine 10d aggregates + signal cards + Engines section ──
+    // ── Engine 10d aggregates · signal cards · engine cards (v2 — 2026-05-14) ──
     const eOn10=avg(last10.map(r=>r.eOn));
     const eIn10=avg(last10.map(r=>r.eIn));
     const eOut10=avg(last10.map(r=>r.eOut));
     const eTotal10=(eOn10||0)+(eIn10||0)+(eOut10||0);
+
+    // Signal cards · Row 1 — Performance · 10D
+    // 10D Bonus Avg = mean of Builder · Shooter · Clutch 10D averages
+    const bonusVals=[l10anc,l10lev,l10clu].filter(v=>v!==null);
+    const bonusAvg=bonusVals.length?avg(bonusVals):null;
+    const bavgEl=document.getElementById('sig-bavg');
+    if(bonusAvg!==null){
+      bavgEl.textContent=f2(bonusAvg);
+      document.getElementById('sig-bavg-sub').textContent='B '+f1(l10anc||0)+' · S '+f1(l10lev||0)+' · C '+f1(l10clu||0);
+    }
+
+    // Signal cards · Row 2 — Context · 10D
+    // 10D Index Avg
+    const iavgEl=document.getElementById('sig-iavg');
+    if(l10idxA!==null){
+      iavgEl.textContent=f2(l10idxA);
+      iavgEl.style.color=l10idxA>=3?'#EF9F27':l10idxA>=2?'#1D9E75':'#E24B4A';
+      const idxSub=l10idxA>=3?'gold zone (ghost authorized)':l10idxA>=2?'on track':'below tripwire';
+      document.getElementById('sig-iavg-sub').textContent='floor 2.0 · ghost 3.0 · '+idxSub;
+    }
     // Fontein Investment Ratio (Onfontéin ÷ Infontéin)
     const firEl=document.getElementById('sig-fir');
     if(eOn10!==null&&eIn10!==null&&eIn10>0){
       const fir=eOn10/eIn10;
       firEl.textContent=f2(fir);
-      firEl.style.color=fir>=2?'#1D9E75':fir>=1?'#BA7517':'#E24B4A';
       document.getElementById('sig-fir-sub').textContent='On '+f1(eOn10)+' ÷ In '+f1(eIn10);
     }
-    // Non-Fontein Share (Outfontéin ÷ Total)
-    const nfsEl=document.getElementById('sig-nfs');
-    if(eTotal10>0){
-      const nfs=(eOut10||0)/eTotal10;
-      nfsEl.textContent=(nfs*100).toFixed(0)+'%';
-      nfsEl.style.color=nfs<=0.15?'#1D9E75':nfs<=0.25?'#BA7517':'#E24B4A';
-      document.getElementById('sig-nfs-sub').textContent='Out '+f1(eOut10||0)+' ÷ Total '+f1(eTotal10)+' · '+(nfs>0.15?'⚠ above cap':'on band');
-    }
-    // Engine Balance bar
-    if(eTotal10>0){
-      const pOn=(eOn10||0)/eTotal10,pIn=(eIn10||0)/eTotal10,pOut=(eOut10||0)/eTotal10;
-      const segs=document.querySelectorAll('#sig-balance-bar .balance-seg');
-      segs[0].style.flexBasis=(pOn*100).toFixed(0)+'%';
-      segs[1].style.flexBasis=(pIn*100).toFixed(0)+'%';
-      segs[2].style.flexBasis=(pOut*100).toFixed(0)+'%';
-      segs[0].textContent=(pOn*100).toFixed(0)+'%';
-      segs[1].textContent=(pIn*100).toFixed(0)+'%';
-      segs[2].textContent=(pOut*100).toFixed(0)+'%';
-      const dOn=Math.abs(pOn-0.60),dIn=Math.abs(pIn-0.25),dOut=Math.abs(pOut-0.15);
-      const maxDrift=Math.max(dOn,dIn,dOut);
-      const balSub=document.getElementById('sig-balance-sub');
-      if(maxDrift<=0.05){balSub.textContent='✓ on band (max drift '+(maxDrift*100).toFixed(0)+'%)';balSub.style.color='#1D9E75';}
-      else if(maxDrift<=0.10){balSub.textContent='⚠ approaching drift (max '+(maxDrift*100).toFixed(0)+'%)';balSub.style.color='#BA7517';}
-      else{balSub.textContent='● drifted (max '+(maxDrift*100).toFixed(0)+'%)';balSub.style.color='#E24B4A';}
-    }
-    // Engines section per-engine cards
+
+    // Engines section · per-engine cards (share-as-headline, soft targets)
     const qOnSum=qtdRows.reduce((a,r)=>a+(r.eOn||0),0);
     const qInSum=qtdRows.reduce((a,r)=>a+(r.eIn||0),0);
     const qOutSum=qtdRows.reduce((a,r)=>a+(r.eOut||0),0);
@@ -972,30 +950,36 @@ async function init(){
     const mInSum=mtdRows.reduce((a,r)=>a+(r.eIn||0),0);
     const mOutSum=mtdRows.reduce((a,r)=>a+(r.eOut||0),0);
     const mTotal=mOnSum+mInSum+mOutSum;
-    function renderEngine(prefix,engineKey,todayVal,d10,bandTxt,bandHi,bandLo){
-      document.getElementById(prefix+'-today').textContent=todayVal!==null&&todayVal!==undefined?todayVal:'—';
-      document.getElementById(prefix+'-10d').textContent=d10!==null?f1(d10):'—';
+
+    function renderEngine(prefix,engineKey,todayVal,d10,softTargetPct){
+      // 10D share — the headline
+      const tenDayVal=engineKey==='on'?(eOn10||0):engineKey==='in'?(eIn10||0):(eOut10||0);
+      const headlineShare=eTotal10>0?(tenDayVal/eTotal10)*100:null;
+      document.getElementById(prefix+'-headline').textContent=headlineShare!==null?headlineShare.toFixed(0)+'%':'—';
+      // body rows
+      document.getElementById(prefix+'-avg').textContent=d10!==null?f1(d10)+' Doros/day':'—';
+      document.getElementById(prefix+'-today').textContent=todayVal!==null&&todayVal!==undefined?todayVal+' Doros':'—';
       const mVal=engineKey==='on'?mOnSum:engineKey==='in'?mInSum:mOutSum;
-      const mShare=mTotal>0?mVal/mTotal:null;
-      document.getElementById(prefix+'-mtd').textContent=mShare!==null?(mShare*100).toFixed(0)+'%':'—';
+      const mShare=mTotal>0?(mVal/mTotal)*100:null;
+      document.getElementById(prefix+'-mtd').textContent=mShare!==null?mShare.toFixed(0)+'%':'—';
       const qVal=engineKey==='on'?qOnSum:engineKey==='in'?qInSum:qOutSum;
-      const qShare=qTotal>0?qVal/qTotal:null;
-      document.getElementById(prefix+'-qtd').textContent=qShare!==null?(qShare*100).toFixed(0)+'%':'—';
+      const qShare=qTotal>0?(qVal/qTotal)*100:null;
+      document.getElementById(prefix+'-qtd').textContent=qShare!==null?qShare.toFixed(0)+'%':'—';
+      // Soft target footer — reference only, no judgment
       const bandEl=document.getElementById(prefix+'-band');
-      if(mShare!==null){
-        const pct=mShare*100;
-        let cls='ok',txt=bandTxt+' · '+pct.toFixed(0)+'% MTD ✓';
-        if(bandHi!==null&&pct>bandHi){cls='breach';txt=bandTxt+' · '+pct.toFixed(0)+'% ✗ breach';}
-        else if(bandLo!==null&&pct<bandLo){cls='warn';txt=bandTxt+' · '+pct.toFixed(0)+'% ⚠ below floor';}
-        else if(bandHi!==null&&pct>bandHi-5){cls='warn';txt=bandTxt+' · '+pct.toFixed(0)+'% ⚠ approaching cap';}
-        bandEl.className='ecard-band '+cls;
-        bandEl.textContent=txt;
+      if(headlineShare!==null){
+        const drift=headlineShare-softTargetPct;
+        const driftTxt=Math.abs(drift)<0.5?'on target':(drift>0?'+'+drift.toFixed(0)+' pts over':drift.toFixed(0)+' pts under');
+        bandEl.textContent='soft target '+softTargetPct+'% · '+driftTxt;
+      } else {
+        bandEl.textContent='soft target '+softTargetPct+'%';
       }
     }
-    renderEngine('on','on',todayRow.eOn,eOn10,'target 60%',null,55);
-    renderEngine('in','in',todayRow.eIn,eIn10,'target 25%',null,null);
-    renderEngine('out','out',todayRow.eOut,eOut10,'cap 15%',15,null);
-    document.getElementById('csec-engines-meta').textContent=eTotal10>0?f1(eTotal10)+' Doros/day · post-A12':'awaiting engine data';
+    // Soft Balance Formula: 40 On / 40 In / 20 Out (operator direction 2026-05-14 — reference, not rigid)
+    renderEngine('on','on',todayRow.eOn,eOn10,40);
+    renderEngine('in','in',todayRow.eIn,eIn10,40);
+    renderEngine('out','out',todayRow.eOut,eOut10,20);
+    document.getElementById('csec-engines-meta').textContent=eTotal10>0?f1(eTotal10)+' Doros/day · soft target 40/40/20':'awaiting engine data';
 
     // Capacity pills
     const capContainer=document.getElementById('cap-pills');
