@@ -191,6 +191,37 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
 
 /* Section divider */
 .sdivider{border:none;border-top:.5px solid var(--border2);margin:.85rem 0 .75rem;}
+
+/* ── Today strip — second row ── */
+.today-strip-r2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:.75rem;padding:.65rem 1rem .65rem 1.1rem;background:var(--bg2);border:.5px solid var(--border);border-radius:var(--rl);}
+.td-pill{display:flex;align-items:baseline;gap:6px;}
+.td-engine{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;font-size:13px;}
+.td-engine .e-pair{display:flex;gap:3px;align-items:baseline;}
+.td-engine .e-lbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;}
+.td-engine .e-val{font-size:14px;}
+.td-engine .e-dom{color:var(--gold);}
+
+/* ── Engines section ── */
+.engine-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.ecard{background:var(--bg3);border:.5px solid var(--border);border-radius:var(--r);padding:10px 12px;}
+.ecard-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;padding-bottom:5px;border-bottom:.5px solid var(--border);}
+.ecard-name{font-size:10px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--text2);}
+.ecard-tag{font-size:9px;color:var(--text3);}
+.ecard-row{display:flex;justify-content:space-between;align-items:baseline;font-size:11px;padding:3px 0;}
+.ecard-row .row-lbl{color:var(--text3);font-size:10px;}
+.ecard-row .row-val{font-size:13px;}
+.ecard-band{margin-top:8px;padding-top:6px;border-top:.5px solid var(--border);font-size:10px;color:var(--text3);}
+.ecard-band.ok{color:var(--green);}
+.ecard-band.warn{color:var(--amber);}
+.ecard-band.breach{color:var(--red);}
+
+/* ── Engine balance bar ── */
+.balance-bar{display:flex;height:18px;border-radius:var(--r);overflow:hidden;background:var(--bg3);margin-top:5px;border:.5px solid var(--border);}
+.balance-seg{font-size:9px;color:var(--bg);display:flex;align-items:center;justify-content:center;font-weight:500;transition:flex-basis .25s;}
+.balance-seg.on{background:#9B7FCC;}
+.balance-seg.in{background:#378ADD;}
+.balance-seg.out{background:#EF9F27;}
+.balance-targets{display:flex;justify-content:space-between;font-size:9px;color:var(--text3);margin-top:3px;}
 </style>
 </head>
 <body>
@@ -217,6 +248,16 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
     <p class="at-risk" id="td-risk">⚠ streak at risk</p>
   </div>
   <div><p class="td-label">Somatic avg · today</p><p class="td-val" id="td-somatic">—</p><p class="td-sub" id="td-somatic-sub">&nbsp;</p></div>
+</div>
+
+<!-- Today strip row 2: Posture, Anchor, Engine split -->
+<div class="today-strip-r2">
+  <div><p class="td-label">Posture</p><p class="td-val" id="td-posture">—</p><p class="td-sub" id="td-posture-sub">&nbsp;</p></div>
+  <div><p class="td-label">Anchor</p><p class="td-val" id="td-anchor">—</p><p class="td-sub" id="td-anchor-sub">&nbsp;</p></div>
+  <div>
+    <p class="td-label">Engine split today</p>
+    <div class="td-engine" id="td-engine">—</div>
+  </div>
 </div>
 
 <!-- Signal cards -->
@@ -247,9 +288,66 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
   </div>
 </div>
 
+<!-- Engine signal cards (NEW row 2) -->
+<div class="signal-grid">
+  <div class="sig-card">
+    <div class="sig-label"><span>Fontein Investment · 10d</span></div>
+    <div class="sig-val" id="sig-fir">—</div>
+    <div class="sig-sub" id="sig-fir-sub">Onfontéin ÷ Infontéin</div>
+  </div>
+  <div class="sig-card">
+    <div class="sig-label"><span>Non-Fontein Share · 10d</span></div>
+    <div class="sig-val" id="sig-nfs">—</div>
+    <div class="sig-sub" id="sig-nfs-sub">Outfontéin ÷ Total · cap 15%</div>
+  </div>
+  <div class="sig-card">
+    <div class="sig-label"><span>Engine Balance · 10d</span></div>
+    <div class="balance-bar" id="sig-balance-bar"><div class="balance-seg on" style="flex-basis:0%"></div><div class="balance-seg in" style="flex-basis:0%"></div><div class="balance-seg out" style="flex-basis:0%"></div></div>
+    <div class="balance-targets"><span>On 60%</span><span>In 25%</span><span>Out 15%</span></div>
+    <div class="sig-sub" id="sig-balance-sub" style="margin-top:5px;">&nbsp;</div>
+  </div>
+</div>
+
 <hr class="sdivider">
 
 <!-- TIER 2: CONTEXT — collapsible -->
+
+<!-- Engines (NEW) -->
+<div class="csec" id="csec-engines">
+  <div class="csec-hdr" onclick="toggleSec('engines')">
+    <span class="csec-title">Engines · 10d</span>
+    <span class="csec-meta" id="csec-engines-meta"></span>
+    <span class="csec-chev" id="csec-engines-chev">▶</span>
+  </div>
+  <div class="csec-body" id="csec-engines-body">
+    <div class="engine-grid">
+      <div class="ecard" id="ecard-on">
+        <div class="ecard-hdr"><span class="ecard-name">Onfontéin</span><span class="ecard-tag">build the business</span></div>
+        <div class="ecard-row"><span class="row-lbl">Today</span><span class="row-val" id="on-today">—</span></div>
+        <div class="ecard-row"><span class="row-lbl">10d avg</span><span class="row-val" id="on-10d">—</span></div>
+        <div class="ecard-row"><span class="row-lbl">MTD share</span><span class="row-val" id="on-mtd">—</span></div>
+        <div class="ecard-row"><span class="row-lbl">QTD share</span><span class="row-val" id="on-qtd">—</span></div>
+        <div class="ecard-band" id="on-band">target 60%</div>
+      </div>
+      <div class="ecard" id="ecard-in">
+        <div class="ecard-hdr"><span class="ecard-name">Infontéin</span><span class="ecard-tag">client work</span></div>
+        <div class="ecard-row"><span class="row-lbl">Today</span><span class="row-val" id="in-today">—</span></div>
+        <div class="ecard-row"><span class="row-lbl">10d avg</span><span class="row-val" id="in-10d">—</span></div>
+        <div class="ecard-row"><span class="row-lbl">MTD share</span><span class="row-val" id="in-mtd">—</span></div>
+        <div class="ecard-row"><span class="row-lbl">QTD share</span><span class="row-val" id="in-qtd">—</span></div>
+        <div class="ecard-band" id="in-band">target 25%</div>
+      </div>
+      <div class="ecard" id="ecard-out">
+        <div class="ecard-hdr"><span class="ecard-name">Outfontéin</span><span class="ecard-tag">non-Fontein</span></div>
+        <div class="ecard-row"><span class="row-lbl">Today</span><span class="row-val" id="out-today">—</span></div>
+        <div class="ecard-row"><span class="row-lbl">10d avg</span><span class="row-val" id="out-10d">—</span></div>
+        <div class="ecard-row"><span class="row-lbl">MTD share</span><span class="row-val" id="out-mtd">—</span></div>
+        <div class="ecard-row"><span class="row-lbl">QTD share</span><span class="row-val" id="out-qtd">—</span></div>
+        <div class="ecard-band" id="out-band">cap 15% · floor 2/wk</div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Summary -->
 <div class="csec" id="csec-summary">
@@ -373,8 +471,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
       <div class="chart-csec-hdr">
         <span class="chart-title">Execution bonuses</span>
         <div class="legend">
-          <span><span class="ldot" style="background:#9B7FCC;"></span>Anchor</span>
-          <span><span class="ldot" style="background:#378ADD;"></span>Leverage</span>
+          <span><span class="ldot" style="background:#9B7FCC;"></span>Builder</span>
+          <span><span class="ldot" style="background:#378ADD;"></span>Shooter</span>
           <span><span class="ldot" style="background:#EF9F27;"></span>Clutch</span>
         </div>
       </div>
@@ -594,8 +692,8 @@ function buildCharts(flat,C){
   ci3=new Chart(document.getElementById('bonusChart'),{
     type:'line',
     data:{datasets:[
-      {label:'Anchor',data:flat.map((r,i)=>({x:i,y:r.anc})),borderColor:'#9B7FCC',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,tension:0.3,spanGaps:true},
-      {label:'Leverage',data:flat.map((r,i)=>({x:i,y:r.lev})),borderColor:'#378ADD',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,tension:0.3,spanGaps:true},
+      {label:'Builder',data:flat.map((r,i)=>({x:i,y:r.anc})),borderColor:'#9B7FCC',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,tension:0.3,spanGaps:true},
+      {label:'Shooter',data:flat.map((r,i)=>({x:i,y:r.lev})),borderColor:'#378ADD',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,tension:0.3,spanGaps:true},
       {label:'Clutch',data:flat.map((r,i)=>({x:i,y:r.clu})),borderColor:'#EF9F27',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,tension:0.3,spanGaps:true},
     ]},
     options:{responsive:true,maintainAspectRatio:false,animation:{duration:250},
@@ -629,12 +727,24 @@ async function init(){
         hi=i;
         lower.forEach((h,j)=>{
           if(h==='date')cols.date=j;if(h==='day type')cols.dt=j;
-          if(h==='doros')cols.doros=j;if(h==='leverage bonus')cols.lev=j;
-          if(h==='anchor bonus')cols.anc=j;if(h==='clutch bonus')cols.clu=j;
+          if(h==='doros')cols.doros=j;
+          // Bonus columns (renamed): Builder = old Anchor Bonus; Shooter = old Leverage Bonus (sales/proposals); Clutch unchanged
+          if(h==='builder'||h==='anchor bonus')cols.anc=j;
+          if(h==='shooter'||h==='leverage bonus')cols.lev=j;
+          if(h==='clutch bonus')cols.clu=j;
           if(h==='total doros')cols.total=j;if(h==='rwr index/5')cols.rwr=j;
           if(h==='mm index/5')cols.mm=j;if(h==='lf index/5')cols.lf=j;
           if(h==='ps score/5')cols.ps=j;if(h==='fitt score/5')cols.fitt=j;
           if(h==='index avg')cols.idxAvg=j;
+          // post-A12 engine columns
+          if(h==='infontein')cols.eIn=j;
+          if(h==='onfontein')cols.eOn=j;
+          if(h==='outfontein')cols.eOut=j;
+          if(h==='r index/2')cols.rIdx=j;
+          // optional MAC schema expansion columns (post-A12 doctrine)
+          if(h==='posture')cols.posture=j;
+          if(h==='anchor sub-type'||h==='anchor subtype')cols.ancSub=j;
+          if(h==='anchor name')cols.ancName=j;
         });
         break;
       }
@@ -659,7 +769,15 @@ async function init(){
       const rwr=gs(row[cols.rwr]),mm=gs(row[cols.mm]),lf=gs(row[cols.lf]),ps=gs(row[cols.ps]),fitt=gs(row[cols.fitt]);
       const idxAvg=gs(row[cols.idxAvg]);
       const anc=gs(row[cols.anc]),lev=gs(row[cols.lev]),clu=gs(row[cols.clu]);
-      flat.push({ds,ym,doros,total,dtRaw,rwr,mm,lf,ps,fitt,idxAvg,anc,lev,clu});
+      // engine values (post-A12)
+      const eIn=cols.eIn!==undefined?gs(row[cols.eIn]):null;
+      const eOn=cols.eOn!==undefined?gs(row[cols.eOn]):null;
+      const eOut=cols.eOut!==undefined?gs(row[cols.eOut]):null;
+      const rIdx=cols.rIdx!==undefined?gs(row[cols.rIdx]):null;
+      const posture=cols.posture!==undefined?(row[cols.posture]||'').trim():'';
+      const ancSub=cols.ancSub!==undefined?(row[cols.ancSub]||'').trim():'';
+      const ancName=cols.ancName!==undefined?(row[cols.ancName]||'').trim():'';
+      flat.push({ds,ym,doros,total,dtRaw,rwr,mm,lf,ps,fitt,idxAvg,anc,lev,clu,eIn,eOn,eOut,rIdx,posture,ancSub,ancName});
       if(!years[yr])years[yr]={};
       if(!years[yr][q])years[yr][q]=newP();
       const qd=years[yr][q];
@@ -755,6 +873,22 @@ async function init(){
     somEl.textContent=todayRow.idxAvg!==null?f2(todayRow.idxAvg):'—';
     if(todayRow.idxAvg!==null){somEl.style.color=idxColor(todayRow.idxAvg,gm);document.getElementById('td-somatic-sub').textContent=todayRow.idxAvg>=3?'gold zone':todayRow.idxAvg>=2?'on track':'needs attention';}
 
+    // ── Today strip row 2: Posture, Anchor, Engine Split ────
+    document.getElementById('td-posture').textContent=todayRow.posture||'—';
+    document.getElementById('td-posture-sub').textContent=todayRow.posture?'declared at MM':'(MAC column missing)';
+    const anchorTxt=todayRow.ancName||(todayRow.ancSub?'(unnamed)':'');
+    document.getElementById('td-anchor').textContent=anchorTxt||'—';
+    document.getElementById('td-anchor-sub').textContent=todayRow.ancSub?'sub-type: '+todayRow.ancSub:(todayRow.ancName?'sub-type: —':'(MAC columns missing)');
+    const engineEl=document.getElementById('td-engine');
+    if(todayRow.eIn!==null||todayRow.eOn!==null||todayRow.eOut!==null){
+      const vIn=todayRow.eIn||0,vOn=todayRow.eOn||0,vOut=todayRow.eOut||0;
+      const maxE=Math.max(vIn,vOn,vOut);
+      const tag=(name,v,dom)=>'<span class="e-pair"><span class="e-lbl">'+name+'</span><span class="e-val'+(dom?' e-dom':'')+'">'+(dom?'★ ':'')+v+'</span></span>';
+      engineEl.innerHTML=tag('On',vOn,vOn===maxE&&maxE>0)+tag('In',vIn,vIn===maxE&&maxE>0&&vIn!==vOn)+tag('Out',vOut,vOut===maxE&&maxE>0&&vOut!==vOn&&vOut!==vIn);
+    } else engineEl.textContent='—';
+
+    // (engine aggregates moved below Intelligence — they need last10 and qtdRows)
+
     // ── Summary ───────────────────────────────────────
     const ytdE=avg(allD),ytdT=avg(allT);
     const mtdRows=flat.filter(r=>r.ym===cym);
@@ -790,6 +924,78 @@ async function init(){
     const l10lf=avg(last10.map(r=>r.lf)),l10ps=avg(last10.map(r=>r.ps)),l10fitt=avg(last10.map(r=>r.fitt));
     const l10anc=avg(last10.map(r=>r.anc)),l10lev=avg(last10.map(r=>r.lev)),l10clu=avg(last10.map(r=>r.clu));
     const l10bonusAvg=avg([l10anc,l10lev,l10clu].filter(v=>v!==null));
+
+    // ── Engine 10d aggregates + signal cards + Engines section ──
+    const eOn10=avg(last10.map(r=>r.eOn));
+    const eIn10=avg(last10.map(r=>r.eIn));
+    const eOut10=avg(last10.map(r=>r.eOut));
+    const eTotal10=(eOn10||0)+(eIn10||0)+(eOut10||0);
+    // Fontein Investment Ratio (Onfontéin ÷ Infontéin)
+    const firEl=document.getElementById('sig-fir');
+    if(eOn10!==null&&eIn10!==null&&eIn10>0){
+      const fir=eOn10/eIn10;
+      firEl.textContent=f2(fir);
+      firEl.style.color=fir>=2?'#1D9E75':fir>=1?'#BA7517':'#E24B4A';
+      document.getElementById('sig-fir-sub').textContent='On '+f1(eOn10)+' ÷ In '+f1(eIn10);
+    }
+    // Non-Fontein Share (Outfontéin ÷ Total)
+    const nfsEl=document.getElementById('sig-nfs');
+    if(eTotal10>0){
+      const nfs=(eOut10||0)/eTotal10;
+      nfsEl.textContent=(nfs*100).toFixed(0)+'%';
+      nfsEl.style.color=nfs<=0.15?'#1D9E75':nfs<=0.25?'#BA7517':'#E24B4A';
+      document.getElementById('sig-nfs-sub').textContent='Out '+f1(eOut10||0)+' ÷ Total '+f1(eTotal10)+' · '+(nfs>0.15?'⚠ above cap':'on band');
+    }
+    // Engine Balance bar
+    if(eTotal10>0){
+      const pOn=(eOn10||0)/eTotal10,pIn=(eIn10||0)/eTotal10,pOut=(eOut10||0)/eTotal10;
+      const segs=document.querySelectorAll('#sig-balance-bar .balance-seg');
+      segs[0].style.flexBasis=(pOn*100).toFixed(0)+'%';
+      segs[1].style.flexBasis=(pIn*100).toFixed(0)+'%';
+      segs[2].style.flexBasis=(pOut*100).toFixed(0)+'%';
+      segs[0].textContent=(pOn*100).toFixed(0)+'%';
+      segs[1].textContent=(pIn*100).toFixed(0)+'%';
+      segs[2].textContent=(pOut*100).toFixed(0)+'%';
+      const dOn=Math.abs(pOn-0.60),dIn=Math.abs(pIn-0.25),dOut=Math.abs(pOut-0.15);
+      const maxDrift=Math.max(dOn,dIn,dOut);
+      const balSub=document.getElementById('sig-balance-sub');
+      if(maxDrift<=0.05){balSub.textContent='✓ on band (max drift '+(maxDrift*100).toFixed(0)+'%)';balSub.style.color='#1D9E75';}
+      else if(maxDrift<=0.10){balSub.textContent='⚠ approaching drift (max '+(maxDrift*100).toFixed(0)+'%)';balSub.style.color='#BA7517';}
+      else{balSub.textContent='● drifted (max '+(maxDrift*100).toFixed(0)+'%)';balSub.style.color='#E24B4A';}
+    }
+    // Engines section per-engine cards
+    const qOnSum=qtdRows.reduce((a,r)=>a+(r.eOn||0),0);
+    const qInSum=qtdRows.reduce((a,r)=>a+(r.eIn||0),0);
+    const qOutSum=qtdRows.reduce((a,r)=>a+(r.eOut||0),0);
+    const qTotal=qOnSum+qInSum+qOutSum;
+    const mOnSum=mtdRows.reduce((a,r)=>a+(r.eOn||0),0);
+    const mInSum=mtdRows.reduce((a,r)=>a+(r.eIn||0),0);
+    const mOutSum=mtdRows.reduce((a,r)=>a+(r.eOut||0),0);
+    const mTotal=mOnSum+mInSum+mOutSum;
+    function renderEngine(prefix,engineKey,todayVal,d10,bandTxt,bandHi,bandLo){
+      document.getElementById(prefix+'-today').textContent=todayVal!==null&&todayVal!==undefined?todayVal:'—';
+      document.getElementById(prefix+'-10d').textContent=d10!==null?f1(d10):'—';
+      const mVal=engineKey==='on'?mOnSum:engineKey==='in'?mInSum:mOutSum;
+      const mShare=mTotal>0?mVal/mTotal:null;
+      document.getElementById(prefix+'-mtd').textContent=mShare!==null?(mShare*100).toFixed(0)+'%':'—';
+      const qVal=engineKey==='on'?qOnSum:engineKey==='in'?qInSum:qOutSum;
+      const qShare=qTotal>0?qVal/qTotal:null;
+      document.getElementById(prefix+'-qtd').textContent=qShare!==null?(qShare*100).toFixed(0)+'%':'—';
+      const bandEl=document.getElementById(prefix+'-band');
+      if(mShare!==null){
+        const pct=mShare*100;
+        let cls='ok',txt=bandTxt+' · '+pct.toFixed(0)+'% MTD ✓';
+        if(bandHi!==null&&pct>bandHi){cls='breach';txt=bandTxt+' · '+pct.toFixed(0)+'% ✗ breach';}
+        else if(bandLo!==null&&pct<bandLo){cls='warn';txt=bandTxt+' · '+pct.toFixed(0)+'% ⚠ below floor';}
+        else if(bandHi!==null&&pct>bandHi-5){cls='warn';txt=bandTxt+' · '+pct.toFixed(0)+'% ⚠ approaching cap';}
+        bandEl.className='ecard-band '+cls;
+        bandEl.textContent=txt;
+      }
+    }
+    renderEngine('on','on',todayRow.eOn,eOn10,'target 60%',null,55);
+    renderEngine('in','in',todayRow.eIn,eIn10,'target 25%',null,null);
+    renderEngine('out','out',todayRow.eOut,eOut10,'cap 15%',15,null);
+    document.getElementById('csec-engines-meta').textContent=eTotal10>0?f1(eTotal10)+' Doros/day · post-A12':'awaiting engine data';
 
     // Capacity pills
     const capContainer=document.getElementById('cap-pills');
@@ -841,7 +1047,7 @@ async function init(){
     // Leverage pills — avg leads
     const levDefs=[
       {k:'bonus',l:'Avg',v:l10bonusAvg,special:true},
-      {k:'anc',l:'Anchor',v:l10anc},{k:'lev',l:'Leverage',v:l10lev},{k:'clu',l:'Clutch',v:l10clu}
+      {k:'anc',l:'Builder',v:l10anc},{k:'lev',l:'Shooter',v:l10lev},{k:'clu',l:'Clutch',v:l10clu}
     ];
     const validL=levDefs.filter(p=>p.v!==null&&!p.special);
     const bestL=validL.length?validL.reduce((a,b)=>b.v>a.v?b:a):{k:null};
