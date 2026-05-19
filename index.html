@@ -232,6 +232,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
 <div class="today-strip" id="today-strip">
   <div><p class="td-label">Today</p><p class="td-val" id="td-date">—</p><p class="td-sub" id="td-dsub">&nbsp;</p></div>
   <div><p class="td-label">Day type</p><p class="td-val" id="td-dtype">—</p></div>
+  <div><p class="td-label">State</p><p class="td-val" id="td-state">—</p></div>
   <div>
     <p class="td-label">ED · TD today</p>
     <div class="td-pair"><span class="td-val" id="td-ed">—</span><span class="td-sep">/</span><span class="td-val" id="td-td">—</span></div>
@@ -762,6 +763,7 @@ async function init(){
     if(hi===-1)throw new Error('header not found');
     const gs=v=>{if(v===undefined)return null;const s=(v||'').trim();return s!==''&&!isNaN(+s)?+s:null;};
     const flat=[],years={},allD=[],allT=[];
+    const offDays=new Set();
     const today=todayStr(),cym=curYM();
 
     for(let i=hi+1;i<lines.length;i++){
@@ -770,7 +772,7 @@ async function init(){
       if(!/^\d{4}-\d{2}-\d{2}/.test(ds))continue;
       const dtRaw=(cols.dt!==undefined?row[cols.dt]||'':'').trim();
       const stateRaw=(cols.state!==undefined?(row[cols.state]||''):'').trim().toLowerCase();
-      if(dtRaw.toLowerCase()==='off day')continue;
+      if(dtRaw.toLowerCase()==='off day'){offDays.add(ds);continue;}
       const dr=(row[cols.doros]||'').trim();
       if(dr==='')continue;
       const doros=parseFloat(dr);if(isNaN(doros))continue;
@@ -814,25 +816,70 @@ async function init(){
     const r10eA=[],r10tA=[];
     flat.forEach((_,i)=>{const sl=flat.slice(Math.max(0,i-9),i+1);r10eA.push(avg(sl.map(r=>r.doros)));r10tA.push(avg(sl.map(r=>r.total)));});
 
-    const roll10E=r10eA[flat.length-1];
-    const roll10T=r10tA[flat.length-1];
-    const prev10E=r10eA[flat.length-11]||null;
-    const prev10T=r10tA[flat.length-11]||null;
-    const peakE=Math.max(...r10eA.filter(v=>v!==null));
-    const peakT=Math.max(...r10tA.filter(v=>v!==null));
+    // ── In-progress today vs closed history ────────────
+    // The latest row in flat is treated as "today / in progress" — its Doro count
+    // doesn't roll into the 10D figures until a newer row is logged (i.e. the day closes).
+    // closedFlat = all logged rows except the most recent one.
+    const closedFlat=flat.slice(0,-1);
+    const inProgress=flat[flat.length-1]||null;
 
-    // ── Streak (closed days) ───────────────────────────
-    const closedFlat=flat[flat.length-1].ds===today?flat.slice(0,-1):flat;
-    let streak=0,lastState='below';
+    // 10D rolling figures shown in the top strip — computed from closedFlat only.
+    const r10eA_c=[],r10tA_c=[];
+    closedFlat.forEach((_,i)=>{const sl=closedFlat.slice(Math.max(0,i-9),i+1);r10eA_c.push(avg(sl.map(r=>r.doros)));r10tA_c.push(avg(sl.map(r=>r.total)));});
+    const roll10E=closedFlat.length>0?r10eA_c[closedFlat.length-1]:null;
+    const roll10T=closedFlat.length>0?r10tA_c[closedFlat.length-1]:null;
+    const prev10E=closedFlat.length>=11?r10eA_c[closedFlat.length-11]:null;
+    const prev10T=closedFlat.length>=11?r10tA_c[closedFlat.length-11]:null;
+    const peakE=r10eA_c.filter(v=>v!==null).length>0?Math.max(...r10eA_c.filter(v=>v!==null)):0;
+    const peakT=r10tA_c.filter(v=>v!==null).length>0?Math.max(...r10tA_c.filter(v=>v!==null)):0;
+
+    // ── Streak — workday-aware, multi-state breakdown ──
+    // Streak counts consecutive workdays of matching state, walking back from latest closed row.
+    // Weekends and Off Days do NOT break a streak. Missing workdays (a date that should have
+    // been logged but isn't) DO break the streak.
+    function workdayGap(d1,d2){
+      // Count workdays strictly between d1 and d2 that are NOT in offDays.
+      let count=0;
+      const cur=new Date(d1+'T00:00:00');
+      const end=new Date(d2+'T00:00:00');
+      cur.setDate(cur.getDate()+1);
+      while(cur<end){
+        const dow=cur.getDay();
+        if(dow!==0&&dow!==6){
+          const ds=cur.getFullYear()+'-'+String(cur.getMonth()+1).padStart(2,'0')+'-'+String(cur.getDate()).padStart(2,'0');
+          if(!offDays.has(ds))count++;
+        }
+        cur.setDate(cur.getDate()+1);
+      }
+      return count;
+    }
+    function streakOfState(rows,target){
+      // target: 'ghost' | 'cascante' | null (null = any workday)
+      let streak=0;
+      for(let i=rows.length-1;i>=0;i--){
+        const r=rows[i];
+        const r10=r10eA_c[i];
+        const s=stateOf(r10,r.idxAvg,r.doros,r.state);
+        if(target!==null&&s!==target)break;
+        streak++;
+        if(i>0){
+          const gap=workdayGap(rows[i-1].ds,r.ds);
+          if(gap>0)break;
+        }
+      }
+      return streak;
+    }
+    let lastState='below',mainStreak=0,ghostStreak=0,cascanteStreak=0,workdayStreak=0;
     if(closedFlat.length>0){
       const lr=closedFlat[closedFlat.length-1];
-      const lr10=r10eA[closedFlat.length-1];
+      const lr10=r10eA_c[closedFlat.length-1];
       lastState=stateOf(lr10,lr.idxAvg,lr.doros,lr.state);
-      for(let i=closedFlat.length-1;i>=0;i--){
-        if(stateOf(r10eA[i],closedFlat[i].idxAvg,closedFlat[i].doros,closedFlat[i].state)===lastState)streak++;
-        else break;
-      }
+      ghostStreak=streakOfState(closedFlat,'ghost');
+      cascanteStreak=streakOfState(closedFlat,'cascante');
+      workdayStreak=streakOfState(closedFlat,null);
+      mainStreak=lastState==='ghost'?ghostStreak:lastState==='cascante'?cascanteStreak:workdayStreak;
     }
+    const streak=mainStreak;
     const streakColor=lastState==='ghost'?'#EF9F27':lastState==='cascante'?'#1D9E75':'#E24B4A';
 
     // Signal cards
@@ -847,11 +894,14 @@ async function init(){
     document.getElementById('sig-t-sub').textContent='floor 10.0 · peak '+f2(peakT);
     const ssEl=document.getElementById('sig-streak');
     ssEl.textContent=streak;ssEl.style.color=streakColor;
-    document.getElementById('sig-streak-sub').textContent=lastState==='ghost'?(streak>=10?'★ ghost streak active':streak+' days in ghost'):lastState==='cascante'?streak+' days in Cascante':streak+' days below 8.5';
+    document.getElementById('sig-streak-sub').innerHTML=
+      '<span style="color:#EF9F27">★ '+ghostStreak+' ghost</span>'+
+      ' · <span style="color:#1D9E75">● '+cascanteStreak+' cascante</span>'+
+      ' · <span style="color:var(--text2)">'+workdayStreak+' workdays</span>';
 
     // Momentum
-    const last5=avg(flat.slice(-5).map(r=>r.doros));
-    const prev5=avg(flat.slice(-10,-5).map(r=>r.doros));
+    const last5=avg(closedFlat.slice(-5).map(r=>r.doros));
+    const prev5=avg(closedFlat.slice(-10,-5).map(r=>r.doros));
     const mb=document.getElementById('momentum-badge');
     if(last5!==null&&prev5!==null){
       const d=last5-prev5;
@@ -864,19 +914,27 @@ async function init(){
     document.getElementById('today-strip').style.setProperty('border-left-color',streakColor);
 
     // Today values
+    // todayRow = most recent logged row, always (matches "Most recent logged" sub-label).
+    // ED/TD shown verbatim; these values do NOT feed 10D rolling until the row is no longer the latest.
     const todayRow=flat.find(r=>r.ds===today)||flat[flat.length-1];
     const isToday=todayRow.ds===today;
     document.getElementById('td-date').textContent=fmtDate(todayRow.ds);
     document.getElementById('td-dsub').textContent=isToday?'':'Most recent logged';
     document.getElementById('td-dtype').textContent=todayRow.dtRaw||'—';
+    // State chip (MAC col C) — capitalized for display, color-coded
+    const stEl_disp=document.getElementById('td-state');
+    if(todayRow.state==='ghost'){stEl_disp.textContent='GHOST';stEl_disp.style.color='#EF9F27';}
+    else if(todayRow.state==='cascante'){stEl_disp.textContent='Cascante';stEl_disp.style.color='#1D9E75';}
+    else if(todayRow.state==='none'){stEl_disp.textContent='None';stEl_disp.style.color='var(--text3)';}
+    else{stEl_disp.textContent='—';stEl_disp.style.color='';}
     const edEl=document.getElementById('td-ed');
-    edEl.textContent=isToday?todayRow.doros:'—';
-    if(isToday)edEl.style.color=todayRow.doros>=8.5?'#1D9E75':todayRow.doros>=6?'#BA7517':'var(--text)';
+    edEl.textContent=todayRow.doros!==null&&todayRow.doros!==undefined?todayRow.doros:'—';
+    edEl.style.color=todayRow.doros>=8.5?'#1D9E75':todayRow.doros>=6?'#BA7517':'var(--text)';
     const tdEl=document.getElementById('td-td');
-    tdEl.textContent=isToday?todayRow.total:'—';
-    if(isToday)tdEl.style.color=todayRow.total>=10?'#1D9E75':todayRow.total>=7?'#BA7517':'var(--text)';
+    tdEl.textContent=todayRow.total!==null&&todayRow.total!==undefined?todayRow.total:'—';
+    tdEl.style.color=todayRow.total>=10?'#1D9E75':todayRow.total>=7?'#BA7517':'var(--text)';
     const riskEl=document.getElementById('td-risk');
-    if(isToday&&lastState!=='below'){
+    if(lastState!=='below'){
       const atRisk=(lastState==='ghost'&&todayRow.doros<10)||(lastState==='cascante'&&todayRow.doros<8.5);
       if(atRisk)riskEl.style.display='block';
     }
@@ -916,7 +974,7 @@ async function init(){
     document.getElementById('csec-summary-meta').textContent='YTD · MTD · QTD · WTD';
 
     // ── Intelligence ──────────────────────────────────
-    const last10=flat.slice(-10);
+    const last10=closedFlat.slice(-10);
     const l10e=avg(last10.map(r=>r.doros)),l10t=avg(last10.map(r=>r.total));
     const l10idxA=avg(last10.map(r=>r.idxAvg));
     const l10rwr=avg(last10.map(r=>r.rwr)),l10mm=avg(last10.map(r=>r.mm));
