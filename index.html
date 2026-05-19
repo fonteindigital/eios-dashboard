@@ -629,8 +629,21 @@ const SKc=[{k:'rwr',l:'RWR'},{k:'mm',l:'MM'},{k:'lf',l:'LF'},{k:'ps',l:'PS'},{k:
 function chips(d,cls){return SKc.map(s=>{const a=avg(d[s.k]);return a!==null?'<span class="'+cls+'">'+s.l+' '+a.toFixed(1)+'</span>':''}).join('');}
 function idxColor(v,gm){if(v===null)return isDark()?'#6b6a65':'#9a9890';if(v>=3)return '#EF9F27';if(v>=(gm?3:2))return '#1D9E75';return '#BA7517';}
 function traj(cur,prev){if(prev===null||cur===null)return '';const d=cur-prev;if(d>0.3)return '<span style="color:#1D9E75">↑ +'+d.toFixed(1)+'</span>';if(d<-0.3)return '<span style="color:#E24B4A">↓ '+d.toFixed(1)+'</span>';return '<span style="color:var(--text3)">→</span>';}
-function isGhost(r10e,som){return r10e!==null&&r10e>=10&&som!==null&&som>=3;}
-function stateOf(r10e,som,doros){if(isGhost(r10e,som))return 'ghost';if(doros>=8.5)return 'cascante';return 'below';}
+// Manual State column (MAC col C) wins when populated; falls back to computed for older rows where State is blank.
+// state arg is lowercased: 'ghost' | 'cascante' | 'none' | '' (blank = pre-State-column rows)
+function isGhost(r10e,som,state){
+  if(state==='ghost')return true;
+  if(state==='cascante'||state==='none')return false;
+  return r10e!==null&&r10e>=10&&som!==null&&som>=3;
+}
+function stateOf(r10e,som,doros,state){
+  if(state==='ghost')return 'ghost';
+  if(state==='cascante')return 'cascante';
+  if(state==='none')return 'below';
+  if(isGhost(r10e,som,state))return 'ghost';
+  if(doros>=8.5)return 'cascante';
+  return 'below';
+}
 function xTickFmt(flat){return v=>{const r=flat[Math.round(v)];return r?new Date(r.ds+'T00:00:00').toLocaleString('default',{month:'short',day:'numeric'}):'';};}
 
 let ci1=null,ci2=null,ci3=null,gFlat=[];
@@ -723,6 +736,7 @@ async function init(){
         hi=i;
         lower.forEach((h,j)=>{
           if(h==='date')cols.date=j;if(h==='day type')cols.dt=j;
+          if(h==='state')cols.state=j;
           if(h==='doros')cols.doros=j;
           // Bonus columns (renamed): Builder = old Anchor Bonus; Shooter = old Leverage Bonus (sales/proposals); Clutch unchanged
           if(h==='builder'||h==='anchor bonus')cols.anc=j;
@@ -755,6 +769,7 @@ async function init(){
       const ds=(row[cols.date]||'').trim();
       if(!/^\d{4}-\d{2}-\d{2}/.test(ds))continue;
       const dtRaw=(cols.dt!==undefined?row[cols.dt]||'':'').trim();
+      const stateRaw=(cols.state!==undefined?(row[cols.state]||''):'').trim().toLowerCase();
       if(dtRaw.toLowerCase()==='off day')continue;
       const dr=(row[cols.doros]||'').trim();
       if(dr==='')continue;
@@ -773,7 +788,7 @@ async function init(){
       const posture=cols.posture!==undefined?(row[cols.posture]||'').trim():'';
       const ancSub=cols.ancSub!==undefined?(row[cols.ancSub]||'').trim():'';
       const ancName=cols.ancName!==undefined?(row[cols.ancName]||'').trim():'';
-      flat.push({ds,ym,doros,total,dtRaw,rwr,mm,lf,ps,fitt,idxAvg,anc,lev,clu,eIn,eOn,eOut,rIdx,posture,ancSub,ancName});
+      flat.push({ds,ym,doros,total,dtRaw,state:stateRaw,rwr,mm,lf,ps,fitt,idxAvg,anc,lev,clu,eIn,eOn,eOut,rIdx,posture,ancSub,ancName});
       if(!years[yr])years[yr]={};
       if(!years[yr][q])years[yr][q]=newP();
       const qd=years[yr][q];
@@ -812,9 +827,9 @@ async function init(){
     if(closedFlat.length>0){
       const lr=closedFlat[closedFlat.length-1];
       const lr10=r10eA[closedFlat.length-1];
-      lastState=stateOf(lr10,lr.idxAvg,lr.doros);
+      lastState=stateOf(lr10,lr.idxAvg,lr.doros,lr.state);
       for(let i=closedFlat.length-1;i>=0;i--){
-        if(stateOf(r10eA[i],closedFlat[i].idxAvg,closedFlat[i].doros)===lastState)streak++;
+        if(stateOf(r10eA[i],closedFlat[i].idxAvg,closedFlat[i].doros,closedFlat[i].state)===lastState)streak++;
         else break;
       }
     }
@@ -1078,11 +1093,11 @@ async function init(){
     const ghostDays=[];
     flat.forEach((r,i)=>{
       if(r.ds===today&&i===flat.length-1)return;
-      if(isGhost(r10eA[i],r.idxAvg))ghostDays.push({...r,r10e:r10eA[i],r10t:r10tA[i]});
+      if(isGhost(r10eA[i],r.idxAvg,r.state))ghostDays.push({...r,r10e:r10eA[i],r10t:r10tA[i]});
     });
     let longestRun=0,curRun=0;
     flat.slice(0,flat[flat.length-1].ds===today?-1:undefined).forEach((r,i)=>{
-      if(isGhost(r10eA[i],r.idxAvg)){curRun++;longestRun=Math.max(longestRun,curRun);}else curRun=0;
+      if(isGhost(r10eA[i],r.idxAvg,r.state)){curRun++;longestRun=Math.max(longestRun,curRun);}else curRun=0;
     });
     const recent=ghostDays.length?ghostDays[ghostDays.length-1].ds:'—';
     document.getElementById('ghost-meta').innerHTML=
