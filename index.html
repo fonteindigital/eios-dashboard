@@ -817,11 +817,12 @@ async function init(){
     flat.forEach((_,i)=>{const sl=flat.slice(Math.max(0,i-9),i+1);r10eA.push(avg(sl.map(r=>r.doros)));r10tA.push(avg(sl.map(r=>r.total)));});
 
     // ── In-progress today vs closed history ────────────
-    // The latest row in flat is treated as "today / in progress" — its Doro count
-    // doesn't roll into the 10D figures until a newer row is logged (i.e. the day closes).
-    // closedFlat = all logged rows except the most recent one.
-    const closedFlat=flat.slice(0,-1);
-    const inProgress=flat[flat.length-1]||null;
+    // A row is officially "closed" when R Index = 2 (both R1 morning + R2 closing reflections captured).
+    // The latest row stays out of 10D rolling until that condition is met.
+    // closedFlat = flat minus the latest row IF it's still in-progress.
+    const lastRow=flat[flat.length-1]||null;
+    const inProgress=(lastRow&&(lastRow.rIdx===null||lastRow.rIdx<2))?lastRow:null;
+    const closedFlat=inProgress?flat.slice(0,-1):flat;
 
     // 10D rolling figures shown in the top strip — computed from closedFlat only.
     const r10eA_c=[],r10tA_c=[];
