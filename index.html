@@ -43,7 +43,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
 .theme-btn:hover{color:var(--text);}
 
 /* Today strip */
-.today-strip{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-bottom:.75rem;padding:.75rem 1rem .75rem 1.1rem;background:var(--bg2);border:.5px solid var(--border2);border-radius:var(--rl);box-shadow:var(--shadow);border-left:3px solid var(--border2);transition:border-left-color .3s;}
+.today-strip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-bottom:.75rem;padding:.75rem 1rem .75rem 1.1rem;background:var(--bg2);border:.5px solid var(--border2);border-radius:var(--rl);box-shadow:var(--shadow);border-left:3px solid var(--border2);transition:border-left-color .3s;}
+@media(max-width:780px){.today-strip{grid-template-columns:repeat(2,minmax(0,1fr));}}
 .td-label{font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;}
 .td-val{font-size:16px;line-height:1.2;}
 .td-pair{display:flex;gap:10px;align-items:baseline;}
@@ -175,6 +176,136 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
 .w-ghost{font-size:10px;color:var(--gold);min-width:20px;}
 .w-days{font-size:10px;color:var(--text3);min-width:16px;}
 
+
+/* ── Ghost 2.0 additions (2026-05-21) ────────────────────────────── */
+/* Status row below today-strip: LF chip, R index chip, terminal gate */
+.status-row{display:flex;gap:10px;margin:-.55rem 0 .75rem;padding:6px 12px;background:var(--bg2);border:.5px solid var(--border);border-radius:var(--r);align-items:center;font-size:10px;flex-wrap:wrap;}
+.status-chip{display:flex;align-items:center;gap:5px;padding:2px 8px;border-radius:10px;background:var(--bg3);border:.5px solid var(--border);color:var(--text2);}
+.status-chip-lbl{font-size:9px;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;}
+.status-chip-val{font-size:11px;font-weight:500;}
+.status-chip.gate-open{background:rgba(29,158,117,0.10);border-color:rgba(29,158,117,0.25);}
+.status-chip.gate-closed{background:rgba(186,117,23,0.10);border-color:rgba(186,117,23,0.28);color:var(--amber);}
+.status-chip.gate-warn{background:rgba(226,75,74,0.10);border-color:rgba(226,75,74,0.25);color:var(--red);}
+.status-chip.day-open{background:rgba(186,117,23,0.10);border-color:rgba(186,117,23,0.28);color:var(--amber);}
+.status-chip.day-closed{background:rgba(29,158,117,0.10);border-color:rgba(29,158,117,0.25);color:var(--green);}
+.status-chip.lf-pass{background:rgba(29,158,117,0.10);border-color:rgba(29,158,117,0.25);color:var(--green);}
+.status-chip.lf-fail{background:rgba(226,75,74,0.10);border-color:rgba(226,75,74,0.25);color:var(--red);}
+
+/* Sparklines */
+.spark{display:block;width:100%;height:18px;margin-top:3px;overflow:visible;}
+.spark-line{fill:none;stroke:var(--text3);stroke-width:1;opacity:.45;}
+.spark-ref{stroke:var(--text3);stroke-width:.5;stroke-dasharray:2,2;opacity:.35;}
+.spark-dot{stroke-width:1.2;}
+.spark-dot.lift{fill:var(--green);stroke:var(--green);}
+.spark-dot.drag{fill:var(--red);stroke:var(--red);}
+.spark-dot.flat{fill:var(--text3);stroke:var(--text3);}
+
+/* Day-type NM (Nightman) styling — same family as ghost-gold but distinct */
+.dtype-nm{color:#C77DFF;}
+
+/* Ghost 2.0 Qualification panel */
+.q2-panel{margin-bottom:.6rem;background:var(--bg2);border:.5px solid var(--border2);border-radius:var(--rl);padding:14px 16px;box-shadow:var(--shadow);}
+.q2-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:.5px solid var(--border);}
+.q2-title{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);}
+.q2-verdict{font-size:11px;font-weight:500;padding:3px 9px;border-radius:11px;}
+.q2-verdict.pass{background:rgba(239,159,39,0.15);color:var(--gold);}
+.q2-verdict.fail{background:rgba(107,106,101,0.12);color:var(--text3);}
+.q2-pillars{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-bottom:10px;}
+.q2-pillar{background:var(--bg3);border:.5px solid var(--border);border-radius:var(--r);padding:9px 10px;}
+.q2-pillar.pass{background:rgba(29,158,117,0.07);border-color:rgba(29,158,117,0.2);}
+.q2-pillar.fail{background:rgba(226,75,74,0.06);border-color:rgba(226,75,74,0.18);}
+.q2-pillar-lbl{font-size:9px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;display:flex;align-items:center;justify-content:space-between;}
+.q2-pillar-mark{font-size:11px;}
+.q2-pillar-mark.pass{color:var(--green);}
+.q2-pillar-mark.fail{color:var(--red);}
+.q2-pillar-val{font-size:15px;line-height:1.1;}
+.q2-pillar-thr{font-size:9px;color:var(--text3);margin-top:2px;}
+.q2-pillar-gap{font-size:9px;margin-top:2px;}
+.q2-pillar-gap.short{color:var(--red);}
+.q2-pillar-gap.surplus{color:var(--green);}
+.q2-pillar-trend{font-size:9px;margin-left:4px;}
+.q2-proj{font-size:10px;color:var(--text2);margin-top:6px;padding-top:6px;border-top:.5px dashed var(--border);}
+.q2-window{display:flex;gap:3px;margin-top:8px;align-items:center;}
+.q2-window-lbl{font-size:9px;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;margin-right:6px;min-width:64px;}
+.q2-tile{flex:1;height:18px;border-radius:3px;background:var(--bg3);border:.5px solid var(--border);position:relative;}
+.q2-tile.ghost{background:rgba(239,159,39,0.45);border-color:rgba(239,159,39,0.6);}
+.q2-tile.cascante{background:rgba(29,158,117,0.4);border-color:rgba(29,158,117,0.55);}
+.q2-tile.none{background:rgba(107,106,101,0.18);}
+.q2-tile.off{background:repeating-linear-gradient(45deg,var(--bg3),var(--bg3) 3px,var(--bg) 3px,var(--bg) 6px);}
+.q2-tile.exiting{opacity:.35;border-style:dashed;}
+.q2-tile.today{border-width:1px;border-style:solid;border-color:var(--text2);box-shadow:0 0 0 1px var(--text3);}
+.q2-window-meta{font-size:9px;color:var(--text3);margin-top:4px;display:flex;justify-content:space-between;}
+
+/* Ghost log era marker */
+.ghost-era{font-size:9px;color:var(--gold);letter-spacing:.08em;text-transform:uppercase;padding:6px 0 4px;border-top:.5px dashed rgba(239,159,39,0.35);margin:8px 0 4px;}
+.ghost-era-pre{color:var(--text3);border-top-color:var(--border);}
+
+
+
+/* Somatic component chips (RWR · MM · LF · PS · FITT in status row) */
+.som-chips{display:flex;gap:6px;flex:1;flex-wrap:wrap;}
+.som-chip{display:flex;align-items:center;gap:4px;padding:2px 7px;border-radius:9px;background:var(--bg3);border:.5px solid var(--border);font-size:10px;}
+.som-chip-lbl{font-size:8px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);}
+.som-chip-val{font-size:11px;font-weight:500;color:var(--text2);}
+.som-chip.gated{border-color:rgba(239,159,39,0.35);background:rgba(239,159,39,0.06);}
+.som-chip.gated .som-chip-lbl{color:var(--gold);}
+.som-chip.lf-pass{background:rgba(29,158,117,0.08);border-color:rgba(29,158,117,0.22);}
+.som-chip.lf-pass .som-chip-val{color:var(--green);}
+.som-chip.lf-fail{background:rgba(226,75,74,0.08);border-color:rgba(226,75,74,0.22);}
+.som-chip.lf-fail .som-chip-val{color:var(--red);}
+
+/* Awaiting-data placeholder for qualification panel */
+.q2-await{font-size:11px;color:var(--text3);padding:14px 4px;text-align:center;font-style:italic;}
+
+/* Status row — separator pseudo between component groups */
+.status-row{flex-wrap:wrap;}
+.status-sep{width:1px;height:18px;background:var(--border);margin:0 4px;}
+
+/* Bullet graphs (replace ✓/✗ pillar tiles) */
+.bullet-wrap{display:flex;flex-direction:column;gap:4px;}
+.bullet-svg{width:100%;height:14px;display:block;overflow:visible;}
+.bullet-bg{fill:var(--bg3);}
+.bullet-fill.pass{fill:var(--green);}
+.bullet-fill.fail{fill:var(--red);}
+.bullet-fill.ghost{fill:var(--gold);}
+.bullet-target{stroke:var(--text);stroke-width:1.5;}
+.bullet-meta{display:flex;justify-content:space-between;font-size:9px;color:var(--text3);}
+.bullet-meta .val{color:var(--text2);font-weight:500;font-size:11px;}
+
+/* Pillar v2 (bullet style) */
+.q2-pillar-v2{background:var(--bg3);border:.5px solid var(--border);border-radius:var(--r);padding:8px 10px;}
+.q2-pillar-v2.pass{background:rgba(29,158,117,0.06);border-color:rgba(29,158,117,0.18);}
+.q2-pillar-v2.fail{background:rgba(226,75,74,0.04);border-color:rgba(226,75,74,0.14);}
+.q2-pillar-v2-lbl{font-size:9px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);margin-bottom:5px;display:flex;align-items:center;gap:5px;}
+
+/* Streak state strip (inside Streak signal card) */
+.state-strip{display:flex;gap:2px;margin:8px 0 4px;}
+.st-tile{flex:1;height:14px;border-radius:2px;background:var(--bg3);border:.5px solid var(--border);}
+.st-tile.ghost{background:rgba(239,159,39,0.55);border-color:rgba(239,159,39,0.7);}
+.st-tile.cascante{background:rgba(29,158,117,0.45);border-color:rgba(29,158,117,0.55);}
+.st-tile.none{background:rgba(107,106,101,0.22);}
+.st-tile.empty{background:transparent;border-style:dashed;}
+
+/* Momentum sparkline replacing text badge */
+.momentum-spark{margin-left:auto;width:60px;height:14px;display:block;}
+
+/* Section header above Ghost 2.0 panel */
+.layer-hdr{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin:1.1rem 0 .45rem;padding-bottom:.4rem;border-bottom:.5px solid var(--border);display:flex;align-items:center;gap:8px;}
+.layer-hdr-tag{font-size:9px;background:rgba(239,159,39,0.13);color:var(--gold);padding:1px 6px;border-radius:8px;letter-spacing:.05em;}
+
+/* Today strip floor refs (small bar under values) */
+.floor-bar-wrap{display:flex;align-items:center;gap:4px;font-size:9px;color:var(--text3);margin-top:3px;}
+.floor-bar{flex:1;height:3px;background:var(--bg3);border-radius:2px;position:relative;overflow:hidden;max-width:60px;}
+.floor-bar-fill{height:100%;border-radius:2px;}
+.floor-bar-fill.pass{background:var(--green);}
+.floor-bar-fill.partial{background:var(--amber);}
+.floor-bar-fill.fail{background:var(--red);}
+.floor-lbl{font-size:8px;color:var(--text3);}
+
+@media (max-width: 720px){
+  .q2-pillars{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+
 /* Ghost log */
 .ghost-hdr-inner{display:flex;align-items:center;gap:8px;width:100%;}
 .ghost-title{font-size:11px;font-weight:500;color:var(--gold);}
@@ -236,12 +367,32 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
   <div>
     <p class="td-label">ED · TD today</p>
     <div class="td-pair"><span class="td-val" id="td-ed">—</span><span class="td-sep">/</span><span class="td-val" id="td-td">—</span></div>
+    <div class="floor-bar-wrap" id="td-ed-floorwrap"><div class="floor-bar"><div class="floor-bar-fill" id="td-ed-floorfill" style="width:0%;"></div></div><span class="floor-lbl" id="td-ed-floorlbl">/ 10</span></div>
+    <svg class="spark" id="spark-ed" viewBox="0 0 100 18" preserveAspectRatio="none"></svg>
     <p class="at-risk" id="td-risk">⚠ streak at risk</p>
   </div>
-  <div><p class="td-label">Somatic avg · today</p><p class="td-val" id="td-somatic">—</p><p class="td-sub" id="td-somatic-sub">&nbsp;</p></div>
+  <div>
+    <p class="td-label">Somatic avg · today</p>
+    <p class="td-val" id="td-somatic">—</p>
+    <div class="floor-bar-wrap" id="td-som-floorwrap"><div class="floor-bar" style="position:relative;"><div class="floor-bar-fill" id="td-som-floorfill" style="width:0%;"></div><span id="td-som-ghosttick" style="position:absolute;top:-1px;bottom:-1px;width:1px;background:var(--gold);left:60%;"></span></div><span class="floor-lbl">floor 2 · ghost 3</span></div>
+    <svg class="spark" id="spark-idx" viewBox="0 0 100 18" preserveAspectRatio="none"></svg>
+    <p class="td-sub" id="td-somatic-sub">&nbsp;</p>
+  </div>
 </div>
 
-<!-- Today strip row 2 removed 2026-05-14 — dashboard optimized for 2-3 day check cadence, not daily snapshots -->
+<!-- Status row — Somatic components · Day status · Terminal Gate -->
+<div class="status-row" id="status-row">
+  <div class="som-chips" id="som-chips">
+    <div class="som-chip"><span class="som-chip-lbl">RWR</span><span class="som-chip-val" id="som-rwr">—</span></div>
+    <div class="som-chip"><span class="som-chip-lbl">MM</span><span class="som-chip-val" id="som-mm">—</span></div>
+    <div class="som-chip gated" id="som-lf-chip"><span class="som-chip-lbl">LF <small style="opacity:.6">(gate ≥2)</small></span><span class="som-chip-val" id="som-lf">—</span></div>
+    <div class="som-chip"><span class="som-chip-lbl">PS</span><span class="som-chip-val" id="som-ps">—</span></div>
+    <div class="som-chip"><span class="som-chip-lbl">FITT</span><span class="som-chip-val" id="som-fitt">—</span></div>
+  </div>
+  <div class="status-sep"></div>
+  <div class="status-chip" id="chip-rstat"><span class="status-chip-lbl">Day</span><span class="status-chip-val" id="chip-rstat-val">—</span></div>
+  <div class="status-chip" id="chip-gate"><span class="status-chip-lbl">22:00</span><span class="status-chip-val" id="chip-gate-val">—</span></div>
+</div>
 
 <!-- Signal cards · Row 1 — Performance · 10D -->
 <div class="signal-grid">
@@ -278,9 +429,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
   <div class="sig-card">
     <div class="sig-label">
       <span>Streak</span>
-      <span id="momentum-badge" class="momentum-badge"></span>
+      <svg class="momentum-spark" id="momentum-spark" viewBox="0 0 60 14" preserveAspectRatio="none"></svg>
+      <span id="momentum-badge" class="momentum-badge" style="display:none;"></span>
     </div>
-    <div class="sig-val" id="sig-streak">—</div>
+    <div class="sig-val" id="sig-streak" style="font-size:24px;">—</div>
+    <div class="state-strip" id="state-strip"></div>
     <div class="sig-sub" id="sig-streak-sub">&nbsp;</div>
   </div>
   <div class="sig-card">
@@ -491,6 +644,23 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
   <div class="csec-body" id="csec-breakdown-body">
     <div id="quarters"></div>
   </div>
+</div>
+
+<!-- Doctrine Compliance layer · Ghost 2.0 is the marquee gate; future gates land here -->
+<div class="layer-hdr"><span>Doctrine compliance</span><span class="layer-hdr-tag">Ghost 2.0 sealed 2026-05-20</span></div>
+<!-- Ghost 2.0 Qualification panel (sealed 2026-05-20) -->
+<div class="q2-panel" id="q2-panel">
+  <div class="q2-hdr">
+    <span class="q2-title">★ Ghost 2.0 qualification</span>
+    <span class="q2-verdict fail" id="q2-verdict">—</span>
+  </div>
+  <div class="q2-pillars" id="q2-pillars"><div class="q2-await" style="grid-column:1/-1;">Awaiting live data — open via served URL (file:// blocks fetch)</div></div>
+  <div class="q2-proj" id="q2-proj">—</div>
+  <div class="q2-window">
+    <span class="q2-window-lbl">10D Window</span>
+    <div id="q2-tiles" style="display:flex;gap:3px;flex:1;"></div>
+  </div>
+  <div class="q2-window-meta" id="q2-window-meta"><span>oldest (exits next)</span><span>today (in progress)</span></div>
 </div>
 
 <!-- Ghost log -->
@@ -899,16 +1069,46 @@ async function init(){
       ' · <span style="color:#1D9E75">● '+cascanteStreak+' cascante</span>'+
       ' · <span style="color:var(--text2)">'+workdayStreak+' workdays</span>';
 
-    // Momentum
-    const last5=avg(closedFlat.slice(-5).map(r=>r.doros));
-    const prev5=avg(closedFlat.slice(-10,-5).map(r=>r.doros));
-    const mb=document.getElementById('momentum-badge');
-    if(last5!==null&&prev5!==null){
-      const d=last5-prev5;
-      if(d>0.5){mb.className='momentum-badge up';mb.textContent='↑ accelerating';}
-      else if(d<-0.5){mb.className='momentum-badge down';mb.textContent='↓ decelerating';}
-      else{mb.className='momentum-badge flat';mb.textContent='→ stable';}
-    }
+    // State strip: last 10 closed days as colored tiles inside Streak card
+    (function renderStateStrip(){
+      const stripEl=document.getElementById('state-strip');
+      if(!stripEl)return;
+      const last10rows=closedFlat.slice(-10);
+      let html='';
+      // Pad start with empty tiles if fewer than 10 closed days
+      for(let i=0;i<10-last10rows.length;i++){
+        html+='<div class="st-tile empty"></div>';
+      }
+      last10rows.forEach((r,i)=>{
+        const idx=closedFlat.length-last10rows.length+i;
+        const r10=r10eA_c[idx];
+        const s=stateOf(r10,r.idxAvg,r.doros,r.state);
+        const cls=s==='ghost'?'ghost':s==='cascante'?'cascante':'none';
+        html+='<div class="st-tile '+cls+'" title="'+r.ds+' · '+s+'"></div>';
+      });
+      stripEl.innerHTML=html;
+    })();
+
+    // Momentum — render as mini sparkline of last 7 closed days' ED values
+    (function renderMomentumSpark(){
+      const el=document.getElementById('momentum-spark');
+      if(!el)return;
+      const vals=closedFlat.slice(-7).map(r=>r.doros);
+      if(vals.length<2){el.innerHTML='';return;}
+      const lo=Math.min(...vals,8),hi=Math.max(...vals,12);
+      const rng=Math.max(hi-lo,0.5);
+      const W=60,H=14,PAD=1;
+      function y(v){return H-PAD-((v-lo)/rng)*(H-2*PAD);}
+      function x(i,n){return n<=1?W/2:PAD+(i/(n-1))*(W-2*PAD);}
+      const pts=vals.map((v,i)=>x(i,vals.length)+','+y(v)).join(' ');
+      // Direction color: last value vs first
+      const d=vals[vals.length-1]-vals[0];
+      const col=d>0.5?'var(--green)':d<-0.5?'var(--red)':'var(--text3)';
+      const lastX=W-PAD,lastY=y(vals[vals.length-1]);
+      el.innerHTML=
+        '<polyline points="'+pts+'" fill="none" stroke="'+col+'" stroke-width="1.2" opacity="0.85"/>'+
+        '<circle cx="'+lastX+'" cy="'+lastY+'" r="1.8" fill="'+col+'"/>';
+    })();
 
     // Today accent
     document.getElementById('today-strip').style.setProperty('border-left-color',streakColor);
@@ -920,7 +1120,11 @@ async function init(){
     const isToday=todayRow.ds===today;
     document.getElementById('td-date').textContent=fmtDate(todayRow.ds);
     document.getElementById('td-dsub').textContent=isToday?'':'Most recent logged';
-    document.getElementById('td-dtype').textContent=todayRow.dtRaw||'—';
+    const dtypeEl=document.getElementById('td-dtype');
+    const dtRawT=todayRow.dtRaw||'';
+    dtypeEl.textContent=dtRawT||'—';
+    dtypeEl.classList.remove('dtype-nm');
+    if(dtRawT.toLowerCase()==='nm'||dtRawT.toLowerCase()==='nightman')dtypeEl.classList.add('dtype-nm');
     // State chip (MAC col C) — capitalized for display, color-coded
     const stEl_disp=document.getElementById('td-state');
     if(todayRow.state==='ghost'){stEl_disp.textContent='GHOST';stEl_disp.style.color='#EF9F27';}
@@ -934,14 +1138,17 @@ async function init(){
     tdEl.textContent=todayRow.total!==null&&todayRow.total!==undefined?todayRow.total:'—';
     tdEl.style.color=todayRow.total>=10?'#1D9E75':todayRow.total>=7?'#BA7517':'var(--text)';
     const riskEl=document.getElementById('td-risk');
-    if(lastState!=='below'){
-      const atRisk=(lastState==='ghost'&&todayRow.doros<10)||(lastState==='cascante'&&todayRow.doros<8.5);
-      if(atRisk)riskEl.style.display='block';
+    riskEl.style.display='none';
+    if(mainStreak>=1&&lastState!=='below'){
+      const stName=lastState==='ghost'?'ghost':'cascante';
+      const floor=lastState==='ghost'?10:8.5;
+      const atRisk=todayRow.doros<floor;
+      if(atRisk){riskEl.style.display='block';riskEl.textContent='⚠ '+stName+' streak at risk · need ED ≥'+floor;}
     }
     const gm=lastState==='ghost';
     const somEl=document.getElementById('td-somatic');
     somEl.textContent=todayRow.idxAvg!==null?f2(todayRow.idxAvg):'—';
-    if(todayRow.idxAvg!==null){somEl.style.color=idxColor(todayRow.idxAvg,gm);document.getElementById('td-somatic-sub').textContent=todayRow.idxAvg>=3?'gold zone':todayRow.idxAvg>=2?'on track':'needs attention';}
+    if(todayRow.idxAvg!==null){somEl.style.color=idxColor(todayRow.idxAvg,gm);document.getElementById('td-somatic-sub').textContent=todayRow.idxAvg>=3?'ghost zone (≥3)':todayRow.idxAvg>=2.5?'climbing toward ghost':todayRow.idxAvg>=2?'above floor · below ghost':'below tripwire';}
 
     // (Today strip row 2 removed 2026-05-14 — dashboard optimized for 2-3 day check cadence)
     // (engine aggregates moved below Intelligence — they need last10 and qtdRows)
@@ -1006,7 +1213,7 @@ async function init(){
     if(l10idxA!==null){
       iavgEl.textContent=f2(l10idxA);
       iavgEl.style.color=l10idxA>=3?'#EF9F27':l10idxA>=2?'#1D9E75':'#E24B4A';
-      const idxSub=l10idxA>=3?'gold zone (ghost authorized)':l10idxA>=2?'on track':'below tripwire';
+      const idxSub=l10idxA>=3?'ghost authorized':l10idxA>=2.5?'climbing toward ghost':l10idxA>=2?'above floor · below ghost':'below tripwire';
       document.getElementById('sig-iavg-sub').textContent='floor 2.0 · ghost 3.0 · '+idxSub;
     }
     // Fontein Investment Ratio (Onfontéin ÷ Infontéin) — green inside band [0.5, 1.5], red outside
@@ -1170,18 +1377,78 @@ async function init(){
     if(ghostDays.length===0){
       gBodyEl.innerHTML='<p style="font-size:11px;color:var(--text3);">No ghost days yet.</p>';
     }else{
-      gBodyEl.innerHTML=Object.keys(gByWk).reverse().map(wk=>{
+      // Ghost 2.0 sealed 2026-05-20 — era divider between old-rules and new-rules ghost days
+      const ERA_DATE='2026-05-20';
+      const wkKeys=Object.keys(gByWk).reverse();
+      // Determine if any week straddles the era; we'll render era markers per cluster
+      const sortedDays=ghostDays.slice().sort((a,b)=>a.ds<b.ds?-1:1);
+      const hasPreEra=sortedDays.some(g=>g.ds<ERA_DATE);
+      const hasPostEra=sortedDays.some(g=>g.ds>=ERA_DATE);
+      let html='';
+      if(hasPostEra){
+        html+='<div class="ghost-era">— Ghost 2.0 era (sealed '+ERA_DATE+') —</div>';
+      }
+      wkKeys.forEach(wk=>{
         const days=gByWk[wk];
-        return '<div class="ghost-cluster">'+
-          '<div class="ghost-cluster-lbl">'+wk+' · '+days.length+' ghost day'+(days.length>1?'s':'')+'</div>'+
-          days.map(g=>'<div class="ghost-row">'+
-            '<span class="ghost-date">'+g.ds+'</span>'+
-            '<span class="ghost-ed">ED '+g.doros+'</span>'+
-            '<span class="ghost-td">TD '+g.total+'</span>'+
-            '<span class="ghost-som">★ '+f2(g.idxAvg)+'</span>'+
-          '</div>').join('')+
-        '</div>';
-      }).join('');
+        // For mixed-era weeks, split them
+        const postDays=days.filter(g=>g.ds>=ERA_DATE);
+        const preDays=days.filter(g=>g.ds<ERA_DATE);
+        if(postDays.length){
+          html+='<div class="ghost-cluster"><div class="ghost-cluster-lbl">'+wk+' · '+postDays.length+' ghost day'+(postDays.length>1?'s':'')+'</div>'+
+            postDays.map(g=>'<div class="ghost-row">'+
+              '<span class="ghost-date">'+g.ds+'</span>'+
+              '<span class="ghost-ed">ED '+g.doros+'</span>'+
+              '<span class="ghost-td">TD '+g.total+'</span>'+
+              '<span class="ghost-som">★ '+f2(g.idxAvg)+'</span>'+
+            '</div>').join('')+'</div>';
+        }
+        if(preDays.length){
+          if(postDays.length){
+            // no extra marker inside; keep cluster header
+          }
+          html+='<div class="ghost-cluster"><div class="ghost-cluster-lbl">'+wk+' · '+preDays.length+' ghost day'+(preDays.length>1?'s':'')+(hasPostEra?' (pre-2.0)':'')+'</div>'+
+            preDays.map(g=>'<div class="ghost-row">'+
+              '<span class="ghost-date">'+g.ds+'</span>'+
+              '<span class="ghost-ed">ED '+g.doros+'</span>'+
+              '<span class="ghost-td">TD '+g.total+'</span>'+
+              '<span class="ghost-som">★ '+f2(g.idxAvg)+'</span>'+
+            '</div>').join('')+'</div>';
+        }
+      });
+      if(hasPreEra&&hasPostEra){
+        // Insert pre-era separator: find first pre-era cluster in html and prepend a marker
+        // Easier: append a marker between blocks via re-rendering. Re-do simpler:
+        html='';
+        if(hasPostEra){html+='<div class="ghost-era">— Ghost 2.0 era (sealed '+ERA_DATE+') —</div>';}
+        wkKeys.forEach(wk=>{
+          const days=gByWk[wk];
+          const postDays=days.filter(g=>g.ds>=ERA_DATE);
+          if(postDays.length){
+            html+='<div class="ghost-cluster"><div class="ghost-cluster-lbl">'+wk+' · '+postDays.length+' ghost day'+(postDays.length>1?'s':'')+'</div>'+
+              postDays.map(g=>'<div class="ghost-row">'+
+                '<span class="ghost-date">'+g.ds+'</span>'+
+                '<span class="ghost-ed">ED '+g.doros+'</span>'+
+                '<span class="ghost-td">TD '+g.total+'</span>'+
+                '<span class="ghost-som">★ '+f2(g.idxAvg)+'</span>'+
+              '</div>').join('')+'</div>';
+          }
+        });
+        html+='<div class="ghost-era ghost-era-pre">— pre-2.0 records (legacy rules) —</div>';
+        wkKeys.forEach(wk=>{
+          const days=gByWk[wk];
+          const preDays=days.filter(g=>g.ds<ERA_DATE);
+          if(preDays.length){
+            html+='<div class="ghost-cluster"><div class="ghost-cluster-lbl">'+wk+' · '+preDays.length+' ghost day'+(preDays.length>1?'s':'')+'</div>'+
+              preDays.map(g=>'<div class="ghost-row">'+
+                '<span class="ghost-date">'+g.ds+'</span>'+
+                '<span class="ghost-ed">ED '+g.doros+'</span>'+
+                '<span class="ghost-td">TD '+g.total+'</span>'+
+                '<span class="ghost-som">★ '+f2(g.idxAvg)+'</span>'+
+              '</div>').join('')+'</div>';
+          }
+        });
+      }
+      gBodyEl.innerHTML=html;
     }
 
     // ── Breakdown ─────────────────────────────────────
@@ -1241,6 +1508,220 @@ async function init(){
         container.appendChild(qDiv);
       });
     });
+
+    // ── Ghost 2.0 — Status row (LF chip · R-index · Terminal Gate) ───
+    (function renderStatusRow(){
+      function setSom(id,v){document.getElementById(id).textContent=v!==null&&v!==undefined?v:'—';}
+      setSom('som-rwr',todayRow.rwr);
+      setSom('som-mm',todayRow.mm);
+      setSom('som-lf',todayRow.lf);
+      setSom('som-ps',todayRow.ps);
+      setSom('som-fitt',todayRow.fitt);
+      const lfChip=document.getElementById('som-lf-chip');
+      lfChip.classList.remove('lf-pass','lf-fail');
+      if(todayRow.lf!==null&&todayRow.lf!==undefined){
+        lfChip.classList.add(todayRow.lf>=2?'lf-pass':'lf-fail');
+      }
+
+      // R-index day status
+      const rsChip=document.getElementById('chip-rstat');
+      const rsVal=document.getElementById('chip-rstat-val');
+      rsChip.classList.remove('day-open','day-closed');
+      if(todayRow.rIdx===2){rsVal.textContent='closed (R1+R2)';rsChip.classList.add('day-closed');}
+      else if(todayRow.rIdx===1){rsVal.textContent='open · R1 logged';rsChip.classList.add('day-open');}
+      else if(todayRow.rIdx===0||todayRow.rIdx===null){rsVal.textContent='open · awaiting R1';rsChip.classList.add('day-open');}
+      else{rsVal.textContent='R '+todayRow.rIdx;}
+
+      // Terminal Gate 22:00 CAT (UTC+2). Compute current CAT hour from UTC.
+      const gChip=document.getElementById('chip-gate');
+      const gVal=document.getElementById('chip-gate-val');
+      const now=new Date();
+      const catHour=(now.getUTCHours()+2)%24;
+      const catMin=now.getUTCMinutes();
+      gChip.classList.remove('gate-open','gate-closed','gate-warn');
+      if(catHour>=22||catHour<5){gVal.textContent='past gate';gChip.classList.add('gate-closed');}
+      else if(catHour>=21){gVal.textContent=(60-catMin)+'m to gate';gChip.classList.add('gate-warn');}
+      else{
+        const mins=(22-catHour)*60-catMin;
+        const h=Math.floor(mins/60),m=mins%60;
+        gVal.textContent=h+'h '+m+'m to gate';gChip.classList.add('gate-open');
+      }
+    })();
+
+    // ── Ghost 2.0 — Sparklines (today vs 10D delta) ──────────────────
+    (function renderSparklines(){
+      function spark(elId,history,todayVal,avg10,refIsFloor){
+        const el=document.getElementById(elId);if(!el)return;
+        const vals=history.filter(v=>v!==null&&v!==undefined);
+        if(vals.length===0){el.innerHTML='';return;}
+        const lo=Math.min(...vals,todayVal!==null?todayVal:vals[0],avg10||vals[0]);
+        const hi=Math.max(...vals,todayVal!==null?todayVal:vals[0],avg10||vals[0]);
+        const range=Math.max(hi-lo,0.1);
+        const W=100,H=18,PAD=2;
+        function y(v){return H-PAD-((v-lo)/range)*(H-2*PAD);}
+        function x(i,n){return n<=1?W/2:PAD+(i/(n-1))*(W-2*PAD);}
+        const pts=history.map((v,i)=>v!==null&&v!==undefined?(x(i,history.length)+','+y(v)):null).filter(Boolean);
+        let svg='';
+        // 10D average reference line
+        if(avg10!==null&&avg10!==undefined){
+          const ry=y(avg10);
+          svg+='<line class="spark-ref" x1="0" y1="'+ry+'" x2="'+W+'" y2="'+ry+'"/>';
+        }
+        // history polyline
+        if(pts.length>1)svg+='<polyline class="spark-line" points="'+pts.join(' ')+'"/>';
+        // today dot
+        if(todayVal!==null&&todayVal!==undefined&&avg10!==null){
+          const tx=W-PAD,ty=y(todayVal);
+          const cls=todayVal>avg10+0.05?'lift':todayVal<avg10-0.05?'drag':'flat';
+          svg+='<circle class="spark-dot '+cls+'" cx="'+tx+'" cy="'+ty+'" r="2"/>';
+        }
+        el.innerHTML=svg;
+      }
+      const last10ED=closedFlat.slice(-10).map(r=>r.doros);
+      const last10Idx=closedFlat.slice(-10).map(r=>r.idxAvg);
+      const last10LF=closedFlat.slice(-10).map(r=>r.lf);
+      spark('spark-ed',last10ED,todayRow.doros,roll10E);
+      spark('spark-idx',last10Idx,todayRow.idxAvg,l10idxA);
+      // LF sparkline removed in v3 (LF now part of somatic chip row instead)
+
+      // Floor bars in today strip
+      function setFloorBar(fillId,lblId,val,floor,ghostThr){
+        const fill=document.getElementById(fillId);
+        if(!fill)return;
+        if(val===null||val===undefined){fill.style.width='0%';return;}
+        const max=ghostThr||(floor*1.5);
+        const pct=Math.min(100,(val/max)*100);
+        fill.style.width=pct.toFixed(0)+'%';
+        fill.classList.remove('pass','partial','fail');
+        if(val>=floor)fill.classList.add('pass');
+        else if(val>=floor*0.6)fill.classList.add('partial');
+        else fill.classList.add('fail');
+      }
+      setFloorBar('td-ed-floorfill','td-ed-floorlbl',todayRow.doros,10,15);
+      setFloorBar('td-som-floorfill',null,todayRow.idxAvg,2,5);
+    })();
+
+    // ── Ghost 2.0 — Qualification panel (5 pillars + projection + window) ──
+    (function renderQualPanel(){
+      const panel=document.getElementById('q2-panel');// already visible (v3 — placeholder shown until data fills)
+      // Trend over last 3 closed days
+      function trendArrow(series){
+        const v=series.filter(x=>x!==null&&x!==undefined);
+        if(v.length<2)return '';
+        const d=v[v.length-1]-v[0];
+        if(d>0.05)return '<span class="q2-pillar-trend" style="color:var(--green)">↑</span>';
+        if(d<-0.05)return '<span class="q2-pillar-trend" style="color:var(--red)">↓</span>';
+        return '<span class="q2-pillar-trend" style="color:var(--text3)">→</span>';
+      }
+      // Rolling 10D ED avg series (last 3 values)
+      const last3_10D_ED=r10eA_c.slice(-3);
+      // 10D Index Avg series — compute on closedFlat
+      const r10idxA_c=[];
+      closedFlat.forEach((_,i)=>{const sl=closedFlat.slice(Math.max(0,i-9),i+1);r10idxA_c.push(avg(sl.map(r=>r.idxAvg)));});
+      const last3_10D_Idx=r10idxA_c.slice(-3);
+      // Today snapshots: last 3 closed days' ED, LF, IdxAvg
+      const last3_ED=closedFlat.slice(-3).map(r=>r.doros);
+      const last3_LF=closedFlat.slice(-3).map(r=>r.lf);
+      const last3_Idx=closedFlat.slice(-3).map(r=>r.idxAvg);
+
+      const pillars=[
+        {lbl:'10D Idx Avg',val:l10idxA,thr:3.00,max:5.00,fmt:f2,trend:last3_10D_Idx},
+        {lbl:'10D ED Avg',val:roll10E,thr:10.00,max:15,fmt:f2,trend:last3_10D_ED},
+        {lbl:'Today ED',val:todayRow.doros,thr:10,max:15,fmt:v=>v!==null?String(v):'—',trend:last3_ED},
+        {lbl:'Today LF',val:todayRow.lf,thr:2,max:5,fmt:v=>v!==null?String(v):'—',trend:last3_LF},
+        {lbl:'Today Idx Avg',val:todayRow.idxAvg,thr:3.00,max:5,fmt:f2,trend:last3_Idx},
+      ];
+      let passCount=0;
+      // Bullet graph SVG generator
+      function bulletSvg(value,threshold,maxVal,pass){
+        const v=value===null||value===undefined?0:value;
+        const pct=Math.min(100,Math.max(0,(v/maxVal)*100));
+        const tPct=Math.min(100,Math.max(0,(threshold/maxVal)*100));
+        const fillCls=pass?'pass':'fail';
+        return '<svg class="bullet-svg" viewBox="0 0 100 14" preserveAspectRatio="none">'+
+          '<rect class="bullet-bg" x="0" y="5" width="100" height="4" rx="2"/>'+
+          '<rect class="bullet-fill '+fillCls+'" x="0" y="5" width="'+pct.toFixed(1)+'" height="4" rx="2"/>'+
+          '<line class="bullet-target" x1="'+tPct.toFixed(1)+'" y1="2" x2="'+tPct.toFixed(1)+'" y2="12"/>'+
+        '</svg>';
+      }
+      const html=pillars.map(p=>{
+        const v=p.val;
+        const pass=v!==null&&v!==undefined&&v>=p.thr;
+        if(pass)passCount++;
+        const gap=v!==null&&v!==undefined?v-p.thr:null;
+        const gapTxt=gap===null?'awaiting':gap>=0?'+'+f2(gap):f2(gap);
+        const gapCol=gap===null?'var(--text3)':gap>=0?'var(--green)':'var(--red)';
+        return '<div class="q2-pillar-v2 '+(pass?'pass':'fail')+'">'+
+          '<div class="q2-pillar-v2-lbl">'+p.lbl+trendArrow(p.trend)+'</div>'+
+          '<div class="bullet-wrap">'+
+            bulletSvg(v,p.thr,p.max,pass)+
+            '<div class="bullet-meta"><span class="val">'+p.fmt(v)+'</span><span style="color:'+gapCol+'">'+gapTxt+'</span></div>'+
+            '<div style="font-size:9px;color:var(--text3);">need ≥ '+(typeof p.thr==='number'&&p.thr%1===0?p.thr:p.thr.toFixed(2))+'</div>'+
+          '</div>'+
+        '</div>';
+      }).join('');
+      document.getElementById('q2-pillars').innerHTML=html;
+      const verdict=document.getElementById('q2-verdict');
+      const fullPass=passCount===5;
+      verdict.className='q2-verdict '+(fullPass?'pass':'fail');
+      verdict.textContent=(fullPass?'✓ QUALIFIED':'✗ NOT QUALIFIED')+' ('+passCount+'/5)';
+
+      // Projection: rough estimate of days to qualifying if today's values held
+      const proj=document.getElementById('q2-proj');
+      if(fullPass){
+        proj.textContent='All five pillars hold. Ghost authorized for tomorrow if today closes at these values.';
+      } else {
+        // Identify limiting factors
+        const failed=pillars.filter(p=>!(p.val!==null&&p.val>=p.thr));
+        const failLabels=failed.map(p=>p.lbl).join(' · ');
+        // Naive projection for 10D averages only
+        let projText='Falling short on: '+failLabels+'. ';
+        if(l10idxA!==null&&l10idxA<3.00&&todayRow.idxAvg!==null&&todayRow.idxAvg>=3.00){
+          // days to lift 10D avg to 3.00 at today's IdxAvg
+          const target=3.00;
+          const stepImprove=Math.max(todayRow.idxAvg-l10idxA,0.01);
+          const daysIdx=Math.ceil(Math.max((target-l10idxA)/(stepImprove/10),1));
+          projText+='At current trajectory, 10D Idx Avg reaches 3.00 in ~'+daysIdx+' day'+(daysIdx===1?'':'s')+'.';
+        } else if(todayRow.idxAvg===null||todayRow.idxAvg<3.00){
+          projText+='Today\'s Idx Avg below 3.00 — rolling average cannot climb until today closes ≥3.00.';
+        }
+        proj.textContent=projText;
+      }
+
+      // Rolling window decay strip — last 10 closed days + today
+      const tilesEl=document.getElementById('q2-tiles');
+      const windowRows=closedFlat.slice(-10);
+      // Pad with empty if fewer than 10
+      const tileHtml=[];
+      for(let i=0;i<10;i++){
+        const r=windowRows[i];
+        if(!r){tileHtml.push('<div class="q2-tile" title="—"></div>');continue;}
+        const r10=r10eA_c[closedFlat.length-windowRows.length+i];
+        const s=stateOf(r10,r.idxAvg,r.doros,r.state);
+        const cls=s==='ghost'?'ghost':s==='cascante'?'cascante':'none';
+        const exiting=i===0?' exiting':'';
+        tileHtml.push('<div class="q2-tile '+cls+exiting+'" title="'+r.ds+' · '+s+' · IA '+f2(r.idxAvg)+' · ED '+r.doros+'"></div>');
+      }
+      // Append today as in-progress tile
+      const inP=inProgress;
+      if(inP){
+        const r10=roll10E;
+        const s=stateOf(r10,inP.idxAvg,inP.doros,inP.state);
+        const cls=s==='ghost'?'ghost':s==='cascante'?'cascante':'none';
+        tileHtml.push('<div class="q2-tile '+cls+' today" title="'+inP.ds+' (today, in progress) · '+s+'"></div>');
+      }
+      tilesEl.innerHTML=tileHtml.join('');
+
+      // Window meta: which day rolls out, projected impact
+      const wmeta=document.getElementById('q2-window-meta');
+      if(windowRows.length>=10){
+        const exit=windowRows[0];
+        const arrow=exit.idxAvg!==null&&l10idxA!==null?(exit.idxAvg>l10idxA?'↓ drops avg':exit.idxAvg<l10idxA?'↑ lifts avg':'→ neutral'):'';
+        wmeta.innerHTML='<span>'+exit.ds+' exits next · '+arrow+'</span><span>'+(inP?inP.ds:'')+' today</span>';
+      } else {
+        wmeta.innerHTML='<span>building window (need 10 closed days)</span><span>'+(inP?inP.ds:'')+' today</span>';
+      }
+    })();
 
     document.getElementById('sdot').className='sdot';
     document.getElementById('stext').textContent='Live · '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
