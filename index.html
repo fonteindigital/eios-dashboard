@@ -362,6 +362,25 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
 .jl-bar-fill.ok{background:#1D9E75;}
 .jl-bar-fill.warn{background:#BA7517;}
 .jl-note{font-size:9px;color:var(--text3);margin-top:10px;padding-top:8px;border-top:.5px dashed var(--border);font-style:italic;}
+
+/* ── Fontein Balance bar (2026-06-05) — Onf share of On+In; band = old 0.5–1.5 ratio zone ── */
+.fb-bar{position:relative;height:8px;border-radius:4px;background:var(--bg3);border:.5px solid var(--border);overflow:hidden;margin:7px 0 4px;}
+.fb-fill{height:100%;background:#378ADD;border-radius:4px 0 0 4px;transition:width .3s;}
+.fb-band{position:absolute;left:33%;width:27%;top:0;bottom:0;background:rgba(29,158,117,0.14);}
+.fb-mid{position:absolute;left:50%;top:-1px;bottom:-1px;width:1px;background:var(--text3);opacity:.6;}
+
+/* ── Streak ladder (2026-06-05) — somatic & bonus tier runs ── */
+.ladder-strip{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;margin:-.45rem 0 .85rem;}
+@media(max-width:780px){.ladder-strip{grid-template-columns:repeat(3,minmax(0,1fr));}}
+.lad-chip{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--r);padding:6px 9px;}
+.lad-lbl{font-size:9px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);margin-bottom:2px;}
+.lad-val{font-size:15px;font-weight:500;color:var(--text);}
+.lad-sub{font-size:9px;color:var(--text3);margin-top:1px;}
+
+/* ── Composition bar (2026-06-05) — 10d split under triad charts ── */
+.comp-bar{display:flex;height:7px;border-radius:4px;overflow:hidden;border:.5px solid var(--border);margin-top:8px;}
+.comp-seg{height:100%;}
+.comp-legend{display:flex;gap:10px;flex-wrap:wrap;font-size:9px;color:var(--text3);margin-top:4px;}
 </style>
 </head>
 <body>
@@ -434,7 +453,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
   <div class="sig-card">
     <div class="sig-label"><span>10d Bonus Avg</span></div>
     <div class="sig-val" id="sig-bavg">—</div>
-    <div class="sig-sub" id="sig-bavg-sub">Builder · Shooter · Clutch avg</div>
+    <div class="sig-sub" id="sig-bavg-sub">Builder · Shooter · Clutch · #'s · RnD avg</div>
   </div>
 </div>
 
@@ -455,12 +474,16 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
     <div class="state-strip" id="state-strip"></div>
     <div class="sig-sub" id="sig-streak-sub">&nbsp;</div>
   </div>
-  <div class="sig-card">
-    <div class="sig-label"><span>Fontein Investment · 10d</span></div>
-    <div class="sig-val" id="sig-fir">—</div>
-    <div class="sig-sub" id="sig-fir-sub">Onfontéin ÷ Infontéin</div>
+  <div class="sig-card" id="sig-card-fb">
+    <div class="sig-label"><span>Fontein Balance · 10d</span></div>
+    <div class="sig-val" id="sig-fir" style="font-size:18px;">—</div>
+    <div class="fb-bar"><div class="fb-band"></div><div class="fb-fill" id="fb-fill" style="width:0%;"></div><span class="fb-mid"></span></div>
+    <div class="sig-sub" id="sig-fir-sub">Onfontéin vs Infontéin · excludes Out · Vau · Lab</div>
   </div>
 </div>
+
+<!-- Streak ladder — somatic & bonus tier runs (2026-06-05) -->
+<div class="ladder-strip" id="ladder-strip"></div>
 
 <hr class="sdivider">
 
@@ -652,10 +675,40 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
   </div>
 </div>
 
-<!-- Index scores -->
+<!-- Effort — ED spread across the five streams (2026-06-05) -->
+<div class="csec" id="csec-effort">
+  <div class="csec-hdr" onclick="toggleSec('effort')">
+    <span class="csec-title">Effort</span>
+    <span class="csec-meta" id="csec-effort-meta"></span>
+    <span class="csec-chev" id="csec-effort-chev">▶</span>
+  </div>
+  <div class="csec-body" id="csec-effort-body">
+    <div class="chart-csec">
+      <button class="return-btn" id="return-effort" onclick="returnToday(ci4,'return-effort')">↩ today</button>
+      <div class="chart-csec-hdr">
+        <span class="chart-title">Effort · stream spread</span>
+        <div class="legend">
+          <span><span class="ldot" style="background:#378ADD;"></span>Inf</span>
+          <span><span class="ldot" style="background:#1D9E75;"></span>Onf</span>
+          <span><span class="ldot" style="background:#8B8A84;"></span>Out</span>
+          <span><span class="ldot" style="background:#EF9F27;"></span>Vau</span>
+          <span><span class="ldot" style="background:#D96FA8;"></span>Lab</span>
+          <span><span class="ldot" id="leg-eff-ed"></span>ED 10d</span>
+        </div>
+      </div>
+      <div class="chart-wrap med"><canvas id="effortChart" aria-label="Effort streams">Effort.</canvas></div>
+      <p class="chart-hint">drag ← →  ·  stacked = daily ED composition  ·  line = ED 10d</p>
+      <div class="comp-bar" id="effort-comp"></div>
+      <div class="comp-legend" id="effort-comp-legend"></div>
+      <div class="pill-row" id="effort-pills"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Indices -->
 <div class="csec" id="csec-index">
   <div class="csec-hdr" onclick="toggleSec('index')">
-    <span class="csec-title">Index scores</span>
+    <span class="csec-title">Indices</span>
     <span class="csec-meta" id="csec-index-meta"></span>
     <span class="csec-chev" id="csec-index-chev">▶</span>
   </div>
@@ -663,16 +716,20 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
     <div class="chart-csec">
       <button class="return-btn" id="return-index" onclick="returnToday(ci2,'return-index')">↩ today</button>
       <div class="chart-csec-hdr">
-        <span class="chart-title">Index scores</span>
+        <span class="chart-title">Indices</span>
         <div class="legend">
           <span><span class="ldot" id="leg-idx"></span>Index avg</span>
           <span><span class="ldot" style="background:#1D9E75;"></span>LF</span>
           <span><span class="ldot" style="background:#9B7FCC;"></span>RWR</span>
           <span><span class="ldot" style="background:#378ADD;"></span>MM</span>
+          <span><span class="ldot" style="background:#5BC8AF;"></span>PS</span>
+          <span><span class="ldot" style="background:#BA7517;"></span>FITT</span>
         </div>
       </div>
       <div class="chart-wrap med"><canvas id="indexChart" aria-label="Index scores">Index.</canvas></div>
       <p class="chart-hint">drag ← →  ·  pills = 10d avg  ·  floor 2.0 (ghost: 3.0)</p>
+      <div class="comp-bar" id="index-comp"></div>
+      <div class="comp-legend" id="index-comp-legend"></div>
       <div class="pill-row" id="index-pills"></div>
     </div>
   </div>
@@ -681,7 +738,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
 <!-- Execution bonuses -->
 <div class="csec" id="csec-bonus">
   <div class="csec-hdr" onclick="toggleSec('bonus')">
-    <span class="csec-title">Execution bonuses</span>
+    <span class="csec-title">Bonuses</span>
     <span class="csec-meta" id="csec-bonus-meta"></span>
     <span class="csec-chev" id="csec-bonus-chev">▶</span>
   </div>
@@ -689,7 +746,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
     <div class="chart-csec">
       <button class="return-btn" id="return-bonus" onclick="returnToday(ci3,'return-bonus')">↩ today</button>
       <div class="chart-csec-hdr">
-        <span class="chart-title">Execution bonuses</span>
+        <span class="chart-title">Bonuses</span>
         <div class="legend">
           <span><span class="ldot" style="background:#9B7FCC;"></span>Builder</span>
           <span><span class="ldot" style="background:#378ADD;"></span>Shooter</span>
@@ -699,6 +756,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
         </div>
       </div>
       <div class="chart-wrap sm"><canvas id="bonusChart" aria-label="Execution bonuses">Bonuses.</canvas></div>
+      <div class="comp-bar" id="bonus-comp"></div>
+      <div class="comp-legend" id="bonus-comp-legend"></div>
       <div class="pill-row" id="bonus-pills"></div>
     </div>
   </div>
@@ -794,7 +853,7 @@ function toggleSec(id){
   // resize charts when opened
   if(open){
     setTimeout(()=>{
-      [ci1,ci2,ci3].forEach(c=>{if(c)c.resize();});
+      [ci1,ci2,ci3,ci4].forEach(c=>{if(c)c.resize();});
     },50);
   }
 }
@@ -889,7 +948,7 @@ function stateOf(r10e,som,doros,state){
 }
 function xTickFmt(flat){return v=>{const r=flat[Math.round(v)];return r?new Date(r.ds+'T00:00:00').toLocaleString('default',{month:'short',day:'numeric'}):'';};}
 
-let ci1=null,ci2=null,ci3=null,gFlat=[];
+let ci1=null,ci2=null,ci3=null,ci4=null,gFlat=[];
 
 function buildCharts(flat,C){
   const N=flat.length;gN=N;
@@ -932,6 +991,8 @@ function buildCharts(flat,C){
       {label:'LF',data:flat.map((r,i)=>({x:i,y:r.lf})),borderColor:'#1D9E75',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,tension:0.3,spanGaps:true,order:2},
       {label:'RWR',data:flat.map((r,i)=>({x:i,y:r.rwr})),borderColor:'#9B7FCC',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,tension:0.3,spanGaps:true,order:3},
       {label:'MM',data:flat.map((r,i)=>({x:i,y:r.mm})),borderColor:'#378ADD',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,tension:0.3,spanGaps:true,order:4},
+      {label:'PS',data:flat.map((r,i)=>({x:i,y:r.ps})),borderColor:'#5BC8AF',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,tension:0.3,spanGaps:true,order:5},
+      {label:'FITT',data:flat.map((r,i)=>({x:i,y:r.fitt})),borderColor:'#BA7517',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,tension:0.3,spanGaps:true,order:6},
     ]},
     options:{responsive:true,maintainAspectRatio:false,animation:{duration:250},
       plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{title:ctx=>flat[ctx[0].dataIndex]?.ds||'',label:ctx=>ctx.dataset.label+': '+(ctx.parsed.y||0).toFixed(2)}},
@@ -939,6 +1000,26 @@ function buildCharts(flat,C){
       scales:{x:{...xBase},y:{min:0,max:5,ticks:{stepSize:1,color:C.tick,font:{size:9}},grid:{color:C.grid}}}}
   });
   document.getElementById('indexChart').ondblclick=()=>returnToday(ci2,'return-index');
+
+  if(ci4)ci4.destroy();
+  const z0=v=>v===null||v===undefined?0:v;
+  const effLeg=document.getElementById('leg-eff-ed');if(effLeg)effLeg.style.background=C.ed10;
+  ci4=new Chart(document.getElementById('effortChart'),{
+    type:'line',
+    data:{datasets:[
+      {label:'Inf',data:flat.map((r,i)=>({x:i,y:z0(r.eIn)})),borderColor:'#378ADD',backgroundColor:'rgba(55,138,221,0.45)',borderWidth:1,pointRadius:0,tension:0.2,fill:true,stack:'streams',order:5},
+      {label:'Onf',data:flat.map((r,i)=>({x:i,y:z0(r.eOn)})),borderColor:'#1D9E75',backgroundColor:'rgba(29,158,117,0.45)',borderWidth:1,pointRadius:0,tension:0.2,fill:true,stack:'streams',order:4},
+      {label:'Out',data:flat.map((r,i)=>({x:i,y:z0(r.eOut)})),borderColor:'#8B8A84',backgroundColor:'rgba(139,138,132,0.4)',borderWidth:1,pointRadius:0,tension:0.2,fill:true,stack:'streams',order:3},
+      {label:'Vau',data:flat.map((r,i)=>({x:i,y:z0(r.eVau)})),borderColor:'#EF9F27',backgroundColor:'rgba(239,159,39,0.45)',borderWidth:1,pointRadius:0,tension:0.2,fill:true,stack:'streams',order:2},
+      {label:'Lab',data:flat.map((r,i)=>({x:i,y:z0(r.eLab)})),borderColor:'#D96FA8',backgroundColor:'rgba(217,111,168,0.45)',borderWidth:1,pointRadius:0,tension:0.2,fill:true,stack:'streams',order:1},
+      {label:'ED 10d',data:flat.map((_,i)=>({x:i,y:r10eA[i]})),borderColor:C.ed10,backgroundColor:'transparent',borderWidth:2,pointRadius:0,tension:0.4,stack:'ed10',order:0},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,animation:{duration:250},
+      plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{title:ctx=>flat[ctx[0].dataIndex]?.ds||'',label:ctx=>ctx.dataset.label+': '+(ctx.parsed.y||0).toFixed(1)}},
+        zoom:{...zCfg,pan:{enabled:true,mode:'x',onPanComplete({chart}){onPan(chart,'return-effort');}}}},
+      scales:{x:{...xBase},y:{stacked:true,min:0,ticks:{stepSize:2,color:C.tick,font:{size:9}},grid:{color:C.grid}}}}
+  });
+  document.getElementById('effortChart').ondblclick=()=>returnToday(ci4,'return-effort');
 
   if(ci3)ci3.destroy();
   ci3=new Chart(document.getElementById('bonusChart'),{
@@ -1114,12 +1195,14 @@ async function init(){
     }
     function streakOfState(rows,target){
       // target: 'ghost' | 'cascante' | null (null = any workday)
+      // Hierarchy fix (2026-06-05): Ghost is ABOVE Cascante — a Ghost day maintains a Cascante streak.
       let streak=0;
       for(let i=rows.length-1;i>=0;i--){
         const r=rows[i];
         const r10=r10eA_c[i];
         const s=stateOf(r10,r.idxAvg,r.doros,r.state);
-        if(target!==null&&s!==target)break;
+        const match=target===null?true:(target==='cascante'?(s==='cascante'||s==='ghost'):s===target);
+        if(!match)break;
         streak++;
         if(i>0){
           const gap=workdayGap(rows[i-1].ds,r.ds);
@@ -1141,6 +1224,49 @@ async function init(){
     const streak=mainStreak;
     const streakColor=lastState==='ghost'?'#EF9F27':lastState==='cascante'?'#1D9E75':'#E24B4A';
 
+    // ── Record streaks + tier ladders (2026-06-05) ──
+    // Longest historical run matching pred, gap-aware (missing workdays break, off days/weekends don't).
+    function runRecord(rows,pred){
+      let best=0,cur=0;
+      for(let i=0;i<rows.length;i++){
+        if(i>0&&workdayGap(rows[i-1].ds,rows[i].ds)>0)cur=0;
+        if(pred(rows[i],i)){cur++;if(cur>best)best=cur;}else cur=0;
+      }
+      return best;
+    }
+    function runCurrent(rows,pred){
+      let run=0;
+      for(let i=rows.length-1;i>=0;i--){
+        if(!pred(rows[i],i))break;
+        run++;
+        if(i>0&&workdayGap(rows[i-1].ds,rows[i].ds)>0)break;
+      }
+      return run;
+    }
+    const isCascPlus=(r,i)=>{const s=stateOf(r10eA_c[i],r.idxAvg,r.doros,r.state);return s==='cascante'||s==='ghost';};
+    const isGhostDay=(r,i)=>stateOf(r10eA_c[i],r.idxAvg,r.doros,r.state)==='ghost';
+    const bestCasc=runRecord(closedFlat,isCascPlus);
+    const bestGhost=runRecord(closedFlat,isGhostDay);
+    const dayBonus=r=>(r.anc||0)+(r.lev||0)+(r.clu||0)+(r.nums||0)+(r.rnd||0);
+    const ladderDefs=[
+      {grp:'Som',lbl:'Som ≥1',pred:r=>r.idxAvg!==null&&r.idxAvg>=1},
+      {grp:'Som',lbl:'Som ≥2',pred:r=>r.idxAvg!==null&&r.idxAvg>=2},
+      {grp:'Som',lbl:'Som ≥3',pred:r=>r.idxAvg!==null&&r.idxAvg>=3},
+      {grp:'Bon',lbl:'Bonus ≥1',pred:r=>dayBonus(r)>=1},
+      {grp:'Bon',lbl:'Bonus ≥2',pred:r=>dayBonus(r)>=2},
+      {grp:'Bon',lbl:'Bonus ≥3',pred:r=>dayBonus(r)>=3}
+    ];
+    const ladderEl=document.getElementById('ladder-strip');
+    if(ladderEl){
+      ladderEl.innerHTML=ladderDefs.map(d=>{
+        const cur=runCurrent(closedFlat,d.pred),best=runRecord(closedFlat,d.pred);
+        const col=cur>0?(d.grp==='Som'?'#1D9E75':'#9B7FCC'):'var(--text3)';
+        return '<div class="lad-chip"><p class="lad-lbl">'+d.lbl+'</p>'+
+          '<p class="lad-val" style="color:'+col+'">'+cur+'d</p>'+
+          '<p class="lad-sub">best '+best+'d</p></div>';
+      }).join('');
+    }
+
     // Signal cards
     const seEl=document.getElementById('sig-e');
     // 10D ED: gold when Ghost authorized (≥10 ED + somatic ≥3, both conditions); else green ≥8.5, red below
@@ -1156,7 +1282,8 @@ async function init(){
     document.getElementById('sig-streak-sub').innerHTML=
       '<span style="color:#EF9F27">★ '+ghostStreak+' ghost</span>'+
       ' · <span style="color:#1D9E75">● '+cascanteStreak+' cascante</span>'+
-      ' · <span style="color:var(--text2)">'+workdayStreak+' workdays</span>';
+      ' · <span style="color:var(--text2)">'+workdayStreak+' workdays</span>'+
+      '<br><span style="color:var(--text3)">records: ★ '+bestGhost+'d · ● '+bestCasc+'d</span>';
 
     // State strip: last 10 closed days as colored tiles inside Streak card
     (function renderStateStrip(){
@@ -1277,8 +1404,11 @@ async function init(){
     const l10lf=avg(last10.map(r=>r.lf)),l10ps=avg(last10.map(r=>r.ps)),l10fitt=avg(last10.map(r=>r.fitt));
     const l10anc=avg(last10.map(r=>r.anc)),l10lev=avg(last10.map(r=>r.lev)),l10clu=avg(last10.map(r=>r.clu));
     const l10nums=avg(last10.map(r=>r.nums)),l10rnd=avg(last10.map(r=>r.rnd));
-    // 10D Bonus Avg definition unchanged (B·S·C) — V3.1 streams shown separately, not folded into the formula
-    const l10bonusAvg=avg([l10anc,l10lev,l10clu].filter(v=>v!==null));
+    // Previous 10d window — for pill trend arrows (2026-06-05)
+    const prevW=closedFlat.slice(-20,-10);
+    const p10=k=>avg(prevW.map(r=>r[k]));
+    // 10D Bonus Avg = mean of all five bonus streams (B·S·C·#'s·RnD) — operator direction 2026-06-05
+    const l10bonusAvg=avg([l10anc,l10lev,l10clu,l10nums,l10rnd].filter(v=>v!==null));
 
     // ── Engine 10d aggregates · signal cards · engine cards (v2 — 2026-05-14 · v3 2026-06-05: 5 streams) ──
     const eOn10=avg(last10.map(r=>r.eOn));
@@ -1289,15 +1419,15 @@ async function init(){
     const eTotal10=(eOn10||0)+(eIn10||0)+(eOut10||0)+(eVau10||0)+(eLab10||0);
 
     // Signal cards · Row 1 — Performance · 10D
-    // 10D Bonus Avg = mean of Builder · Shooter · Clutch 10D averages
-    const bonusVals=[l10anc,l10lev,l10clu].filter(v=>v!==null);
+    // 10D Bonus Avg = mean of all five bonus streams: Builder · Shooter · Clutch · #'s · RnD
+    const bonusVals=[l10anc,l10lev,l10clu,l10nums,l10rnd].filter(v=>v!==null);
     const bonusAvg=bonusVals.length?avg(bonusVals):null;
     const bavgEl=document.getElementById('sig-bavg');
     if(bonusAvg!==null){
       bavgEl.textContent=f2(bonusAvg);
       // gold ≥ 2.0, green ≥ 1.0, red below 1.0 (operator direction 2026-05-14)
       bavgEl.style.color=bonusAvg>=2?'#EF9F27':bonusAvg>=1?'#1D9E75':'#E24B4A';
-      document.getElementById('sig-bavg-sub').textContent='B '+f1(l10anc||0)+' · S '+f1(l10lev||0)+' · C '+f1(l10clu||0);
+      document.getElementById('sig-bavg-sub').textContent='B '+f1(l10anc||0)+' · S '+f1(l10lev||0)+' · C '+f1(l10clu||0)+' · # '+f1(l10nums||0)+' · R '+f1(l10rnd||0);
     }
 
     // Signal cards · Row 2 — Context · 10D
@@ -1309,14 +1439,16 @@ async function init(){
       const idxSub=l10idxA>=3?'ghost authorized':l10idxA>=2.5?'climbing toward ghost':l10idxA>=2?'above floor · below ghost':'below tripwire';
       document.getElementById('sig-iavg-sub').textContent='floor 2.0 · ghost 3.0 · '+idxSub;
     }
-    // Fontein Investment Ratio (Onfontéin ÷ Infontéin) — green inside band [0.5, 1.5], red outside
+    // Fontein Balance (2026-06-05): Onf share of (Onf+In) only — Out/Vau/Lab excluded.
+    // Balanced zone = Onf share 33–60% (equivalent to the old 0.5–1.5 ratio band).
     const firEl=document.getElementById('sig-fir');
-    if(eOn10!==null&&eIn10!==null&&eIn10>0){
-      const fir=eOn10/eIn10;
-      firEl.textContent=f2(fir);
-      // Band-target metric: 0.5 < fir < 1.5 = green; outside band = red. No gold (no exceptional band).
-      firEl.style.color=(fir>0.5&&fir<1.5)?'#1D9E75':'#E24B4A';
-      document.getElementById('sig-fir-sub').textContent='On '+f1(eOn10)+' ÷ In '+f1(eIn10);
+    if(eOn10!==null&&eIn10!==null&&(eOn10+eIn10)>0){
+      const onShare=eOn10/(eOn10+eIn10)*100;
+      firEl.textContent=onShare.toFixed(0)+'% / '+(100-onShare).toFixed(0)+'%';
+      firEl.style.color=(onShare>=33&&onShare<=60)?'#1D9E75':'#E24B4A';
+      const fillEl=document.getElementById('fb-fill');
+      if(fillEl)fillEl.style.width=onShare.toFixed(1)+'%';
+      document.getElementById('sig-fir-sub').textContent='On '+f1(eOn10)+' vs In '+f1(eIn10)+' · balanced 33–60%';
     }
 
     // Engines section · per-engine cards (share-as-headline · 5 streams per V3.1 MAC · targets retired 2026-06-05)
@@ -1411,9 +1543,9 @@ async function init(){
     // Quality pills — avg leads, coloured by floor
     const somFloor=gm?3:2;
     const qualDefs=[
-      {k:'idxAvg',l:'Avg',v:l10idxA,special:true},
-      {k:'rwr',l:'RWR',v:l10rwr},{k:'mm',l:'MM',v:l10mm},
-      {k:'lf',l:'LF',v:l10lf},{k:'ps',l:'PS',v:l10ps},{k:'fitt',l:'FITT',v:l10fitt}
+      {k:'idxAvg',l:'Avg',v:l10idxA,special:true,t:traj(l10idxA,p10('idxAvg'))},
+      {k:'rwr',l:'RWR',v:l10rwr,t:traj(l10rwr,p10('rwr'))},{k:'mm',l:'MM',v:l10mm,t:traj(l10mm,p10('mm'))},
+      {k:'lf',l:'LF',v:l10lf,t:traj(l10lf,p10('lf'))},{k:'ps',l:'PS',v:l10ps,t:traj(l10ps,p10('ps'))},{k:'fitt',l:'FITT',v:l10fitt,t:traj(l10fitt,p10('fitt'))}
     ];
     const validQ=qualDefs.filter(p=>p.v!==null&&!p.special);
     const bestQ=validQ.length?validQ.reduce((a,b)=>b.v>a.v?b:a):null;
@@ -1431,14 +1563,16 @@ async function init(){
       return '<div class="ipill'+(p.special?' lead':'')+(isBest?' best':isWorst?' worst':floorCls)+'">'+
         '<p class="ipill-label">'+p.l+'</p>'+
         '<p class="ipill-val" style="color:'+col+'">'+(p.v!==null?f2(p.v):'—')+'</p>'+
+        (p.t?'<p style="font-size:8px;margin:1px 0 0;">'+p.t+'</p>':'')+
       '</div>';
     }).join('');
 
     // Leverage pills — avg leads
+    const prevBonusAvg=avg([p10('anc'),p10('lev'),p10('clu'),p10('nums'),p10('rnd')].filter(v=>v!==null));
     const levDefs=[
-      {k:'bonus',l:'Avg',v:l10bonusAvg,special:true},
-      {k:'anc',l:'Builder',v:l10anc},{k:'lev',l:'Shooter',v:l10lev},{k:'clu',l:'Clutch',v:l10clu},
-      {k:'nums',l:"#'s",v:l10nums},{k:'rnd',l:'RnD',v:l10rnd}
+      {k:'bonus',l:'Avg',v:l10bonusAvg,special:true,t:traj(l10bonusAvg,prevBonusAvg)},
+      {k:'anc',l:'Builder',v:l10anc,t:traj(l10anc,p10('anc'))},{k:'lev',l:'Shooter',v:l10lev,t:traj(l10lev,p10('lev'))},{k:'clu',l:'Clutch',v:l10clu,t:traj(l10clu,p10('clu'))},
+      {k:'nums',l:"#'s",v:l10nums,t:traj(l10nums,p10('nums'))},{k:'rnd',l:'RnD',v:l10rnd,t:traj(l10rnd,p10('rnd'))}
     ];
     const validL=levDefs.filter(p=>p.v!==null&&!p.special);
     const bestL=validL.length?validL.reduce((a,b)=>b.v>a.v?b:a):{k:null};
@@ -1448,6 +1582,7 @@ async function init(){
       return '<div class="ipill'+(p.special?' lead':'')+(isBest?' best':isWorst?' worst':'')+'">'+
         '<p class="ipill-label">'+p.l+'</p>'+
         '<p class="ipill-val">'+(p.v!==null?f2(p.v):'—')+'</p>'+
+        (p.t?'<p style="font-size:8px;margin:1px 0 0;">'+p.t+'</p>':'')+
       '</div>';
     }).join('');
 
@@ -1464,6 +1599,7 @@ async function init(){
       return '<div class="pill'+(p.special?' accent':'')+(isBest?' best':isWorst?' worst':'')+'">'+
         '<p class="pill-label">'+p.l+'</p>'+
         '<p class="pill-val" style="color:'+col+'">'+(p.v!==null?f2(p.v):'—')+'</p>'+
+        (p.t?'<p style="font-size:8px;margin:1px 0 0;">'+p.t+'</p>':'')+
       '</div>';
     }).join('');
 
@@ -1473,8 +1609,47 @@ async function init(){
       return '<div class="pill'+(p.special?' accent':'')+(isBest?' best':isWorst?' worst':'')+'">'+
         '<p class="pill-label">'+p.l+' 10d</p>'+
         '<p class="pill-val">'+(p.v!==null?f2(p.v):'—')+'</p>'+
+        (p.t?'<p style="font-size:8px;margin:1px 0 0;">'+p.t+'</p>':'')+
       '</div>';
     }).join('');
+
+    // ── Composition bars + Effort pills + triad metas (2026-06-05) ──
+    function renderComp(barId,legId,items){
+      const bar=document.getElementById(barId),leg=document.getElementById(legId);
+      if(!bar)return;
+      const tot=items.reduce((a,it)=>a+(it.v||0),0);
+      if(tot<=0){bar.style.display='none';if(leg)leg.style.display='none';return;}
+      bar.innerHTML=items.map(it=>'<div class="comp-seg" style="width:'+((it.v||0)/tot*100).toFixed(1)+'%;background:'+it.c+';"></div>').join('');
+      if(leg)leg.innerHTML=items.map(it=>'<span><span class="ldot" style="background:'+it.c+';"></span>'+it.l+' '+((it.v||0)/tot*100).toFixed(0)+'%</span>').join('');
+    }
+    renderComp('effort-comp','effort-comp-legend',[{l:'Inf',v:eIn10,c:'#378ADD'},{l:'Onf',v:eOn10,c:'#1D9E75'},{l:'Out',v:eOut10,c:'#8B8A84'},{l:'Vau',v:eVau10,c:'#EF9F27'},{l:'Lab',v:eLab10,c:'#D96FA8'}]);
+    renderComp('index-comp','index-comp-legend',[{l:'RWR',v:l10rwr,c:'#9B7FCC'},{l:'MM',v:l10mm,c:'#378ADD'},{l:'LF',v:l10lf,c:'#1D9E75'},{l:'PS',v:l10ps,c:'#5BC8AF'},{l:'FITT',v:l10fitt,c:'#BA7517'}]);
+    renderComp('bonus-comp','bonus-comp-legend',[{l:'Builder',v:l10anc,c:'#9B7FCC'},{l:'Shooter',v:l10lev,c:'#378ADD'},{l:'Clutch',v:l10clu,c:'#EF9F27'},{l:"#'s",v:l10nums,c:'#3FB68E'},{l:'RnD',v:l10rnd,c:'#D96FA8'}]);
+
+    const effDefs=[
+      {k:'doros',l:'Avg ED',v:l10e,special:true,t:traj(l10e,p10('doros'))},
+      {k:'eIn',l:'Inf',v:eIn10,t:traj(eIn10,p10('eIn'))},
+      {k:'eOn',l:'Onf',v:eOn10,t:traj(eOn10,p10('eOn'))},
+      {k:'eOut',l:'Out',v:eOut10,t:traj(eOut10,p10('eOut'))},
+      {k:'eVau',l:'Vau',v:eVau10,t:traj(eVau10,p10('eVau'))},
+      {k:'eLab',l:'Lab',v:eLab10,t:traj(eLab10,p10('eLab'))}
+    ];
+    const validE=effDefs.filter(p=>p.v!==null&&!p.special);
+    const bestE=validE.length?validE.reduce((a,b)=>b.v>a.v?b:a):{k:null};
+    const worstE=validE.length>1?validE.reduce((a,b)=>b.v<a.v?b:a):{k:null};
+    const effPillsEl=document.getElementById('effort-pills');
+    if(effPillsEl)effPillsEl.innerHTML=effDefs.map(p=>{
+      const isBest=!p.special&&p.k===bestE.k,isWorst=!p.special&&p.k===worstE.k&&validE.length>1;
+      return '<div class="pill'+(p.special?' accent':'')+(isBest?' best':isWorst?' worst':'')+'">'+
+        '<p class="pill-label">'+p.l+' 10d</p>'+
+        '<p class="pill-val">'+(p.v!==null?f2(p.v):'—')+'</p>'+
+        (p.t?'<p style="font-size:8px;margin:1px 0 0;">'+p.t+'</p>':'')+
+      '</div>';
+    }).join('');
+    const effMeta=document.getElementById('csec-effort-meta');
+    if(effMeta)effMeta.textContent=l10e!==null?f1(l10e)+' ED/day · 10d · 5 streams':'';
+    document.getElementById('csec-index-meta').textContent=l10idxA!==null?'avg '+f2(l10idxA)+' · 10d':'';
+    document.getElementById('csec-bonus-meta').textContent=l10bonusAvg!==null?'avg '+f2(l10bonusAvg)+' · 10d · 5 streams':'';
 
     // ── Ghost log ─────────────────────────────────────
     const ghostDays=[];
