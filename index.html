@@ -43,7 +43,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
 .theme-btn:hover{color:var(--text);}
 
 /* Today strip */
-.today-strip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-bottom:.75rem;padding:.75rem 1rem .75rem 1.1rem;background:var(--bg2);border:.5px solid var(--border2);border-radius:var(--rl);box-shadow:var(--shadow);border-left:3px solid var(--border2);transition:border-left-color .3s;}
+.today-strip{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;margin-bottom:.75rem;padding:.75rem 1rem .75rem 1.1rem;background:var(--bg2);border:.5px solid var(--border2);border-radius:var(--rl);box-shadow:var(--shadow);border-left:3px solid var(--border2);transition:border-left-color .3s;}
 @media(max-width:780px){.today-strip{grid-template-columns:repeat(2,minmax(0,1fr));}}
 .td-label{font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;}
 .td-val{font-size:16px;line-height:1.2;}
@@ -362,6 +362,10 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
 .jl-bar-fill.ok{background:#1D9E75;}
 .jl-bar-fill.warn{background:#BA7517;}
 .jl-note{font-size:9px;color:var(--text3);margin-top:10px;padding-top:8px;border-top:.5px dashed var(--border);font-style:italic;}
+.yr-toggle{display:flex;gap:6px;margin-bottom:10px;}
+.yr-toggle button{flex:1;font-family:var(--font);font-size:11px;padding:6px 4px;background:var(--bg3);border:.5px solid var(--border);border-radius:var(--r);color:var(--text3);cursor:pointer;letter-spacing:.04em;transition:background .12s;}
+.yr-toggle button:hover{background:var(--bg4);}
+.yr-toggle button.active{background:var(--bg4);color:var(--text);border-color:var(--border2);}
 
 /* ── Fontein Balance bar (2026-06-05) — Onf share of On+In; band = old 0.5–1.5 ratio zone ── */
 .fb-bar{position:relative;height:8px;border-radius:4px;background:var(--bg3);border:.5px solid var(--border);overflow:hidden;margin:7px 0 4px;}
@@ -370,12 +374,28 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
 .fb-mid{position:absolute;left:50%;top:-1px;bottom:-1px;width:1px;background:var(--text3);opacity:.6;}
 
 /* ── Streak ladder (2026-06-05) — somatic & bonus tier runs ── */
-.ladder-strip{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;margin:-.45rem 0 .85rem;}
+.ladder-cap{font-size:9px;color:var(--text3);letter-spacing:.04em;margin:.1rem 0 .35rem;}
+.ladder-strip{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;margin:0 0 .85rem;}
 @media(max-width:780px){.ladder-strip{grid-template-columns:repeat(3,minmax(0,1fr));}}
 .lad-chip{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--r);padding:6px 9px;}
 .lad-lbl{font-size:9px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);margin-bottom:2px;}
 .lad-val{font-size:15px;font-weight:500;color:var(--text);}
 .lad-sub{font-size:9px;color:var(--text3);margin-top:1px;}
+
+/* ── Week Requirements gauges (2026-06-08) — WTD actual vs WP target ── */
+.wr-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;}
+@media(max-width:780px){.wr-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+.wr-card{background:var(--bg3);border:.5px solid var(--border);border-radius:var(--r);padding:11px 13px;}
+.wr-lbl{font-size:9px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;}
+.wr-val{font-size:21px;font-weight:400;color:var(--text);line-height:1;}
+.wr-tgt{font-size:9px;color:var(--text3);margin-top:4px;}
+.wr-bar{position:relative;height:6px;border-radius:3px;background:var(--bg);border:.5px solid var(--border);overflow:hidden;margin:7px 0 2px;}
+.wr-fill{height:100%;border-radius:3px;transition:width .3s;background:var(--text3);}
+.wr-fill.ok{background:#1D9E75;}
+.wr-fill.warn{background:#BA7517;}
+.wr-fill.lo{background:#E24B4A;}
+.wr-mark{position:absolute;top:-1px;bottom:-1px;width:1px;background:var(--text2);opacity:.7;}
+.wr-note{font-size:9px;color:var(--text3);margin-top:10px;padding-top:8px;border-top:.5px dashed var(--border);font-style:italic;}
 
 /* ── Composition bar (2026-06-05) — 10d split under triad charts ── */
 .comp-bar{display:flex;height:7px;border-radius:4px;overflow:hidden;border:.5px solid var(--border);margin-top:8px;}
@@ -406,15 +426,18 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
     <p class="td-label">ED · TD today</p>
     <div class="td-pair"><span class="td-val" id="td-ed">—</span><span class="td-sep">/</span><span class="td-val" id="td-td">—</span></div>
     <div class="floor-bar-wrap" id="td-ed-floorwrap"><div class="floor-bar"><div class="floor-bar-fill" id="td-ed-floorfill" style="width:0%;"></div></div><span class="floor-lbl" id="td-ed-floorlbl">/ 10</span></div>
-    <svg class="spark" id="spark-ed" viewBox="0 0 100 18" preserveAspectRatio="none"></svg>
     <p class="at-risk" id="td-risk">⚠ streak at risk</p>
   </div>
   <div>
     <p class="td-label">Somatic avg · today</p>
     <p class="td-val" id="td-somatic">—</p>
     <div class="floor-bar-wrap" id="td-som-floorwrap"><div class="floor-bar" style="position:relative;"><div class="floor-bar-fill" id="td-som-floorfill" style="width:0%;"></div><span id="td-som-ghosttick" style="position:absolute;top:-1px;bottom:-1px;width:1px;background:var(--gold);left:60%;"></span></div><span class="floor-lbl">floor 2 · ghost 3</span></div>
-    <svg class="spark" id="spark-idx" viewBox="0 0 100 18" preserveAspectRatio="none"></svg>
     <p class="td-sub" id="td-somatic-sub">&nbsp;</p>
+  </div>
+  <div>
+    <p class="td-label">Yield today</p>
+    <p class="td-val" id="td-yield">—</p>
+    <p class="td-sub" id="td-yield-sub">TD ÷ ED · 1.3+</p>
   </div>
 </div>
 
@@ -451,9 +474,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
     <div class="sig-sub" id="sig-t-sub">floor 10.0</div>
   </div>
   <div class="sig-card">
-    <div class="sig-label"><span>10d Bonus Avg</span></div>
-    <div class="sig-val" id="sig-bavg">—</div>
-    <div class="sig-sub" id="sig-bavg-sub">Builder · Shooter · Clutch · #'s · RnD avg</div>
+    <div class="sig-label"><span>10d Yield Ratio</span></div>
+    <div class="sig-val" id="sig-yr">—</div>
+    <div class="sig-sub" id="sig-yr-sub">TD ÷ ED · target 1.3+</div>
   </div>
 </div>
 
@@ -483,7 +506,34 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
 </div>
 
 <!-- Streak ladder — somatic & bonus tier runs (2026-06-05) -->
+<p class="ladder-cap">Tier streaks · current run · best — consecutive days at each somatic (Index Avg) and daily-bonus threshold.</p>
 <div class="ladder-strip" id="ladder-strip"></div>
+
+<!-- Week Requirements — WTD actual vs this week's WP targets (2026-06-08) -->
+<div class="csec" id="csec-wreq">
+  <div class="csec-hdr" onclick="toggleSec('wreq')">
+    <span class="csec-title" id="wreq-title">Week Requirements</span>
+    <span class="csec-meta" id="csec-wreq-meta"></span>
+    <span class="csec-chev" id="csec-wreq-chev">▶</span>
+  </div>
+  <div class="csec-body" id="csec-wreq-body">
+    <div class="wr-grid">
+      <div class="wr-card"><p class="wr-lbl">ED pace · WTD</p><p class="wr-val" id="wr-ed">—</p>
+        <div class="wr-bar"><div class="wr-fill" id="wr-ed-fill" style="width:0%;"></div><span class="wr-mark" id="wr-ed-mark"></span></div>
+        <p class="wr-tgt" id="wr-ed-tgt">—</p></div>
+      <div class="wr-card"><p class="wr-lbl">Week Pool</p><p class="wr-val" id="wr-pool">—</p>
+        <div class="wr-bar"><div class="wr-fill" id="wr-pool-fill" style="width:0%;"></div><span class="wr-mark" id="wr-pool-mark"></span></div>
+        <p class="wr-tgt" id="wr-pool-tgt">—</p></div>
+      <div class="wr-card"><p class="wr-lbl">Yield Index · WTD</p><p class="wr-val" id="wr-yield">—</p>
+        <div class="wr-bar"><div class="wr-fill" id="wr-yield-fill" style="width:0%;"></div><span class="wr-mark" id="wr-yield-mark"></span></div>
+        <p class="wr-tgt" id="wr-yield-tgt">—</p></div>
+      <div class="wr-card"><p class="wr-lbl">Somatic Index · WTD</p><p class="wr-val" id="wr-som">—</p>
+        <div class="wr-bar"><div class="wr-fill" id="wr-som-fill" style="width:0%;"></div><span class="wr-mark" id="wr-som-mark"></span></div>
+        <p class="wr-tgt" id="wr-som-tgt">—</p></div>
+    </div>
+    <p class="wr-note" id="wr-note">WTD vs Week Plan targets · sheet-measurable only · edit WEEK_REQ each Monday.</p>
+  </div>
+</div>
 
 <hr class="sdivider">
 
@@ -567,27 +617,25 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
 <!-- June Ledger · trial (2026-06-05) — display-only derived views; promote to main board only if it earns it -->
 <div class="csec" id="csec-june">
   <div class="csec-hdr" onclick="toggleSec('june')">
-    <span class="csec-title">June Ledger · trial</span>
+    <span class="csec-title">Yield Ratio</span>
     <span class="csec-meta" id="csec-june-meta"></span>
     <span class="csec-chev" id="csec-june-chev">▶</span>
   </div>
   <div class="csec-body" id="csec-june-body">
-    <div class="jl-grid">
-      <div class="jl-card">
-        <p class="jl-lbl">Yield Ratio · MTD</p>
-        <p class="jl-val" id="jl-yr">—</p>
-        <p class="jl-sub" id="jl-yr-sub">TD ÷ ED · target 1.3+</p>
-      </div>
-      <div class="jl-card">
-        <p class="jl-lbl">Yield Ratio · 10d</p>
-        <p class="jl-val" id="jl-yr10">—</p>
-        <p class="jl-sub" id="jl-yr10-sub">TD ÷ ED · target 1.3+</p>
-      </div>
+    <div class="yr-toggle" id="yr-toggle">
+      <button data-p="today" onclick="showYield('today')">Today</button>
+      <button data-p="week" data-default="1" onclick="showYield('week')" class="active">This Week</button>
+      <button data-p="month" onclick="showYield('month')">This Month</button>
+    </div>
+    <div class="jl-card" style="margin-bottom:8px;">
+      <p class="jl-lbl" id="yr-head">Yield Ratio · This Week</p>
+      <p class="jl-val" id="yr-big">—</p>
+      <p class="jl-sub" id="yr-sub">TD ÷ ED · target 1.3+</p>
     </div>
     <div class="jl-card">
-      <p class="jl-lbl">70-Point Bonus Floor · MTD <span id="jl-pts-total" style="float:right;color:var(--text2);"></span></p>
-      <div class="jl-rows" id="jl-pts-rows"></div>
-      <p class="jl-note">Trial section · June MP metrics shown as derived views only — no formulas, scores, or rules changed. Main board remains cumulative governance.</p>
+      <p class="jl-lbl">Bonus source <span id="yr-pts-total" style="float:right;color:var(--text2);"></span></p>
+      <div class="jl-rows" id="yr-rows"></div>
+      <p class="jl-note">Where the asymmetric value came from · derived view, no formulas or rules changed. 70-pt floor shown on This Month only.</p>
     </div>
   </div>
 </div>
@@ -814,6 +862,16 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
 <script>
 const CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vSEwNS2RuMUEPU50zZAgJdDwNfCWS3TA_r1lmOYB-YUGv_bo6_jknLdKpDhZUQwiFc8eiJ9Kbie2Rxu/pub?gid=78857917&single=true&output=csv';
 
+// ── Week Plan requirements (edit each Monday from the WP) ──────────────
+// Only sheet-measurable targets live here. Week pool spans the WP's active days.
+const WEEK_REQ={
+  label:'Week 24',
+  edDayMin:8.5, edDayAim:12.0,        // Focus Doros/day
+  poolMin:34.0, poolMax:48.0, poolDays:'Tue–Fri', poolActiveDays:4,  // total ED pool for the week
+  yieldMin:1.3,                        // TD ÷ ED
+  somaticMin:2.5                       // Index Avg average
+};
+
 // ── Theme ──────────────────────────────────────────────
 let theme=localStorage.getItem('eios-theme')||(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
 document.documentElement.setAttribute('data-theme',theme);
@@ -948,7 +1006,7 @@ function stateOf(r10e,som,doros,state){
 }
 function xTickFmt(flat){return v=>{const r=flat[Math.round(v)];return r?new Date(r.ds+'T00:00:00').toLocaleString('default',{month:'short',day:'numeric'}):'';};}
 
-let ci1=null,ci2=null,ci3=null,ci4=null,gFlat=[];
+let ci1=null,ci2=null,ci3=null,ci4=null,gFlat=[],gYield={};
 
 function buildCharts(flat,C){
   const N=flat.length;gN=N;
@@ -1365,6 +1423,13 @@ async function init(){
     const somEl=document.getElementById('td-somatic');
     somEl.textContent=todayRow.idxAvg!==null?f2(todayRow.idxAvg):'—';
     if(todayRow.idxAvg!==null){somEl.style.color=idxColor(todayRow.idxAvg,gm);document.getElementById('td-somatic-sub').textContent=todayRow.idxAvg>=3?'ghost zone (≥3)':todayRow.idxAvg>=2.5?'climbing toward ghost':todayRow.idxAvg>=2?'above floor · below ghost':'below tripwire';}
+    // Yield today = today's TD ÷ ED (2026-06-08)
+    (function(){
+      const ye=document.getElementById('td-yield');if(!ye)return;
+      const ed=todayRow.doros,td=todayRow.total;
+      if(ed!==null&&ed>0&&td!==null){const y=td/ed;ye.textContent=f2(y);ye.style.color=y>=1.3?'#1D9E75':y>=1.15?'#BA7517':'#E24B4A';document.getElementById('td-yield-sub').textContent='TD '+td.toFixed(0)+' ÷ ED '+ed.toFixed(0);}
+      else{ye.textContent='—';ye.style.color='var(--text3)';document.getElementById('td-yield-sub').textContent='TD ÷ ED · 1.3+';}
+    })();
 
     // (Today strip row 2 removed 2026-05-14 — dashboard optimized for 2-3 day check cadence)
     // (engine aggregates moved below Intelligence — they need last10 and qtdRows)
@@ -1396,6 +1461,65 @@ async function init(){
     setS('wtd-t','wtd-t-sub',wtdT,ytdT,tot(wtdRows.map(r=>r.total)).toFixed(0)+' total');
     document.getElementById('csec-summary-meta').textContent='YTD · MTD · QTD · WTD';
 
+    // ── Week Requirements — WTD actual vs this week's WP targets (2026-06-08) ──
+    (function renderWeekReq(){
+      const R=WEEK_REQ;
+      const tEl=document.getElementById('wreq-title');if(tEl)tEl.textContent=R.label+' Requirements';
+      const edAvg=wtdE;                                   // avg ED/day this week
+      const pool=tot(wtdRows.map(r=>r.doros));            // total ED this week
+      const wtdTtot=tot(wtdRows.map(r=>r.total));
+      const yld=pool>0?wtdTtot/pool:null;                // WTD TD ÷ ED
+      const som=avg(wtdRows.map(r=>r.idxAvg));            // WTD somatic
+      const ndays=wtdRows.length;
+      // gauge: value, fill% (0..100 toward goal), marker% (target line), color tier
+      function gauge(pfx,val,disp,fillPct,markPct,tier,tgtTxt){
+        const v=document.getElementById(pfx);if(!v)return;
+        v.textContent=val===null?'—':disp;
+        v.style.color=val===null?'var(--text3)':(tier==='ok'?'#1D9E75':tier==='warn'?'#BA7517':'#E24B4A');
+        const f=document.getElementById(pfx+'-fill');
+        if(f){f.style.width=Math.max(0,Math.min(100,fillPct||0)).toFixed(0)+'%';f.className='wr-fill '+(tier||'');}
+        const m=document.getElementById(pfx+'-mark');
+        if(m){if(markPct==null){m.style.display='none';}else{m.style.display='';m.style.left=Math.max(0,Math.min(100,markPct)).toFixed(0)+'%';}}
+        document.getElementById(pfx+'-tgt').textContent=tgtTxt;
+      }
+      // ED pace: scale 0..aim; min line at edDayMin
+      gauge('wr-ed',edAvg, (edAvg!==null?f1(edAvg):'')+'/day',
+        edAvg!==null?edAvg/R.edDayAim*100:0, R.edDayMin/R.edDayAim*100,
+        edAvg===null?'':(edAvg>=R.edDayMin?'ok':edAvg>=R.edDayMin*0.8?'warn':'lo'),
+        'floor '+R.edDayMin+' · aim '+R.edDayAim);
+      // Week pool: current + pace + projected end-of-week vs target (2026-06-08)
+      const paceDay=ndays>0?pool/ndays:null;
+      const proj=paceDay!==null?paceDay*(R.poolActiveDays||5):null;
+      // tier reflects whether we're ON PACE to clear the floor by week-end
+      const poolTier=proj===null?'':(proj>=R.poolMin?(pool>=R.poolMin?'ok':'warn'):'lo');
+      const poolTgt=paceDay===null?(R.poolMin+'–'+R.poolMax+' '+R.poolDays)
+        :('pace '+f1(paceDay)+'/d → proj '+proj.toFixed(0)+' by Fri · need '+R.poolMin+' ('+ndays+'/'+(R.poolActiveDays||5)+'d)');
+      gauge('wr-pool',pool, pool.toFixed(0)+' / '+R.poolMax.toFixed(0),
+        pool/R.poolMax*100, R.poolMin/R.poolMax*100, poolTier, poolTgt);
+      // projection marker (lighter tick) on the pool bar
+      (function(){
+        const bar=document.getElementById('wr-pool-fill');
+        if(!bar||proj===null)return;
+        const wrap=bar.parentElement;
+        let pm=wrap.querySelector('.wr-proj');
+        if(!pm){pm=document.createElement('span');pm.className='wr-mark wr-proj';pm.style.background='var(--text3)';wrap.appendChild(pm);}
+        pm.style.left=Math.max(0,Math.min(100,proj/R.poolMax*100)).toFixed(0)+'%';
+      })();
+      // Yield: scale so target sits at ~70% of bar (cap display at ~1.86)
+      gauge('wr-yield',yld, yld!==null?f2(yld):'',
+        yld!==null?yld/(R.yieldMin/0.7)*100:0, 70,
+        yld===null?'':(yld>=R.yieldMin?'ok':yld>=R.yieldMin*0.9?'warn':'lo'),
+        'target '+R.yieldMin+'+');
+      // Somatic: scale 0..5; min line at somaticMin
+      gauge('wr-som',som, som!==null?f2(som):'',
+        som!==null?som/5*100:0, R.somaticMin/5*100,
+        som===null?'':(som>=R.somaticMin?'ok':som>=R.somaticMin*0.8?'warn':'lo'),
+        'target '+R.somaticMin+'+ avg');
+      const hits=[edAvg!==null&&edAvg>=R.edDayMin, pool>=R.poolMin, yld!==null&&yld>=R.yieldMin, som!==null&&som>=R.somaticMin].filter(Boolean).length;
+      const mEl=document.getElementById('csec-wreq-meta');
+      if(mEl)mEl.textContent=R.label+' · '+hits+'/4 on target · '+ndays+'d in';
+    })();
+
     // ── Intelligence ──────────────────────────────────
     const last10=closedFlat.slice(-10);
     const l10e=avg(last10.map(r=>r.doros)),l10t=avg(last10.map(r=>r.total));
@@ -1422,12 +1546,13 @@ async function init(){
     // 10D Bonus Avg = mean of all five bonus streams: Builder · Shooter · Clutch · #'s · RnD
     const bonusVals=[l10anc,l10lev,l10clu,l10nums,l10rnd].filter(v=>v!==null);
     const bonusAvg=bonusVals.length?avg(bonusVals):null;
-    const bavgEl=document.getElementById('sig-bavg');
-    if(bonusAvg!==null){
-      bavgEl.textContent=f2(bonusAvg);
-      // gold ≥ 2.0, green ≥ 1.0, red below 1.0 (operator direction 2026-05-14)
-      bavgEl.style.color=bonusAvg>=2?'#EF9F27':bonusAvg>=1?'#1D9E75':'#E24B4A';
-      document.getElementById('sig-bavg-sub').textContent='B '+f1(l10anc||0)+' · S '+f1(l10lev||0)+' · C '+f1(l10clu||0)+' · # '+f1(l10nums||0)+' · R '+f1(l10rnd||0);
+    // 10d Yield Ratio (replaces Bonus Avg in signal row, 2026-06-08): 10d TD ÷ 10d ED
+    const yrEl2=document.getElementById('sig-yr');
+    if(roll10E!==null&&roll10E>0&&roll10T!==null){
+      const y10=roll10T/roll10E;
+      yrEl2.textContent=f2(y10);
+      yrEl2.style.color=y10>=1.3?'#1D9E75':y10>=1.15?'#BA7517':'#E24B4A';
+      document.getElementById('sig-yr-sub').textContent='TD '+f1(roll10T)+' ÷ ED '+f1(roll10E)+' · target 1.3+';
     }
 
     // Signal cards · Row 2 — Context · 10D
@@ -1481,42 +1606,45 @@ async function init(){
     document.getElementById('csec-engines-meta').textContent=eTotal10>0?f1(eTotal10)+' Doros/day · 5 streams · shares reference-only':'awaiting engine data';
 
     // ── June Ledger · trial (2026-06-05) — derived views only; no formulas/rules changed ──
-    (function renderJuneLedger(){
-      const yrEl=document.getElementById('jl-yr');
-      if(!yrEl)return;
-      const edSum=mtdRows.reduce((a,r)=>a+(r.doros||0),0);
-      const tdSum=mtdRows.reduce((a,r)=>a+(r.total||0),0);
-      const yr=edSum>0?tdSum/edSum:null;
-      const yr10=(l10e!==null&&l10e>0&&l10t!==null)?l10t/l10e:null;
-      function paintYR(el,subId,v,detail){
-        if(v===null){el.textContent='—';return;}
-        el.textContent=f2(v);
-        el.style.color=v>=1.3?'#1D9E75':v>=1.15?'#BA7517':'#E24B4A';
-        document.getElementById(subId).textContent=detail+' · target 1.3+';
+    (function renderYieldPanel(){
+      if(!document.getElementById('yr-toggle'))return;
+      const cat=[{k:'clu',l:'Clutch',f:20},{k:'anc',l:'Builder',f:20},{k:'nums',l:"#'s · Vault",f:10},{k:'rnd',l:'RnD · Lab',f:10},{k:'lev',l:'Shooter',f:10}];
+      function calc(rows){
+        const ed=rows.reduce((a,r)=>a+(r.doros||0),0), td=rows.reduce((a,r)=>a+(r.total||0),0);
+        const pts={}; cat.forEach(c=>pts[c.k]=rows.reduce((a,r)=>a+(r[c.k]||0),0));
+        return {ed,td,y:ed>0?td/ed:null,pts};
       }
-      paintYR(yrEl,'jl-yr-sub',yr,'TD '+tdSum.toFixed(0)+' ÷ ED '+edSum.toFixed(0));
-      paintYR(document.getElementById('jl-yr10'),'jl-yr10-sub',yr10,'TD '+f1(l10t||0)+' ÷ ED '+f1(l10e||0));
-      // 70-Point Bonus Floor (June MP): Clutch 20 · Builder 20 · #'s 10 · RnD 10 · Shooter 10
-      const defs=[
-        {k:'clu',l:'Clutch',floor:20},{k:'anc',l:'Builder',floor:20},
-        {k:'nums',l:"#'s · Vault",floor:10},{k:'rnd',l:'RnD · Lab',floor:10},
-        {k:'lev',l:'Shooter',floor:10}
-      ];
-      let totalPts=0;
-      const rows=defs.map(d=>{
-        const pts=mtdRows.reduce((a,r)=>a+(r[d.k]||0),0);
-        totalPts+=pts;
-        const pct=Math.min(100,(pts/d.floor)*100);
-        const cls=pts>=d.floor?'ok':pts>=d.floor*0.5?'warn':'';
-        return '<div class="jl-row"><span class="jl-r-lbl">'+d.l+'</span>'+
-          '<div class="jl-bar"><div class="jl-bar-fill '+cls+'" style="width:'+pct.toFixed(0)+'%;"></div></div>'+
-          '<span class="jl-r-val">'+pts.toFixed(0)+' / '+d.floor+'</span></div>';
-      }).join('');
-      document.getElementById('jl-pts-rows').innerHTML=rows;
-      const totEl=document.getElementById('jl-pts-total');
-      totEl.textContent=totalPts.toFixed(0)+' / 70';
-      totEl.style.color=totalPts>=70?'#1D9E75':'var(--text2)';
-      document.getElementById('csec-june-meta').textContent=(yr!==null?'yield '+f2(yr):'')+' · '+totalPts.toFixed(0)+'/70 pts · MTD';
+      const todayRows=todayRow?[todayRow]:[];
+      gYield={today:calc(todayRows),week:calc(wtdRows),month:calc(mtdRows)};
+      window.showYield=function(p){
+        const d=gYield[p]; if(!d)return;
+        document.querySelectorAll('#yr-toggle button').forEach(b=>b.classList.toggle('active',b.dataset.p===p));
+        const lbl={today:'Today',week:'This Week',month:'This Month'}[p];
+        document.getElementById('yr-head').textContent='Yield Ratio · '+lbl;
+        const big=document.getElementById('yr-big');
+        if(d.y===null){big.textContent='—';big.style.color='var(--text3)';}
+        else{big.textContent=f2(d.y);big.style.color=d.y>=1.3?'#1D9E75':d.y>=1.15?'#BA7517':'#E24B4A';}
+        document.getElementById('yr-sub').textContent='TD '+d.td.toFixed(0)+' ÷ ED '+d.ed.toFixed(0)+' · target 1.3+';
+        const showFloor=(p==='month');
+        const maxp=Math.max(1,...cat.map(c=>d.pts[c.k]||0));
+        let tot=0;
+        const rows=cat.map(c=>{
+          const pts=d.pts[c.k]||0; tot+=pts;
+          if(showFloor){
+            const pct=Math.min(100,pts/c.f*100), cls=pts>=c.f?'ok':pts>=c.f*0.5?'warn':'';
+            return '<div class="jl-row"><span class="jl-r-lbl">'+c.l+'</span><div class="jl-bar"><div class="jl-bar-fill '+cls+'" style="width:'+pct.toFixed(0)+'%;"></div></div><span class="jl-r-val">'+pts.toFixed(0)+' / '+c.f+'</span></div>';
+          }
+          const pct=Math.min(100,pts/maxp*100);
+          return '<div class="jl-row"><span class="jl-r-lbl">'+c.l+'</span><div class="jl-bar"><div class="jl-bar-fill ok" style="width:'+pct.toFixed(0)+'%;"></div></div><span class="jl-r-val">'+pts.toFixed(0)+'</span></div>';
+        }).join('');
+        document.getElementById('yr-rows').innerHTML=rows;
+        const totEl=document.getElementById('yr-pts-total');
+        totEl.textContent=showFloor?(tot.toFixed(0)+' / 70'):(tot.toFixed(0)+' pts');
+        totEl.style.color=(showFloor&&tot>=70)?'#1D9E75':'var(--text2)';
+      };
+      showYield('week');
+      const m=gYield.month, mY=m.y!==null?f2(m.y):'—';
+      document.getElementById('csec-june-meta').textContent='yield by period · month '+mY;
     })();
 
     // Capacity pills
@@ -1877,8 +2005,6 @@ async function init(){
       const last10ED=closedFlat.slice(-10).map(r=>r.doros);
       const last10Idx=closedFlat.slice(-10).map(r=>r.idxAvg);
       const last10LF=closedFlat.slice(-10).map(r=>r.lf);
-      spark('spark-ed',last10ED,todayRow.doros,roll10E);
-      spark('spark-idx',last10Idx,todayRow.idxAvg,l10idxA);
       // LF sparkline removed in v3 (LF now part of somatic chip row instead)
 
       // Floor bars in today strip
