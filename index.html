@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EIOS Dashboard</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzBiMGQwYyIvPjxyZWN0IHg9IjYiIHk9IjE4IiB3aWR0aD0iNCIgaGVpZ2h0PSI4IiByeD0iMSIgZmlsbD0iIzFEOUU3NSIvPjxyZWN0IHg9IjE0IiB5PSIxMSIgd2lkdGg9IjQiIGhlaWdodD0iMTUiIHJ4PSIxIiBmaWxsPSIjQkE3NTE3Ii8+PHJlY3QgeD0iMjIiIHk9IjciIHdpZHRoPSI0IiBoZWlnaHQ9IjE5IiByeD0iMSIgZmlsbD0iIzM3OEFERCIvPjwvc3ZnPg==">
 <style>
 :root {
   --bg:#0f0f0e;--bg2:#1c1c1a;--bg3:#272724;--bg4:#1a1a18;
@@ -689,6 +690,16 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
   </div>
 </div>
 
+<!-- Variance band - corridor 8.5-12.5 (added 2026-06-18) -->
+<div class="csec" id="csec-variance">
+  <div class="csec-hdr" onclick="toggleSec('variance')">
+    <span class="csec-title">Variance &middot; corridor 8.5-12.5</span>
+    <span class="csec-meta" id="csec-variance-meta"></span>
+    <span class="csec-chev" id="csec-variance-chev">&#9654;</span>
+  </div>
+  <div class="csec-body" id="csec-variance-body"></div>
+</div>
+
 <hr class="sdivider">
 
 <!-- TIER 3: ANALYSIS — collapsible -->
@@ -1104,9 +1115,42 @@ document.getElementById('theme-btn').addEventListener('click',()=>{
   localStorage.setItem('eios-theme',theme);
   applyThemeBtn();updateDots();
   if(gFlat.length)buildCharts(gFlat,getC());
+  renderVariance();
 });
 
 // ── Main ──────────────────────────────────────────────
+// Variance band - 10D rolling (excl. in-progress today), corridor 8.5-12.5
+function renderVariance(){
+  var host=document.getElementById('csec-variance-body'); if(!host) return;
+  var LO=8.5,HI=12.5,FLOOR=2.5,MAXY=14;
+  if(!gFlat||!gFlat.length){host.innerHTML='<p style="color:var(--text3);font-size:11px;">No data.</p>';return;}
+  var win=gFlat.slice(0,-1).slice(-10);
+  if(!win.length){host.innerHTML='<p style="color:var(--text3);font-size:11px;">No closed days yet.</p>';return;}
+  function decl(dt){dt=(dt||'').toLowerCase();return dt.indexOf('limp')>=0||dt.indexOf('recovery')>=0;}
+  function classify(r){var ed=r.doros,som=r.idxAvg,rested=(som!=null&&som>=FLOOR);if(ed<LO){if(decl(r.dtRaw))return 'blue';return rested?'amber':'red';}if(ed>HI)return 'amber';return rested?'green':'amber';}
+  var COL={green:'#1D9E75',amber:'#BA7517',red:'#E24B4A',blue:'#378ADD'};
+  function leg(c,t){return '<span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:8px;height:8px;border-radius:50%;background:'+c+';display:inline-block;"></span>'+t+'</span>';}
+  var eds=win.map(function(r){return r.doros;});
+  var inBand=win.filter(function(r){return r.doros>=LO&&r.doros<=HI;}).length;
+  var mean=eds.reduce(function(s,x){return s+x;},0)/eds.length;
+  var sd=Math.sqrt(eds.reduce(function(s,x){return s+(x-mean)*(x-mean);},0)/eds.length);
+  var n=win.length,W=380,H=150,padT=8,padB=22,padL=8,padR=34,plotH=H-padT-padB,plotW=W-padL-padR;
+  function y(v){return padT+plotH-(Math.min(v,MAXY)/MAXY)*plotH;}
+  var s='<svg viewBox="0 0 '+W+' '+H+'" width="100%" role="img" aria-label="Daily effort vs 8.5 to 12.5 corridor, last '+n+' closed days">';
+  s+='<rect x="'+padL+'" y="'+y(HI).toFixed(1)+'" width="'+plotW+'" height="'+(y(LO)-y(HI)).toFixed(1)+'" fill="rgba(29,158,117,0.10)" stroke="rgba(29,158,117,0.30)" stroke-dasharray="3 3"/>';
+  s+='<text x="'+(padL+plotW+4)+'" y="'+(y(HI)+3).toFixed(1)+'" style="fill:var(--text3)" font-size="9">12.5</text>';
+  s+='<text x="'+(padL+plotW+4)+'" y="'+(y(LO)+3).toFixed(1)+'" style="fill:var(--text3)" font-size="9">8.5</text>';
+  var slot=plotW/n;
+  win.forEach(function(r,i){var c=COL[classify(r)],cx=padL+slot*i+slot/2,bw=Math.min(20,slot*0.6),by=y(r.doros),bh=(padT+plotH)-by;s+='<rect x="'+(cx-bw/2).toFixed(1)+'" y="'+by.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+bh.toFixed(1)+'" rx="2" fill="'+c+'" opacity="0.85"/>';s+='<circle cx="'+cx.toFixed(1)+'" cy="'+by.toFixed(1)+'" r="3" fill="'+c+'"/>';var lbl=new Date(r.ds+'T00:00:00').toLocaleString('default',{weekday:'short'}).slice(0,2);s+='<text x="'+cx.toFixed(1)+'" y="'+(H-7)+'" style="fill:var(--text3)" font-size="9" text-anchor="middle">'+lbl+'</text>';});
+  s+='</svg>';
+  s+='<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:6px;">';
+  s+='<div style="display:flex;gap:10px;flex-wrap:wrap;font-size:10px;color:var(--text3);">'+leg(COL.green,'in band')+leg(COL.blue,'declared recovery')+leg(COL.amber,'miss / draining')+leg(COL.red,'crash')+'</div>';
+  s+='<div style="font-size:10px;color:var(--text3);"><b style="color:var(--text);font-size:13px;">'+inBand+'/'+n+'</b> in band &nbsp;&middot;&nbsp; <b style="color:var(--text);font-size:13px;">&sigma; '+sd.toFixed(1)+'</b> volatility</div>';
+  s+='</div>';
+  host.innerHTML=s;
+  var meta=document.getElementById('csec-variance-meta'); if(meta) meta.textContent=inBand+'/'+n+' in band';
+}
+
 async function init(){
   try{
     const resp=await fetch(CSV);
@@ -1753,6 +1797,8 @@ async function init(){
     renderComp('effort-comp','effort-comp-legend',[{l:'Inf',v:eIn10,c:'#378ADD'},{l:'Onf',v:eOn10,c:'#1D9E75'},{l:'Out',v:eOut10,c:'#8B8A84'},{l:'Vau',v:eVau10,c:'#EF9F27'},{l:'Lab',v:eLab10,c:'#D96FA8'}]);
     renderComp('index-comp','index-comp-legend',[{l:'RWR',v:l10rwr,c:'#9B7FCC'},{l:'MM',v:l10mm,c:'#378ADD'},{l:'LF',v:l10lf,c:'#1D9E75'},{l:'PS',v:l10ps,c:'#5BC8AF'},{l:'FITT',v:l10fitt,c:'#BA7517'}]);
     renderComp('bonus-comp','bonus-comp-legend',[{l:'Builder',v:l10anc,c:'#9B7FCC'},{l:'Shooter',v:l10lev,c:'#378ADD'},{l:'Clutch',v:l10clu,c:'#EF9F27'},{l:"#'s",v:l10nums,c:'#3FB68E'},{l:'RnD',v:l10rnd,c:'#D96FA8'}]);
+
+    renderVariance();
 
     const effDefs=[
       {k:'doros',l:'Avg ED',v:l10e,special:true,t:traj(l10e,p10('doros'))},
