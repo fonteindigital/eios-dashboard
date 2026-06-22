@@ -589,32 +589,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
 </div>
 
 <!-- June Ledger · trial (2026-06-05) — display-only derived views; promote to main board only if it earns it -->
-<div class="csec" id="csec-intel">
-  <div class="csec-hdr" onclick="toggleSec('intel')">
-    <span class="csec-title">Intelligence · 10d</span>
-    <span class="csec-meta" id="csec-intel-meta"></span>
-    <span class="csec-chev" id="csec-intel-chev">▶</span>
-  </div>
-  <div class="csec-body" id="csec-intel-body">
-    <!-- CAPACITY -->
-    <div class="intel-sub">
-      <div class="intel-sublabel">Capacity</div>
-      <div class="intel-pills" id="cap-pills" style="gap:6px;"></div>
-    </div>
-    <!-- QUALITY -->
-    <div class="intel-sub">
-      <div class="intel-sublabel">Quality <span class="intel-state" id="quality-state"></span></div>
-      <div class="intel-pills" id="qual-pills"></div>
-    </div>
-    <!-- LEVERAGE -->
-    <div class="intel-sub">
-      <div class="intel-sublabel">Leverage</div>
-      <div class="intel-pills" id="lev-pills"></div>
-    </div>
-  </div>
-</div>
-
-<!-- Variance band - corridor 8.5-12.5 (added 2026-06-18) -->
 <div class="csec" id="csec-variance">
   <div class="csec-hdr" onclick="toggleSec('variance')">
     <span class="csec-title">Variance &middot; corridor 8.5-12.5</span>
@@ -661,58 +635,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
   <div class="csec-body" id="csec-w26-body"></div>
 </div>
 
-
-<div style="font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin:20px 0 8px;border-bottom:1px solid var(--border);padding-bottom:5px;">Trends &amp; analysis</div>
-
-<div class="csec" id="csec-june">
-  <div class="csec-hdr" onclick="toggleSec('june')">
-    <span class="csec-title">Yield Ratio</span>
-    <span class="csec-meta" id="csec-june-meta"></span>
-    <span class="csec-chev" id="csec-june-chev">▶</span>
-  </div>
-  <div class="csec-body" id="csec-june-body">
-    <div class="yr-toggle" id="yr-toggle">
-      <button data-p="today" onclick="showYield('today')">Today</button>
-      <button data-p="week" data-default="1" onclick="showYield('week')" class="active">This Week</button>
-      <button data-p="month" onclick="showYield('month')">This Month</button>
-    </div>
-    <div class="jl-card" style="margin-bottom:8px;">
-      <p class="jl-lbl" id="yr-head">Yield Ratio · This Week</p>
-      <p class="jl-val" id="yr-big">—</p>
-      <p class="jl-sub" id="yr-sub">TD ÷ ED · target 1.3+</p>
-    </div>
-    <div class="jl-card">
-      <p class="jl-lbl">Bonus source <span id="yr-pts-total" style="float:right;color:var(--text2);"></span></p>
-      <div class="jl-rows" id="yr-rows"></div>
-      <p class="jl-note">Where the asymmetric value came from · derived view, no formulas or rules changed. 70-pt floor shown on This Month only.</p>
-    </div>
-  </div>
-</div>
-
-<!-- Summary -->
-<div class="csec" id="csec-summary">
-  <div class="csec-hdr" onclick="toggleSec('summary')">
-    <span class="csec-title">Summary</span>
-    <span class="csec-meta" id="csec-summary-meta"></span>
-    <span class="csec-chev" id="csec-summary-chev">▶</span>
-  </div>
-  <div class="csec-body" id="csec-summary-body">
-    <div class="sum-row sum-row-4" style="margin-bottom:6px;">
-      <div class="scard"><p class="scard-tag">YTD · ED</p><p class="scard-val" id="ytd-e">—</p><p class="scard-sub" id="ytd-e-sub">&nbsp;</p></div>
-      <div class="scard"><p class="scard-tag">YTD · TD</p><p class="scard-val" id="ytd-t">—</p><p class="scard-sub" id="ytd-t-sub">&nbsp;</p></div>
-      <div class="scard"><p class="scard-tag">MTD · ED</p><p class="scard-val" id="mtd-e">—</p><p class="scard-sub" id="mtd-e-sub">&nbsp;</p></div>
-      <div class="scard"><p class="scard-tag">MTD · TD</p><p class="scard-val" id="mtd-t">—</p><p class="scard-sub" id="mtd-t-sub">&nbsp;</p></div>
-    </div>
-    <div class="sum-row sum-row-4">
-      <div class="scard"><p class="scard-tag">QTD · ED</p><p class="scard-val" id="qtd-e">—</p><p class="scard-sub" id="qtd-e-sub">&nbsp;</p></div>
-      <div class="scard"><p class="scard-tag">QTD · TD</p><p class="scard-val" id="qtd-t">—</p><p class="scard-sub" id="qtd-t-sub">&nbsp;</p></div>
-      <div class="scard"><p class="scard-tag">WTD · ED</p><p class="scard-val" id="wtd-e">—</p><p class="scard-sub" id="wtd-e-sub">&nbsp;</p></div>
-      <div class="scard"><p class="scard-tag">WTD · TD</p><p class="scard-val" id="wtd-t">—</p><p class="scard-sub" id="wtd-t-sub">&nbsp;</p></div>
-    </div>
-  </div>
-</div>
-
-<!-- Intelligence -->
 <hr class="sdivider">
 
 <!-- TIER 3: ANALYSIS — collapsible -->
@@ -845,37 +767,50 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
     <span class="csec-chev" id="csec-breakdown-chev">▶</span>
   </div>
   <div class="csec-body" id="csec-breakdown-body">
+    <p class="ladder-cap">Period averages · weekday stream (YTD / MTD / QTD / WTD)</p>
+    <div class="sum-row sum-row-4" style="margin-bottom:6px;">
+      <div class="scard"><p class="scard-tag">YTD · ED</p><p class="scard-val" id="ytd-e">—</p><p class="scard-sub" id="ytd-e-sub">&nbsp;</p></div>
+      <div class="scard"><p class="scard-tag">YTD · TD</p><p class="scard-val" id="ytd-t">—</p><p class="scard-sub" id="ytd-t-sub">&nbsp;</p></div>
+      <div class="scard"><p class="scard-tag">MTD · ED</p><p class="scard-val" id="mtd-e">—</p><p class="scard-sub" id="mtd-e-sub">&nbsp;</p></div>
+      <div class="scard"><p class="scard-tag">MTD · TD</p><p class="scard-val" id="mtd-t">—</p><p class="scard-sub" id="mtd-t-sub">&nbsp;</p></div>
+    </div>
+    <div class="sum-row sum-row-4" style="margin-bottom:10px;">
+      <div class="scard"><p class="scard-tag">QTD · ED</p><p class="scard-val" id="qtd-e">—</p><p class="scard-sub" id="qtd-e-sub">&nbsp;</p></div>
+      <div class="scard"><p class="scard-tag">QTD · TD</p><p class="scard-val" id="qtd-t">—</p><p class="scard-sub" id="qtd-t-sub">&nbsp;</p></div>
+      <div class="scard"><p class="scard-tag">WTD · ED</p><p class="scard-val" id="wtd-e">—</p><p class="scard-sub" id="wtd-e-sub">&nbsp;</p></div>
+      <div class="scard"><p class="scard-tag">WTD · TD</p><p class="scard-val" id="wtd-t">—</p><p class="scard-sub" id="wtd-t-sub">&nbsp;</p></div>
+    </div>
     <div id="quarters"></div>
   </div>
 </div>
 
-<!-- Doctrine Compliance layer · Ghost 2.0 is the marquee gate; future gates land here -->
-<div class="layer-hdr"><span>Doctrine compliance</span><span class="layer-hdr-tag">Ghost 2.0 sealed 2026-05-20</span></div>
-<!-- Ghost 2.0 Qualification panel (sealed 2026-05-20) -->
-<div class="q2-panel" id="q2-panel">
-  <div class="q2-hdr">
-    <span class="q2-title">★ Ghost 2.0 qualification</span>
-    <span class="q2-verdict fail" id="q2-verdict">—</span>
+<!-- Weekend stream - separate from weekday metrics (added 2026-06-22) -->
+<div class="csec" id="csec-weekend">
+  <div class="csec-hdr" onclick="toggleSec('weekend')">
+    <span class="csec-title">Weekend stream</span>
+    <span class="csec-meta" id="csec-weekend-meta"></span>
+    <span class="csec-chev" id="csec-weekend-chev">&#9654;</span>
   </div>
-  <div class="q2-pillars" id="q2-pillars"><div class="q2-await" style="grid-column:1/-1;">Awaiting live data — open via served URL (file:// blocks fetch)</div></div>
-  <div class="q2-proj" id="q2-proj">—</div>
-  <div class="q2-window">
-    <span class="q2-window-lbl">10D Window</span>
-    <div id="q2-tiles" style="display:flex;gap:3px;flex:1;"></div>
-  </div>
-  <div class="q2-window-meta" id="q2-window-meta"><span>oldest (exits next)</span><span>today (in progress)</span></div>
+  <div class="csec-body" id="csec-weekend-body"></div>
 </div>
 
 <!-- Ghost log -->
 <div class="csec" id="csec-ghost" style="margin-top:.6rem;">
   <div class="csec-hdr" onclick="toggleSec('ghost')">
     <div class="ghost-hdr-inner">
-      <span class="ghost-title">★ Ghost log</span>
+      <span class="ghost-title">★ Ghost</span>
       <div class="ghost-meta-inline" id="ghost-meta"></div>
     </div>
     <span class="csec-chev" id="csec-ghost-chev">▶</span>
   </div>
   <div class="csec-body" id="csec-ghost-body">
+    <div class="q2-panel" id="q2-panel">
+      <div class="q2-hdr"><span class="q2-title">★ Ghost 2.0 qualification</span><span class="q2-verdict fail" id="q2-verdict">—</span></div>
+      <div class="q2-pillars" id="q2-pillars"><div class="q2-await" style="grid-column:1/-1;">Awaiting live data — open via served URL (file:// blocks fetch)</div></div>
+      <div class="q2-proj" id="q2-proj">—</div>
+      <div class="q2-window"><span class="q2-window-lbl">10D Window</span><div id="q2-tiles" style="display:flex;gap:3px;flex:1;"></div></div>
+      <div class="q2-window-meta" id="q2-window-meta"><span>oldest (exits next)</span><span>today (in progress)</span></div>
+    </div>
     <div id="ghost-body-inner"></div>
   </div>
 </div>
@@ -1209,6 +1144,7 @@ async function init(){
     if(hi===-1)throw new Error('header not found');
     const gs=v=>{if(v===undefined)return null;const s=(v||'').trim();return s!==''&&!isNaN(+s)?+s:null;};
     const flat=[],years={},allD=[],allT=[];
+    const weekendFlat=[];
     const offDays=new Set();
     const today=todayStr(),cym=curYM();
 
@@ -1222,7 +1158,7 @@ async function init(){
       // WWS quarantine (2026-06-05): Phantom Ledger rows (Day = WWS) never merge with the weekday stream.
       // Per MAC banner ("two streams are kept side-by-side but never merged") and W21 WTTW ruling.
       const dayRaw=(cols.day!==undefined?(row[cols.day]||''):'').trim().toLowerCase();
-      if(dayRaw==='wws')continue;
+      const isWWS=(dayRaw==='wws');
       const dr=(row[cols.doros]||'').trim();
       if(dr==='')continue;
       const doros=parseFloat(dr);if(isNaN(doros))continue;
@@ -1245,6 +1181,8 @@ async function init(){
       const posture=cols.posture!==undefined?(row[cols.posture]||'').trim():'';
       const ancSub=cols.ancSub!==undefined?(row[cols.ancSub]||'').trim():'';
       const ancName=cols.ancName!==undefined?(row[cols.ancName]||'').trim():'';
+      const _dow=new Date(ds+'T00:00:00').getDay();
+      if(isWWS||_dow===0||_dow===6){weekendFlat.push({ds,ym,doros,total,dtRaw,idxAvg,ps,fitt,rwr,mm,eIn,eOn,eOut,eVau,eLab,clu,nums,anc,lev,rnd});continue;}
       flat.push({ds,ym,doros,total,dtRaw,state:stateRaw,rwr,mm,lf,ps,fitt,idxAvg,anc,lev,clu,nums,rnd,eIn,eOn,eOut,eVau,eLab,rIdx,posture,ancSub,ancName});
       if(!years[yr])years[yr]={};
       if(!years[yr][q])years[yr][q]=newP();
@@ -1516,7 +1454,7 @@ async function init(){
     setS('qtd-t','qtd-t-sub',qtdT,ytdT,tot(qtdRows.map(r=>r.total)).toFixed(0)+' total');
     setS('wtd-e','wtd-e-sub',wtdE,ytdE,wtdRows.length+'d this week');
     setS('wtd-t','wtd-t-sub',wtdT,ytdT,tot(wtdRows.map(r=>r.total)).toFixed(0)+' total');
-    document.getElementById('csec-summary-meta').textContent='YTD · MTD · QTD · WTD';
+    var _sm=document.getElementById('csec-summary-meta');if(_sm)_sm.textContent='YTD · MTD · QTD · WTD';
 
     // ── Week Requirements — WTD actual vs this week's WP targets (2026-06-08) ──
     (function renderWeekReq(){
@@ -1607,6 +1545,29 @@ async function init(){
       h+='<div style="margin-top:8px;color:var(--text3);font-size:10px;line-height:1.5;">Binary ships (log manually &mdash; not in data): Klok app live + agreements &middot; Fontein pricing live + boosted &middot; Namforce look-and-feel link sent.</div>';
       host.innerHTML=h;
       var m=document.getElementById('csec-w26-meta'); if(m) m.textContent='Klok '+f1(klok)+'/6 · Fontein '+f1(font)+'/6 · σ '+sd.toFixed(1);
+    })();
+
+    (function renderWeekend(){
+      var host=document.getElementById('csec-weekend-body'); if(!host) return;
+      var meta=document.getElementById('csec-weekend-meta');
+      if(!weekendFlat.length){host.innerHTML='<p style="color:var(--text3);font-size:11px;">No weekend work logged.</p>';if(meta)meta.textContent='none';return;}
+      var g={};
+      weekendFlat.forEach(function(r){var k=monday(r.ds);(g[k]=g[k]||[]).push(r);});
+      var keys=Object.keys(g).sort().reverse().slice(0,8);
+      var totED=tot(weekendFlat.map(function(r){return r.doros;}));
+      var h='<div style="font-size:11px;color:var(--text3);margin-bottom:8px;">'+weekendFlat.length+' weekend days &middot; '+totED.toFixed(0)+' ED total &middot; kept out of the weekday stream</div>';
+      keys.forEach(function(k){
+        var rows=g[k];
+        var ed=tot(rows.map(function(r){return r.doros;})),td=tot(rows.map(function(r){return r.total;}));
+        var inf=tot(rows.map(function(r){return r.eIn||0;})),onf=tot(rows.map(function(r){return r.eOn||0;})),out=tot(rows.map(function(r){return r.eOut||0;})),vau=tot(rows.map(function(r){return r.eVau||0;})),lab=tot(rows.map(function(r){return r.eLab||0;}));
+        var som=avg(rows.map(function(r){return r.idxAvg;}));
+        var ws=new Date(k+'T00:00:00');ws.setDate(ws.getDate()+5);
+        var we=new Date(k+'T00:00:00');we.setDate(we.getDate()+6);
+        var lbl=ws.toLocaleString('default',{month:'short',day:'numeric'})+'–'+we.getDate();
+        h+='<div style="padding:7px 0;border-top:.5px solid var(--border);font-size:12px;"><div style="display:flex;justify-content:space-between;"><span>'+lbl+'</span><span><b style="color:var(--text);">'+ed.toFixed(0)+'</b> ED / '+td.toFixed(0)+' TD'+(som!=null?' &middot; som '+som.toFixed(1):'')+'</span></div><div style="color:var(--text3);font-size:10px;margin-top:2px;">Inf '+inf.toFixed(0)+' &middot; Onf '+onf.toFixed(0)+' &middot; Out '+out.toFixed(0)+' &middot; Vau '+vau.toFixed(0)+' &middot; Lab '+lab.toFixed(0)+'</div></div>';
+      });
+      host.innerHTML=h;
+      if(meta)meta.textContent=weekendFlat.length+' days · '+totED.toFixed(0)+' ED';
     })();
 
     const last10=closedFlat.slice(-10);
@@ -1732,18 +1693,18 @@ async function init(){
       };
       showYield('week');
       const m=gYield.month, mY=m.y!==null?f2(m.y):'—';
-      document.getElementById('csec-june-meta').textContent='yield by period · month '+mY;
+      var _jm=document.getElementById('csec-june-meta');if(_jm)_jm.textContent='yield by period · month '+mY;
     })();
 
     // Capacity pills
     const capContainer=document.getElementById('cap-pills');
-    capContainer.innerHTML='';
+    if(capContainer)capContainer.innerHTML='';
     function mkCpill(label,sub,val,color,dot,cls){
       const d=document.createElement('div');d.className='cpill '+(cls||'');
       d.innerHTML=(dot?'<span class="cpill-dot" style="background:'+dot+'"></span>':'')+
         '<div class="cpill-info"><div class="cpill-lbl">'+label+'</div><div class="cpill-sub">'+sub+'</div></div>'+
         '<div class="cpill-right"><div class="cpill-val" style="color:'+color+'">'+val+'</div></div>';
-      capContainer.appendChild(d);
+      if(capContainer)capContainer.appendChild(d);
     }
     const C=getC();
     mkCpill('10d ED avg','floor 8.5',f2(l10e),l10e>=8.5?'#1D9E75':'#E24B4A',C.ed10,'lead');
@@ -1754,7 +1715,7 @@ async function init(){
     const capTrajEl=document.createElement('div');
     capTrajEl.style.cssText='margin-top:6px;font-size:11px;';
     capTrajEl.innerHTML='ED: '+traj(roll10E,prev10E)+'  ·  TD: '+traj(roll10T,prev10T);
-    capContainer.after(capTrajEl);
+    if(capContainer)capContainer.after(capTrajEl);
 
     // Quality pills — avg leads, coloured by floor
     const somFloor=gm?3:2;
@@ -1768,11 +1729,11 @@ async function init(){
     const worstQ=validQ.length?validQ.reduce((a,b)=>b.v<a.v?b:a):null;
     // Quality state sentence
     const qStateEl=document.getElementById('quality-state');
-    if(bestQ&&worstQ&&bestQ.k!==worstQ.k){
+    if(qStateEl&&bestQ&&worstQ&&bestQ.k!==worstQ.k){
       qStateEl.textContent='· '+bestQ.l+' leading · '+worstQ.l+' needs attention';
       qStateEl.style.color=l10idxA>=somFloor?'#1D9E75':'#BA7517';
     }
-    document.getElementById('qual-pills').innerHTML=qualDefs.map(p=>{
+    var _qp=document.getElementById('qual-pills');if(_qp)_qp.innerHTML=qualDefs.map(p=>{
       const isBest=bestQ&&p.k===bestQ.k,isWorst=worstQ&&p.k===worstQ.k;
       const col=p.special?idxColor(p.v,gm):'inherit';
       const floorCls=!p.special&&p.v!==null?(p.v>=somFloor?' ok':p.v>=(somFloor*.65)?' warn':' lo'):'';
@@ -1793,7 +1754,7 @@ async function init(){
     const validL=levDefs.filter(p=>p.v!==null&&!p.special);
     const bestL=validL.length?validL.reduce((a,b)=>b.v>a.v?b:a):{k:null};
     const worstL=validL.length>1?validL.reduce((a,b)=>b.v<a.v?b:a):{k:null};
-    document.getElementById('lev-pills').innerHTML=levDefs.map(p=>{
+    var _lp=document.getElementById('lev-pills');if(_lp)_lp.innerHTML=levDefs.map(p=>{
       const isBest=!p.special&&p.k===bestL.k,isWorst=!p.special&&p.k===worstL.k&&validL.length>1;
       return '<div class="ipill'+(p.special?' lead':'')+(isBest?' best':isWorst?' worst':'')+'">'+
         '<p class="ipill-label">'+p.l+'</p>'+
@@ -1802,7 +1763,7 @@ async function init(){
       '</div>';
     }).join('');
 
-    document.getElementById('csec-intel-meta').textContent='10d avg · capacity · quality · leverage';
+    var _im=document.getElementById('csec-intel-meta');if(_im)_im.textContent='10d avg · capacity · quality · leverage';
 
     // ── Charts ────────────────────────────────────────
     updateDots();
