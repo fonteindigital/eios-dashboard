@@ -541,6 +541,16 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
 <!-- TIER 2: CONTEXT — collapsible -->
 
 <!-- Engines (NEW) -->
+<!-- Week anchors - airtime vs 6-cap (added 2026-06-22) -->
+<div class="csec" id="csec-w26">
+  <div class="csec-hdr" onclick="toggleSec('w26')">
+    <span class="csec-title">Week anchors &middot; airtime vs 6-cap</span>
+    <span class="csec-meta" id="csec-w26-meta"></span>
+    <span class="csec-chev" id="csec-w26-chev">&#9654;</span>
+  </div>
+  <div class="csec-body" id="csec-w26-body"></div>
+</div>
+
 <div class="csec" id="csec-engines">
   <div class="csec-hdr" onclick="toggleSec('engines')">
     <span class="csec-title">Engines · 10d</span>
@@ -1565,6 +1575,37 @@ async function init(){
     })();
 
     // ── Intelligence ──────────────────────────────────
+    (function renderW26(){
+      var host=document.getElementById('csec-w26-body'); if(!host) return;
+      var CAP=6, SOM=2.5;
+      var klok=tot(wtdRows.map(function(r){return r.eVau;}));
+      var font=tot(wtdRows.map(function(r){return r.eOn;}));
+      var pool=tot(wtdRows.map(function(r){return r.doros;}));
+      var nd=wtdRows.length;
+      var floorDays=wtdRows.filter(function(r){return r.doros>=WEEK_REQ.edDayMin;}).length;
+      var somDays=wtdRows.filter(function(r){return r.idxAvg!=null&&r.idxAvg>=SOM;}).length;
+      var gates=wtdRows.filter(function(r){return r.mm===5||r.rwr===5;}).length;
+      var w10=closedFlat.slice(-10).map(function(r){return r.doros;});
+      var mu=w10.length?w10.reduce(function(s,x){return s+x;},0)/w10.length:0;
+      var sd=w10.length?Math.sqrt(w10.reduce(function(s,x){return s+(x-mu)*(x-mu);},0)/w10.length):0;
+      function bar(v){var p=Math.min(100,v/CAP*100);var c=v>=CAP?'#1D9E75':v>0?'#BA7517':'#E24B4A';return '<div style="height:9px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;margin:4px 0;"><i style="display:block;height:100%;width:'+p.toFixed(0)+'%;background:'+c+';border-radius:2px;"></i></div>';}
+      function row(name,eng,v){var s=v>=CAP?'<span style="color:#1D9E75">capped '+f1(v)+'/6</span>':v>0?'<span style="color:#BA7517">airtime '+f1(v)+'/6</span>':'<span style="color:#E24B4A">cold 0/6</span>';return '<div style="padding:7px 0;border-top:.5px solid var(--border);"><div style="display:flex;justify-content:space-between;font-size:12px;"><span>'+name+' <span style="color:var(--text3);font-size:10px;">'+eng+'</span></span>'+s+'</div>'+bar(v)+'</div>';}
+      var h='';
+      h+=row('Klok','Vault',klok);
+      h+=row('Fontein','Onf',font);
+      h+='<div style="padding:7px 0;border-top:.5px solid var(--border);font-size:12px;"><div style="display:flex;justify-content:space-between;"><span>Namforce <span style="color:var(--text3);font-size:10px;">Inf</span></span><span style="color:var(--text3)">needs anchor column</span></div><div style="color:var(--text3);font-size:10px;margin-top:3px;">shares Infont&eacute;in with client migrations &mdash; not separable from the log.</div></div>';
+      h+='<div style="margin-top:10px;padding-top:8px;border-top:.5px solid var(--border);display:flex;gap:16px;flex-wrap:wrap;font-size:11px;">';
+      h+='<span><b style="font-size:14px;color:var(--text);">'+pool.toFixed(0)+'/'+WEEK_REQ.poolMax.toFixed(0)+'</b> <span style="color:var(--text3)">pool</span></span>';
+      h+='<span><b style="font-size:14px;color:var(--text);">'+floorDays+'/'+nd+'</b> <span style="color:var(--text3)">days &ge;8.5</span></span>';
+      h+='<span><b style="font-size:14px;color:var(--text);">'+somDays+'/'+nd+'</b> <span style="color:var(--text3)">days &ge;2.5 som</span></span>';
+      h+='<span><b style="font-size:14px;color:var(--text);">'+sd.toFixed(1)+'</b> <span style="color:var(--text3)">&sigma; 10d</span></span>';
+      h+='<span><b style="font-size:14px;color:var(--text);">'+gates+'/'+nd+'</b> <span style="color:var(--text3)">gates (MM/RWR=5)</span></span>';
+      h+='</div>';
+      h+='<div style="margin-top:8px;color:var(--text3);font-size:10px;line-height:1.5;">Binary ships (log manually &mdash; not in data): Klok app live + agreements &middot; Fontein pricing live + boosted &middot; Namforce look-and-feel link sent.</div>';
+      host.innerHTML=h;
+      var m=document.getElementById('csec-w26-meta'); if(m) m.textContent='Klok '+f1(klok)+'/6 · Fontein '+f1(font)+'/6 · σ '+sd.toFixed(1);
+    })();
+
     const last10=closedFlat.slice(-10);
     const l10e=avg(last10.map(r=>r.doros)),l10t=avg(last10.map(r=>r.total));
     const l10idxA=avg(last10.map(r=>r.idxAvg));
