@@ -416,9 +416,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
   </div>
 </div>
 
-<!-- TIER 1: SIGNAL — always open -->
 
-<!-- Today strip -->
+<div style="font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin:20px 0 8px;border-bottom:1px solid var(--border);padding-bottom:5px;">Today</div>
+
 <div class="today-strip" id="today-strip">
   <div><p class="td-label">Today</p><p class="td-val" id="td-date">—</p><p class="td-sub" id="td-dsub">&nbsp;</p></div>
   <div><p class="td-label">Day type</p><p class="td-val" id="td-dtype">—</p></div>
@@ -457,6 +457,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
 </div>
 
 <!-- Signal cards · Row 1 — Performance · 10D -->
+
+<div style="font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin:20px 0 8px;border-bottom:1px solid var(--border);padding-bottom:5px;">10-day view</div>
+
 <div class="signal-grid">
   <div class="sig-card">
     <div class="sig-label">
@@ -511,46 +514,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
 <div class="ladder-strip" id="ladder-strip"></div>
 
 <!-- Week Requirements — WTD actual vs this week's WP targets (2026-06-08) -->
-<div class="csec" id="csec-wreq">
-  <div class="csec-hdr" onclick="toggleSec('wreq')">
-    <span class="csec-title" id="wreq-title">Week Requirements</span>
-    <span class="csec-meta" id="csec-wreq-meta"></span>
-    <span class="csec-chev" id="csec-wreq-chev">▶</span>
-  </div>
-  <div class="csec-body" id="csec-wreq-body">
-    <div class="wr-grid">
-      <div class="wr-card"><p class="wr-lbl">ED pace · WTD</p><p class="wr-val" id="wr-ed">—</p>
-        <div class="wr-bar"><div class="wr-fill" id="wr-ed-fill" style="width:0%;"></div><span class="wr-mark" id="wr-ed-mark"></span></div>
-        <p class="wr-tgt" id="wr-ed-tgt">—</p></div>
-      <div class="wr-card"><p class="wr-lbl">Week Pool</p><p class="wr-val" id="wr-pool">—</p>
-        <div class="wr-bar"><div class="wr-fill" id="wr-pool-fill" style="width:0%;"></div><span class="wr-mark" id="wr-pool-mark"></span></div>
-        <p class="wr-tgt" id="wr-pool-tgt">—</p></div>
-      <div class="wr-card"><p class="wr-lbl">Yield Index · WTD</p><p class="wr-val" id="wr-yield">—</p>
-        <div class="wr-bar"><div class="wr-fill" id="wr-yield-fill" style="width:0%;"></div><span class="wr-mark" id="wr-yield-mark"></span></div>
-        <p class="wr-tgt" id="wr-yield-tgt">—</p></div>
-      <div class="wr-card"><p class="wr-lbl">Somatic Index · WTD</p><p class="wr-val" id="wr-som">—</p>
-        <div class="wr-bar"><div class="wr-fill" id="wr-som-fill" style="width:0%;"></div><span class="wr-mark" id="wr-som-mark"></span></div>
-        <p class="wr-tgt" id="wr-som-tgt">—</p></div>
-    </div>
-    <p class="wr-note" id="wr-note">WTD vs Week Plan targets · sheet-measurable only · edit WEEK_REQ each Monday.</p>
-  </div>
-</div>
-
-<hr class="sdivider">
-
-<!-- TIER 2: CONTEXT — collapsible -->
-
-<!-- Engines (NEW) -->
-<!-- Week anchors - airtime vs 6-cap (added 2026-06-22) -->
-<div class="csec" id="csec-w26">
-  <div class="csec-hdr" onclick="toggleSec('w26')">
-    <span class="csec-title">Week anchors &middot; airtime vs 6-cap</span>
-    <span class="csec-meta" id="csec-w26-meta"></span>
-    <span class="csec-chev" id="csec-w26-chev">&#9654;</span>
-  </div>
-  <div class="csec-body" id="csec-w26-body"></div>
-</div>
-
 <div class="csec" id="csec-engines">
   <div class="csec-hdr" onclick="toggleSec('engines')">
     <span class="csec-title">Engines · 10d</span>
@@ -626,6 +589,81 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
 </div>
 
 <!-- June Ledger · trial (2026-06-05) — display-only derived views; promote to main board only if it earns it -->
+<div class="csec" id="csec-intel">
+  <div class="csec-hdr" onclick="toggleSec('intel')">
+    <span class="csec-title">Intelligence · 10d</span>
+    <span class="csec-meta" id="csec-intel-meta"></span>
+    <span class="csec-chev" id="csec-intel-chev">▶</span>
+  </div>
+  <div class="csec-body" id="csec-intel-body">
+    <!-- CAPACITY -->
+    <div class="intel-sub">
+      <div class="intel-sublabel">Capacity</div>
+      <div class="intel-pills" id="cap-pills" style="gap:6px;"></div>
+    </div>
+    <!-- QUALITY -->
+    <div class="intel-sub">
+      <div class="intel-sublabel">Quality <span class="intel-state" id="quality-state"></span></div>
+      <div class="intel-pills" id="qual-pills"></div>
+    </div>
+    <!-- LEVERAGE -->
+    <div class="intel-sub">
+      <div class="intel-sublabel">Leverage</div>
+      <div class="intel-pills" id="lev-pills"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Variance band - corridor 8.5-12.5 (added 2026-06-18) -->
+<div class="csec" id="csec-variance">
+  <div class="csec-hdr" onclick="toggleSec('variance')">
+    <span class="csec-title">Variance &middot; corridor 8.5-12.5</span>
+    <span class="csec-meta" id="csec-variance-meta"></span>
+    <span class="csec-chev" id="csec-variance-chev">&#9654;</span>
+  </div>
+  <div class="csec-body" id="csec-variance-body"></div>
+</div>
+
+
+<div style="font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin:20px 0 8px;border-bottom:1px solid var(--border);padding-bottom:5px;">Week 26 · this week</div>
+
+<div class="csec" id="csec-wreq">
+  <div class="csec-hdr" onclick="toggleSec('wreq')">
+    <span class="csec-title" id="wreq-title">Week Requirements</span>
+    <span class="csec-meta" id="csec-wreq-meta"></span>
+    <span class="csec-chev" id="csec-wreq-chev">▶</span>
+  </div>
+  <div class="csec-body" id="csec-wreq-body">
+    <div class="wr-grid">
+      <div class="wr-card"><p class="wr-lbl">ED pace · WTD</p><p class="wr-val" id="wr-ed">—</p>
+        <div class="wr-bar"><div class="wr-fill" id="wr-ed-fill" style="width:0%;"></div><span class="wr-mark" id="wr-ed-mark"></span></div>
+        <p class="wr-tgt" id="wr-ed-tgt">—</p></div>
+      <div class="wr-card"><p class="wr-lbl">Week Pool</p><p class="wr-val" id="wr-pool">—</p>
+        <div class="wr-bar"><div class="wr-fill" id="wr-pool-fill" style="width:0%;"></div><span class="wr-mark" id="wr-pool-mark"></span></div>
+        <p class="wr-tgt" id="wr-pool-tgt">—</p></div>
+      <div class="wr-card"><p class="wr-lbl">Yield Index · WTD</p><p class="wr-val" id="wr-yield">—</p>
+        <div class="wr-bar"><div class="wr-fill" id="wr-yield-fill" style="width:0%;"></div><span class="wr-mark" id="wr-yield-mark"></span></div>
+        <p class="wr-tgt" id="wr-yield-tgt">—</p></div>
+      <div class="wr-card"><p class="wr-lbl">Somatic Index · WTD</p><p class="wr-val" id="wr-som">—</p>
+        <div class="wr-bar"><div class="wr-fill" id="wr-som-fill" style="width:0%;"></div><span class="wr-mark" id="wr-som-mark"></span></div>
+        <p class="wr-tgt" id="wr-som-tgt">—</p></div>
+    </div>
+    <p class="wr-note" id="wr-note">WTD vs Week Plan targets · sheet-measurable only · edit WEEK_REQ each Monday.</p>
+  </div>
+</div>
+
+<div class="csec" id="csec-w26">
+  <div class="csec-hdr" onclick="toggleSec('w26')">
+    <span class="csec-title">Week anchors &middot; airtime vs 6-cap</span>
+    <span class="csec-meta" id="csec-w26-meta"></span>
+    <span class="csec-chev" id="csec-w26-chev">&#9654;</span>
+  </div>
+  <div class="csec-body" id="csec-w26-body"></div>
+</div>
+
+
+<div style="font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin:20px 0 8px;border-bottom:1px solid var(--border);padding-bottom:5px;">Trends &amp; analysis</div>
+
 <div class="csec" id="csec-june">
   <div class="csec-hdr" onclick="toggleSec('june')">
     <span class="csec-title">Yield Ratio</span>
@@ -675,41 +713,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
 </div>
 
 <!-- Intelligence -->
-<div class="csec" id="csec-intel">
-  <div class="csec-hdr" onclick="toggleSec('intel')">
-    <span class="csec-title">Intelligence · 10d</span>
-    <span class="csec-meta" id="csec-intel-meta"></span>
-    <span class="csec-chev" id="csec-intel-chev">▶</span>
-  </div>
-  <div class="csec-body" id="csec-intel-body">
-    <!-- CAPACITY -->
-    <div class="intel-sub">
-      <div class="intel-sublabel">Capacity</div>
-      <div class="intel-pills" id="cap-pills" style="gap:6px;"></div>
-    </div>
-    <!-- QUALITY -->
-    <div class="intel-sub">
-      <div class="intel-sublabel">Quality <span class="intel-state" id="quality-state"></span></div>
-      <div class="intel-pills" id="qual-pills"></div>
-    </div>
-    <!-- LEVERAGE -->
-    <div class="intel-sub">
-      <div class="intel-sublabel">Leverage</div>
-      <div class="intel-pills" id="lev-pills"></div>
-    </div>
-  </div>
-</div>
-
-<!-- Variance band - corridor 8.5-12.5 (added 2026-06-18) -->
-<div class="csec" id="csec-variance">
-  <div class="csec-hdr" onclick="toggleSec('variance')">
-    <span class="csec-title">Variance &middot; corridor 8.5-12.5</span>
-    <span class="csec-meta" id="csec-variance-meta"></span>
-    <span class="csec-chev" id="csec-variance-chev">&#9654;</span>
-  </div>
-  <div class="csec-body" id="csec-variance-body"></div>
-</div>
-
 <hr class="sdivider">
 
 <!-- TIER 3: ANALYSIS — collapsible -->
@@ -886,7 +889,7 @@ const CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vSEwNS2RuMUEPU50zZAgJ
 // ── Week Plan requirements (edit each Monday from the WP) ──────────────
 // Only sheet-measurable targets live here. Week pool spans the WP's active days.
 const WEEK_REQ={
-  label:'Week 24',
+  label:(function(){var ep=Date.UTC(2025,11,29);var d=new Date();var dy=d.getDay(),df=dy===0?-6:1-dy;var m=Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()+df);return 'Week '+(1+Math.round((m-ep)/6048e5));})(),
   edDayMin:8.5, edDayAim:12.0,        // Focus Doros/day
   poolMin:34.0, poolMax:48.0, poolDays:'Tue–Fri', poolActiveDays:4,  // total ED pool for the week
   yieldMin:1.3,                        // TD ÷ ED
