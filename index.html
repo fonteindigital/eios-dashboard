@@ -670,12 +670,12 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
     </div>
     <div class="mp-tiles">
       <div class="mp-tile"><p class="mp-tile-lbl">Inf cap &le;8</p><p class="mp-tile-val" id="mp-infcap">&mdash;</p><p class="mp-tile-sub">breach days</p></div>
-      <div class="mp-tile"><p class="mp-tile-lbl">Mon/Tue &le;10</p><p class="mp-tile-val" id="mp-montue">&mdash;</p><p class="mp-tile-sub">breach &middot; partial</p></div>
+      <div class="mp-tile"><p class="mp-tile-lbl">Week &le;60 total</p><p class="mp-tile-val" id="mp-wk60">&mdash;</p><p class="mp-tile-sub">breach weeks</p></div>
       <div class="mp-tile"><p class="mp-tile-lbl">Auto-Limp</p><p class="mp-tile-val" id="mp-limp">&mdash;</p><p class="mp-tile-sub">2&times; &lt;2.25</p></div>
       <div class="mp-tile"><p class="mp-tile-lbl">Expansion gate</p><p class="mp-tile-val" id="mp-exp">&mdash;</p><p class="mp-tile-sub" id="mp-exp-sub">partial &middot; LS manual</p></div>
       <div class="mp-tile"><p class="mp-tile-lbl">Level-5 MM/RWR</p><p class="mp-tile-val" style="color:var(--text3);">n/a</p><p class="mp-tile-sub">no time columns</p></div>
     </div>
-    <table class="mp-table"><thead><tr><th>Week</th><th>PS</th><th>Yield</th><th>Onf</th><th>Vault%</th><th>Lab%</th><th>Log</th></tr></thead><tbody id="mp-tbody"></tbody></table>
+    <table class="mp-table"><thead><tr><th>Week</th><th>PS</th><th>Yield</th><th>Onf</th><th>Vault%</th><th>Lab%</th><th>Tot</th><th>Log</th></tr></thead><tbody id="mp-tbody"></tbody></table>
     <p class="mp-cap">Weekly matrix &middot; targets Somatic &ge;2.25 &middot; Yield &ge;1.25 &middot; Onf &ge;10/wk &middot; Vault &ge;5% &middot; Lab &ge;5%. Somatic = Index Avg composite. Edit MONTH_PLAN each month.</p>
   </div>
 </div>
@@ -886,8 +886,8 @@ const MONTH_PLAN={
   onfWeekMin:10,    // Onfontéin / Fontein Doros per week
   vaultPctMin:5,    // Vault (Vau) share of week
   labPctMin:5,      // Lab share of week
-  infDayCap:8,      // Infontéin Doros/day cap
-  monTueMax:10      // Mon/Tue total Doros cap
+  infDayCap:8,      // Infontéin Doros/day cap (all days)
+  weekTotalCap:60   // total Doros/week ceiling (all engines)
 };
 
 // ── Theme ──────────────────────────────────────────────
@@ -1610,9 +1610,6 @@ async function init(){
       // 7 · Inf cap ≤8 breach days
       const infB=mRows.filter(r=>(r.eIn||0)>M.infDayCap).length;
       (function(){const e=document.getElementById('mp-infcap'); if(e){e.textContent=infB; e.style.color=infB===0?'#1D9E75':'#E24B4A';}})();
-      // 11 · Mon/Tue ≤10 total breaches
-      const mtB=mRows.filter(r=>{const d=new Date(r.ds+'T00:00:00').getDay(); return (d===1||d===2)&&(r.total||0)>M.monTueMax;}).length;
-      (function(){const e=document.getElementById('mp-montue'); if(e){e.textContent=mtB; e.style.color=mtB===0?'#1D9E75':'#BA7517';}})();
       // 8 · Auto-Limp watch — last 2 logged idx < psFloor
       const seq=mRows.filter(r=>r.idxAvg!==null); const l2=seq.slice(-2);
       let limp='clear',lc='#1D9E75';
@@ -1629,20 +1626,23 @@ async function init(){
       function isoWk(ds){const anc=new Date('2026-06-08T00:00:00');const d=new Date(ds+'T00:00:00');return 24+Math.round((d-anc)/(7*86400000));}
       const byWk={}; mRows.forEach(r=>{const k=monday(r.ds); (byWk[k]=byWk[k]||[]).push(r);});
       const cc=(v,ok)=>v===null?'var(--text3)':(ok?'#1D9E75':'#E24B4A');
-      const tb=document.getElementById('mp-tbody');
+      const tb=document.getElementById('mp-tbody'); let wk60B=0;
       if(tb)tb.innerHTML=Object.keys(byWk).sort().map(k=>{
         const rs=byWk[k]; const p=avg(rs.map(r=>r.idxAvg));
         const e=tot(rs.map(r=>r.doros)), t=tot(rs.map(r=>r.total)); const y=e>0?t/e:null;
         const onf=tot(rs.map(r=>r.eOn));
         const vp=e>0?tot(rs.map(r=>r.eVau))/e*100:null, lp=e>0?tot(rs.map(r=>r.eLab))/e*100:null;
+        if(e>M.weekTotalCap)wk60B++;
         return '<tr><td>W'+isoWk(k)+'</td>'+
           '<td style="color:'+cc(p,p!==null&&p>=M.psFloor)+'">'+(p!==null?f2(p):'—')+'</td>'+
           '<td style="color:'+cc(y,y!==null&&y>=M.yieldAim)+'">'+(y!==null?f2(y):'—')+'</td>'+
           '<td style="color:'+cc(onf,onf>=M.onfWeekMin)+'">'+onf.toFixed(0)+'</td>'+
           '<td style="color:'+cc(vp,vp!==null&&vp>=M.vaultPctMin)+'">'+(vp!==null?vp.toFixed(0)+'%':'—')+'</td>'+
           '<td style="color:'+cc(lp,lp!==null&&lp>=M.labPctMin)+'">'+(lp!==null?lp.toFixed(0)+'%':'—')+'</td>'+
+          '<td style="color:'+(e>M.weekTotalCap?'#E24B4A':'var(--text2)')+'">'+e.toFixed(0)+'</td>'+
           '<td>'+rs.length+'</td></tr>';
       }).join('');
+      (function(){const el=document.getElementById('mp-wk60'); if(el){el.textContent=wk60B; el.style.color=wk60B===0?'#1D9E75':'#E24B4A';}})();
       const meta=document.getElementById('csec-month-meta');
       if(meta)meta.textContent=M.label+' · PS '+(ps!==null?f2(ps):'—')+' · log '+loggedCount+'/'+exp.length;
     })();
