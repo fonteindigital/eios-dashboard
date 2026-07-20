@@ -921,8 +921,9 @@ const WEEK_PLAN={
     {name:'Namforce',  eng:'Inf', def:'website + dashboard draft sent', doroGoal:4, doroSoFar:0, ship:false, tag:'carried'},
     {name:'Intercity', eng:'Inf', def:'month posts + dashboard sent',   doroGoal:4, doroSoFar:0, ship:false, tag:'carried · 2D in'},
     {name:'Fontein',   eng:'Onf', def:'published + boosted + 5 posts',  doroGoal:4, doroSoFar:0, ship:false},
-    {name:'AIM',       eng:'Inf', def:'website + invoice',              doroGoal:4, doroSoFar:0, ship:false, tag:'slot 5 held until Wed COB'}
-  ]
+    {name:'AIM',       eng:'Inf', def:'website + invoice',              doroGoal:4, doroSoFar:0, ship:false}
+  ],
+  heldNote:'held until Wed COB'        // shown on the reserved 5th slot
 };
 
 // ── legacy (kept for any external ref; no longer rendered) ────────────
@@ -1648,8 +1649,18 @@ async function init(){
       var pass=shipped>=P.anchorFloor;
       var need=Math.max(0,+(baseline-totED).toFixed(1));
       var declMix=capF+'F'+(capL?' + '+capL+'L':'')+(capO?' + '+capO+'O':'');
-      var loggedFull=rows.filter(function(r){return (r.dtRaw||'').toLowerCase().indexOf('full')>=0;}).length;
-      var loggedLimp=rows.filter(function(r){return (r.dtRaw||'').toLowerCase().indexOf('limp')>=0;}).length;
+      // map the sheet's Day-Type vocabulary → capacity class (Expansion/Stability = Full day)
+      function dtClass(r){var d=(r.dtRaw||'').toLowerCase();
+        if(d.indexOf('limp')>=0)return 'limp';                                   // "Limp Mode"
+        if(d.indexOf('off')>=0)return 'off';                                     // "Off Day"
+        if(d.indexOf('expansion')>=0||d.indexOf('stability')>=0||d.indexOf('full')>=0)return 'full';
+        return '';                                                               // Ghost / Undeclared / blank — uncounted
+      }
+      var loggedFull=rows.filter(function(r){return dtClass(r)==='full';}).length;
+      var loggedLimp=rows.filter(function(r){return dtClass(r)==='limp';}).length;
+      // is the week over? (today past its Sunday) — controls "if the week ended now" vs "Week grade"
+      var sunISO=(function(){var s=new Date(mon0+'T00:00:00');s.setDate(s.getDate()+6);return s.toISOString().slice(0,10);})();
+      var over=today>sunISO;
 
       // ── HTML ──
       var h='';
@@ -1658,7 +1669,7 @@ async function init(){
         +'<span class="wpsc-sub">State: '+P.state+' · Mode: '+P.mode+'</span>'
         +'<span class="wpsc-dates">'+P.dates+'</span></div>';
       h+='<div class="wpsc-grade"><span class="wpsc-grade-val g'+gr.g+'">'+gr.g+'</span>'
-        +'<span class="wpsc-grade-lbl">Week grade</span><span class="wpsc-grade-why">'+gr.why+'</span></div>';
+        +'<span class="wpsc-grade-lbl">'+(over?'Week grade':'if the week ended now')+'</span><span class="wpsc-grade-why">'+gr.why+'</span></div>';
       h+='<div class="wpsc-binary"><span class="wpsc-binary-lbl">Binary — passes at '+P.anchorFloor+' shipped</span>'
         +'<span class="wpsc-binary-val" style="color:'+(pass?'var(--green)':'var(--amber)')+'">'+shipped+' / '+P.anchorFloor+' shipped</span>'
         +'<span class="wpsc-binary-sub">'+(pass?'week passes its binary':(P.anchorFloor-shipped)+' more to pass · '+(P.slots-shipped)+' slots live')+'</span></div>';
@@ -1734,7 +1745,7 @@ async function init(){
           +'<div class="wpsc-anc-ps">'+sub+' · anchor = '+goal+'+ Doros</div></div>';
       });
       if(P.slots>P.anchors.length){
-        ancRows+='<div class="wpsc-anc"><div class="wpsc-anc-top"><span class="wpsc-anc-name">Slot '+(P.anchors.length+1)+' <small>held</small></span><span class="wpsc-ship ship-hold">◆ held</span></div><div class="wpsc-anc-def">reserved</div></div>';
+        ancRows+='<div class="wpsc-anc"><div class="wpsc-anc-top"><span class="wpsc-anc-name">Slot '+(P.anchors.length+1)+' <small>'+(P.heldNote||'held')+'</small></span><span class="wpsc-ship ship-hold">◆ held</span></div><div class="wpsc-anc-def">reserved</div></div>';
       }
       h+='<div class="wpsc-card"><div class="wpsc-chdr"><span class="wpsc-ctitle">Anchors · '+P.slots+' slots · floor '+P.anchorFloor+' shipped · anchor = 4+ Doros</span><span class="wpsc-cmeta">'+shipped+' shipped</span></div>'+ancRows
         +'<div class="wpsc-leg">◆ manual — bump <b>doroSoFar</b> as you work and set <b>ship:true</b> when shipped, in WEEK_PLAN.anchors. Bar turns amber ("ready") at '+ '4+' +' Doros, green when shipped. Only shipped anchors count toward the binary; unshipped never lower the grade.</div></div>';
