@@ -414,6 +414,70 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
 .comp-bar{display:flex;height:7px;border-radius:4px;overflow:hidden;border:.5px solid var(--border);margin-top:8px;}
 .comp-seg{height:100%;}
 .comp-legend{display:flex;gap:10px;flex-wrap:wrap;font-size:9px;color:var(--text3);margin-top:4px;}
+
+/* ══ Week Plan Scorecard (2026-07-20) — grade logic copied verbatim from eios-console compGrade ══ */
+.wpsc{margin-bottom:.9rem;}
+.wpsc-head{display:flex;align-items:stretch;gap:8px;margin-bottom:9px;flex-wrap:wrap;}
+.wpsc-id{flex:1;min-width:200px;background:var(--bg2);border:.5px solid var(--border2);border-radius:var(--rl);padding:13px 16px;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);}
+.wpsc-week{font-size:19px;letter-spacing:.02em;}
+.wpsc-sub{font-size:10px;color:var(--text3);margin-top:4px;letter-spacing:.06em;text-transform:uppercase;}
+.wpsc-dates{font-size:10px;color:var(--text2);margin-top:2px;}
+.wpsc-grade{width:132px;background:var(--bg2);border:.5px solid var(--border2);border-radius:var(--rl);padding:11px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-shadow:var(--shadow);}
+.wpsc-grade-val{font-size:46px;line-height:.9;font-weight:500;}
+.wpsc-grade-lbl{font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);margin-top:5px;}
+.wpsc-grade-why{font-size:9px;color:var(--text3);margin-top:4px;line-height:1.35;}
+.wpsc-binary{width:170px;background:var(--bg2);border:.5px solid var(--border2);border-radius:var(--rl);padding:12px 14px;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);}
+.wpsc-binary-lbl{font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);}
+.wpsc-binary-val{font-size:14px;margin:5px 0 3px;}
+.wpsc-binary-sub{font-size:9.5px;color:var(--text3);line-height:1.4;}
+.gA{color:var(--green);} .gB{color:#5BC8AF;} .gC{color:var(--gold);} .gD{color:var(--amber);} .gF{color:var(--red);}
+.wpsc-card{background:var(--bg2);border:.5px solid var(--border2);border-radius:var(--rl);padding:12px 15px;margin-bottom:8px;box-shadow:var(--shadow);}
+.wpsc-chdr{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px;}
+.wpsc-ctitle{font-size:11.5px;letter-spacing:.04em;}
+.wpsc-cmeta{font-size:9.5px;color:var(--text3);}
+.wpsc-cap{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;}
+@media(max-width:640px){.wpsc-cap{grid-template-columns:repeat(2,1fr);}}
+.wpsc-capc{background:var(--bg3);border-radius:var(--r);padding:8px 10px;}
+.wpsc-capc .cl{font-size:8.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--text3);}
+.wpsc-capc .cv{font-size:17px;margin-top:3px;}
+.wpsc-capc .cs{font-size:9px;color:var(--text3);margin-top:2px;}
+.wpsc-eng{padding:8px 0;border-top:.5px solid var(--border);}
+.wpsc-eng:first-child{border-top:none;}
+.wpsc-eng-top{display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:5px;}
+.wpsc-eng-top small{color:var(--text3);font-size:9.5px;margin-left:5px;}
+.wpsc-band{position:relative;height:11px;background:var(--bg3);border-radius:3px;}
+.wpsc-band-in{position:absolute;top:0;bottom:0;background:rgba(29,158,117,.13);border-left:1px solid rgba(29,158,117,.45);border-right:1px solid rgba(29,158,117,.45);}
+.wpsc-band-fill{position:absolute;top:2px;bottom:2px;left:0;border-radius:2px;}
+.wpsc-band-tick{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--text2);}
+.wpsc-band-sc{display:flex;justify-content:space-between;font-size:8.5px;color:var(--text3);margin-top:3px;}
+.wpsc-idx{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;}
+@media(max-width:640px){.wpsc-idx{grid-template-columns:repeat(2,1fr);}}
+.wpsc-idxc{background:var(--bg3);border-radius:var(--r);padding:9px 11px;}
+.wpsc-idxc .il{font-size:8.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--text3);}
+.wpsc-idxc .iv{font-size:20px;margin:3px 0 5px;}
+.wpsc-idxbar{height:5px;background:rgba(255,255,255,.06);border-radius:3px;position:relative;}
+.wpsc-idxbar i{position:absolute;left:0;top:0;bottom:0;border-radius:3px;}
+.wpsc-idxbar .mk{position:absolute;top:-2px;bottom:-2px;width:1.5px;background:var(--gold);}
+.wpsc-idxc .is{font-size:8.5px;color:var(--text3);margin-top:4px;}
+.wpsc-ng{font-size:8px;letter-spacing:.05em;text-transform:uppercase;color:var(--text3);opacity:.75;}
+.wpsc-chips{display:flex;flex-wrap:wrap;gap:6px;}
+.wpsc-chip{background:var(--bg3);border:.5px solid var(--border);border-radius:var(--r);padding:5px 9px;font-size:10.5px;display:flex;gap:7px;align-items:center;}
+.wpsc-chip .ck{color:var(--text3);}
+.wpsc-anc{padding:9px 0;border-top:.5px solid var(--border);}
+.wpsc-anc:first-child{border-top:none;}
+.wpsc-anc-top{display:flex;justify-content:space-between;align-items:baseline;}
+.wpsc-anc-name{font-size:12px;}
+.wpsc-anc-name small{color:var(--text3);font-size:9.5px;margin-left:6px;}
+.wpsc-ship{font-size:9px;padding:2px 8px;border-radius:20px;letter-spacing:.03em;white-space:nowrap;}
+.ship-yes{background:rgba(29,158,117,.16);color:var(--green);}
+.ship-no{background:rgba(255,255,255,.05);color:var(--text3);}
+.ship-hold{background:rgba(186,117,23,.16);color:var(--amber);}
+.wpsc-anc-def{font-size:10px;color:var(--text3);margin-top:3px;}
+.wpsc-anc-prog{height:4px;background:rgba(255,255,255,.06);border-radius:3px;margin-top:6px;position:relative;}
+.wpsc-anc-prog i{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:#378ADD;}
+.wpsc-anc-prog .dg{position:absolute;top:-2px;bottom:-2px;width:1.5px;background:var(--text2);}
+.wpsc-anc-ps{font-size:8.5px;color:var(--text3);margin-top:3px;}
+.wpsc-leg{font-size:9px;color:var(--text3);margin-top:7px;line-height:1.5;}
 </style>
 </head>
 <body>
@@ -611,41 +675,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
 </div>
 
 
-<div style="font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin:20px 0 8px;border-bottom:1px solid var(--border);padding-bottom:5px;">Week 26 · this week</div>
 
-<div class="csec" id="csec-wreq">
-  <div class="csec-hdr" onclick="toggleSec('wreq')">
-    <span class="csec-title" id="wreq-title">Week Requirements</span>
-    <span class="csec-meta" id="csec-wreq-meta"></span>
-    <span class="csec-chev" id="csec-wreq-chev">▶</span>
-  </div>
-  <div class="csec-body" id="csec-wreq-body">
-    <div class="wr-grid">
-      <div class="wr-card"><p class="wr-lbl">ED pace · WTD</p><p class="wr-val" id="wr-ed">—</p>
-        <div class="wr-bar"><div class="wr-fill" id="wr-ed-fill" style="width:0%;"></div><span class="wr-mark" id="wr-ed-mark"></span></div>
-        <p class="wr-tgt" id="wr-ed-tgt">—</p></div>
-      <div class="wr-card"><p class="wr-lbl">Week Pool</p><p class="wr-val" id="wr-pool">—</p>
-        <div class="wr-bar"><div class="wr-fill" id="wr-pool-fill" style="width:0%;"></div><span class="wr-mark" id="wr-pool-mark"></span></div>
-        <p class="wr-tgt" id="wr-pool-tgt">—</p></div>
-      <div class="wr-card"><p class="wr-lbl">Yield Index · WTD</p><p class="wr-val" id="wr-yield">—</p>
-        <div class="wr-bar"><div class="wr-fill" id="wr-yield-fill" style="width:0%;"></div><span class="wr-mark" id="wr-yield-mark"></span></div>
-        <p class="wr-tgt" id="wr-yield-tgt">—</p></div>
-      <div class="wr-card"><p class="wr-lbl">Somatic Index · WTD</p><p class="wr-val" id="wr-som">—</p>
-        <div class="wr-bar"><div class="wr-fill" id="wr-som-fill" style="width:0%;"></div><span class="wr-mark" id="wr-som-mark"></span></div>
-        <p class="wr-tgt" id="wr-som-tgt">—</p></div>
-    </div>
-    <p class="wr-note" id="wr-note">WTD vs Week Plan targets · sheet-measurable only · edit WEEK_REQ each Monday.</p>
-  </div>
-</div>
+<div style="font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin:20px 0 8px;border-bottom:1px solid var(--border);padding-bottom:5px;" id="wp-divider">This week</div>
 
-<div class="csec" id="csec-w26">
-  <div class="csec-hdr" onclick="toggleSec('w26')">
-    <span class="csec-title">Week anchors &middot; airtime vs 6-cap</span>
-    <span class="csec-meta" id="csec-w26-meta"></span>
-    <span class="csec-chev" id="csec-w26-chev">&#9654;</span>
-  </div>
-  <div class="csec-body" id="csec-w26-body"></div>
-</div>
+<!-- Week Plan Scorecard — filled by renderW30Scorecard(); grade copied from eios-console compGrade -->
+<div class="wpsc" id="wp-scorecard"></div>
 
 <div style="font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin:20px 0 8px;border-bottom:1px solid var(--border);padding-bottom:5px;" id="mp-divider">Month &middot; July</div>
 
@@ -866,15 +900,33 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);padding:1rem
 <script>
 const CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vTBhp6tYkqRXkv3aVmapCEjXU_nmdKPdBKrQGPRUnX8z0rMFOp5KHjEVr_MJa903oPWNiLt4G9tWzoc/pub?gid=78857917&single=true&output=csv';
 
-// ── Week Plan requirements (edit each Monday from the WP) ──────────────
-// Only sheet-measurable targets live here. Week pool spans the WP's active days.
-const WEEK_REQ={
-  label:(function(){var ep=Date.UTC(2025,11,29);var d=new Date();var dy=d.getDay(),df=dy===0?-6:1-dy;var m=Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()+df);return 'Week '+(1+Math.round((m-ep)/6048e5));})(),
-  edDayMin:8.5, edDayAim:12.0,        // Focus Doros/day
-  poolMin:34.0, poolMax:48.0, poolDays:'Tue–Fri', poolActiveDays:4,  // total ED pool for the week
-  yieldMin:1.3,                        // TD ÷ ED
-  somaticMin:2.5                       // Index Avg average
+// ── Week Plan (edit each Monday from the WP) ──────────────────────────
+// The Week 30 Scorecard grades against THIS. Grade logic (A–F, worst-first)
+// is copied verbatim from eios-console app.js compGrade/compEval.
+// GRADED: baseline ED · engine floors+caps · one somatic floor (console-style
+// (MM+RWR+PS+FITT)/4). RECORDED-not-graded: R Index, LF, Yield (mirrors the
+// console's pending "Slice B"). Anchor SHIP is manual — set ship:true here.
+const WEEK_PLAN={
+  week:30, state:'Cascante', mode:'Stability', dates:'20–26 July 2026',
+  capacity:{full:5, limp:2, off:0},    // the week SIZES ITSELF by declared day-type — baseline = full×8.5 + limp×4.25 (copied from console wpBaseline). NOT weekday-vs-weekend.
+  engines:[                            // Out = Out + Vault + Lab (Vau/Lab/EIOS fold into Out)
+    {key:'Inf', name:'Infontéin',  tag:'client cash',            floor:20, cap:31, shareLo:39, shareHi:61},
+    {key:'Onf', name:'Onfontéin',  tag:'capacity · Fontein',     floor:10, cap:21, shareLo:20, shareHi:41},
+    {key:'Out', name:'Outfontéin', tag:'leverage · Vault+Lab+EIOS',floor:10, cap:21, shareLo:20, shareHi:41}
+  ],
+  somaFloor:2.5,                       // GRADED — console-style (MM+RWR+PS+FITT)/4
+  rFloor:1.5, lfFloor:2.0, yieldFloor:1.30,   // recorded, NOT graded
+  slots:5, anchorFloor:3,              // binary: week passes at 3 shipped
+  anchors:[                            // ship + doroSoFar are MANUAL — bump each as you work. doroGoal 4 = anchor threshold.
+    {name:'Namforce',  eng:'Inf', def:'website + dashboard draft sent', doroGoal:4, doroSoFar:0, ship:false, tag:'carried'},
+    {name:'Intercity', eng:'Inf', def:'month posts + dashboard sent',   doroGoal:4, doroSoFar:0, ship:false, tag:'carried · 2D in'},
+    {name:'Fontein',   eng:'Onf', def:'published + boosted + 5 posts',  doroGoal:4, doroSoFar:0, ship:false},
+    {name:'AIM',       eng:'Inf', def:'website + invoice',              doroGoal:4, doroSoFar:0, ship:false, tag:'slot 5 held until Wed COB'}
+  ]
 };
+
+// ── legacy (kept for any external ref; no longer rendered) ────────────
+const WEEK_REQ={label:'Week',edDayMin:8.5,edDayAim:12.0,poolMin:34.0,poolMax:48.0,poolDays:'Tue–Fri',poolActiveDays:4,yieldMin:1.3,somaticMin:2.5};
 
 // ── Monthly Plan KRs (edit each month from the MP) ────────────────────
 // July 2026 · "The Month of the Instrument". Sheet-measurable KRs only.
@@ -1515,63 +1567,180 @@ async function init(){
     setS('wtd-t','wtd-t-sub',wtdT,ytdT,tot(wtdRows.map(r=>r.total)).toFixed(0)+' total');
     var _sm=document.getElementById('csec-summary-meta');if(_sm)_sm.textContent='YTD · MTD · QTD · WTD';
 
-    // ── Week Requirements — WTD actual vs this week's WP targets (2026-06-08) ──
-    (function renderWeekReq(){
-      const R=WEEK_REQ;
-      const tEl=document.getElementById('wreq-title');if(tEl)tEl.textContent=R.label+' Requirements';
-      const edAvg=wtdE;                                   // avg ED/day this week
-      const pool=tot(wtdRows.map(r=>r.doros));            // total ED this week
-      const wtdTtot=tot(wtdRows.map(r=>r.total));
-      const yld=pool>0?wtdTtot/pool:null;                // WTD TD ÷ ED
-      const som=avg(wtdRows.map(r=>r.idxAvg));            // WTD somatic
-      const ndays=wtdRows.length;
-      // gauge: value, fill% (0..100 toward goal), marker% (target line), color tier
-      function gauge(pfx,val,disp,fillPct,markPct,tier,tgtTxt){
-        const v=document.getElementById(pfx);if(!v)return;
-        v.textContent=val===null?'—':disp;
-        v.style.color=val===null?'var(--text3)':(tier==='ok'?'#1D9E75':tier==='warn'?'#BA7517':'#E24B4A');
-        const f=document.getElementById(pfx+'-fill');
-        if(f){f.style.width=Math.max(0,Math.min(100,fillPct||0)).toFixed(0)+'%';f.className='wr-fill '+(tier||'');}
-        const m=document.getElementById(pfx+'-mark');
-        if(m){if(markPct==null){m.style.display='none';}else{m.style.display='';m.style.left=Math.max(0,Math.min(100,markPct)).toFixed(0)+'%';}}
-        document.getElementById(pfx+'-tgt').textContent=tgtTxt;
+    // ── Week Plan Scorecard — A–F grade copied VERBATIM from eios-console app.js ──
+    (function renderW30Scorecard(){
+      var P=WEEK_PLAN;
+      var host=document.getElementById('wp-scorecard'); if(!host)return;
+
+      // ── the week sizes itself by DECLARED DAY-TYPE, not weekday-vs-weekend (copied from console) ──
+      // baseline = full×8.5 + limp×4.25 ; actuals sum EVERY declared day in the Mon–Sun window
+      // (weekday flat + weekend stream), the way the console sums over its 7-day D7.
+      var cap=P.capacity||{full:5,limp:2,off:0};
+      var capF=+cap.full||0, capL=+cap.limp||0, capO=+cap.off||0;
+      var baseline=+(((capF*8.5)+(capL*4.25)).toFixed(1));      // wpBaseline() — verbatim from eios-console
+      var weekendThis=(typeof weekendFlat!=='undefined'?weekendFlat:[]).filter(function(r){return r.ds>=mon0&&r.ds<=today;});
+      var rows=wtdRows.concat(weekendThis);     // ALL declared days this week (live), regardless of weekend
+      var nrow=rows.length;
+
+      // ── actuals (every declared day in the week) ──
+      var totED=tot(rows.map(function(r){return r.doros;}));
+      var totTD=tot(rows.map(function(r){return r.total;}));
+      var eng={
+        Inf: tot(rows.map(function(r){return r.eIn;})),
+        Onf: tot(rows.map(function(r){return r.eOn;})),
+        Out: tot(rows.map(function(r){return r.eOut;}))+tot(rows.map(function(r){return r.eVau;}))+tot(rows.map(function(r){return r.eLab;}))
+      };
+      var engTot=eng.Inf+eng.Onf+eng.Out;
+      // console-style somatic: (MM+RWR+PS+FITT)/4 averaged over logged rows
+      var sN=0,sSum=0;
+      rows.forEach(function(r){
+        if(r.mm!=null||r.rwr!=null||r.ps!=null||r.fitt!=null){
+          sSum+=((+r.mm||0)+(+r.rwr||0)+(+r.ps||0)+(+r.fitt||0))/4; sN++;
+        }
+      });
+      var soma=sN?sSum/sN:0;
+      var rIdxV=avg(rows.map(function(r){return r.rIdx;}));   // recorded, not graded
+      var lfV=avg(rows.map(function(r){return r.lf;}));
+      var yieldV=totED>0?totTD/totED:null;
+
+      // ── constraints (compEval semantics, copied from eios-console) ──
+      function ev(label,kind,val,act,baseline){
+        var e={label:label,ref:val,act:act};
+        if(kind==='floor'){e.exp='≥ '+val;e.ok=act>=val;e.short=Math.max(0,val-act);e.floor=true;if(baseline)e.baseline=true;}
+        else {e.exp='≤ '+val;e.ok=act<=val;e.over=Math.max(0,act-val);}
+        return e;
       }
-      // ED pace: scale 0..aim; min line at edDayMin
-      gauge('wr-ed',edAvg, (edAvg!==null?f1(edAvg):'')+'/day',
-        edAvg!==null?edAvg/R.edDayAim*100:0, R.edDayMin/R.edDayAim*100,
-        edAvg===null?'':(edAvg>=R.edDayMin?'ok':edAvg>=R.edDayMin*0.8?'warn':'lo'),
-        'floor '+R.edDayMin+' · aim '+R.edDayAim);
-      // Week pool: current + pace + projected end-of-week vs target (2026-06-08)
-      const paceDay=ndays>0?pool/ndays:null;
-      const proj=paceDay!==null?paceDay*(R.poolActiveDays||5):null;
-      // tier reflects whether we're ON PACE to clear the floor by week-end
-      const poolTier=proj===null?'':(proj>=R.poolMin?(pool>=R.poolMin?'ok':'warn'):'lo');
-      const poolTgt=paceDay===null?(R.poolMin+'–'+R.poolMax+' '+R.poolDays)
-        :('pace '+f1(paceDay)+'/d → proj '+proj.toFixed(0)+' by Fri · need '+R.poolMin+' ('+ndays+'/'+(R.poolActiveDays||5)+'d)');
-      gauge('wr-pool',pool, pool.toFixed(0)+' / '+R.poolMax.toFixed(0),
-        pool/R.poolMax*100, R.poolMin/R.poolMax*100, poolTier, poolTgt);
-      // projection marker (lighter tick) on the pool bar
-      (function(){
-        const bar=document.getElementById('wr-pool-fill');
-        if(!bar||proj===null)return;
-        const wrap=bar.parentElement;
-        let pm=wrap.querySelector('.wr-proj');
-        if(!pm){pm=document.createElement('span');pm.className='wr-mark wr-proj';pm.style.background='var(--text3)';wrap.appendChild(pm);}
-        pm.style.left=Math.max(0,Math.min(100,proj/R.poolMax*100)).toFixed(0)+'%';
-      })();
-      // Yield: scale so target sits at ~70% of bar (cap display at ~1.86)
-      gauge('wr-yield',yld, yld!==null?f2(yld):'',
-        yld!==null?yld/(R.yieldMin/0.7)*100:0, 70,
-        yld===null?'':(yld>=R.yieldMin?'ok':yld>=R.yieldMin*0.9?'warn':'lo'),
-        'target '+R.yieldMin+'+');
-      // Somatic: scale 0..5; min line at somaticMin
-      gauge('wr-som',som, som!==null?f2(som):'',
-        som!==null?som/5*100:0, R.somaticMin/5*100,
-        som===null?'':(som>=R.somaticMin?'ok':som>=R.somaticMin*0.8?'warn':'lo'),
-        'target '+R.somaticMin+'+ avg');
-      const hits=[edAvg!==null&&edAvg>=R.edDayMin, pool>=R.poolMin, yld!==null&&yld>=R.yieldMin, som!==null&&som>=R.somaticMin].filter(Boolean).length;
-      const mEl=document.getElementById('csec-wreq-meta');
-      if(mEl)mEl.textContent=R.label+' · '+hits+'/4 on target · '+ndays+'d in';
+      var evs=[];
+      evs.push(ev('Baseline ED','floor',baseline,+totED.toFixed(1),true));
+      P.engines.forEach(function(g){
+        evs.push(ev(g.name+' floor','floor',g.floor,eng[g.key]));
+        evs.push(ev(g.name+' cap','cap',g.cap,eng[g.key]));
+      });
+      evs.push(ev('Index Avg (somatic)','floor',P.somaFloor,+soma.toFixed(1)));
+      // anchor success-binaries — shipped→1, else pending. Only an explicit 0 lowers the grade.
+      var binaries=P.anchors.map(function(a){return {anchor:a.name, verdict:a.ship?1:undefined};});
+
+      // ── compGrade — copied VERBATIM from eios-console app.js (Stage 5, worst-first) ──
+      // F: no data. D: baseline failed, or >=2 fails, or any miss >20%.
+      // C: one fail (or a binary at 0), baseline held. B: met but one floor <5% margin. A: 100%.
+      function compGrade(evs,binaries,rowsN){
+        if(!rowsN) return {g:'F',why:'no data recorded'};
+        var fails=[], drift=false;
+        evs.forEach(function(e,i){
+          if(e.hand||e.ok===null)return;
+          if(!e.ok){ fails.push(i);
+            var miss=e.floor?(e.short||0):(e.over||0);
+            if(e.ref&&miss/e.ref>0.2)drift=true;
+            if(e.baseline)drift=true; }
+        });
+        var b0=(binaries||[]).filter(function(b){return b.verdict===0}).length;
+        var evsBase=evs.some(function(e){return e.baseline&&!e.ok});
+        if(evsBase||fails.length>=2||drift&&fails.length>=1) return {g:'D',why:fails.length+' constraint'+(fails.length===1?'':'s')+' failed'+(evsBase?' incl. baseline':'')};
+        if(fails.length===1||b0>0) return {g:'C',why:(fails.length?'1 constraint failed':'')+(b0?(fails.length?' · ':'')+b0+' binary at 0':'')};
+        var minor=evs.some(function(e){return !e.hand&&e.ok&&e.floor&&e.ref&&e.act<e.ref*1.05});
+        if(minor) return {g:'B',why:'met, but with little margin'};
+        return {g:'A',why:'100% adherence'};
+      }
+      var gr=compGrade(evs,binaries,nrow);
+
+      // ── derived display ──
+      var shipped=P.anchors.filter(function(a){return a.ship;}).length;
+      var pass=shipped>=P.anchorFloor;
+      var need=Math.max(0,+(baseline-totED).toFixed(1));
+      var declMix=capF+'F'+(capL?' + '+capL+'L':'')+(capO?' + '+capO+'O':'');
+      var loggedFull=rows.filter(function(r){return (r.dtRaw||'').toLowerCase().indexOf('full')>=0;}).length;
+      var loggedLimp=rows.filter(function(r){return (r.dtRaw||'').toLowerCase().indexOf('limp')>=0;}).length;
+
+      // ── HTML ──
+      var h='';
+      h+='<div class="wpsc-head">';
+      h+='<div class="wpsc-id"><span class="wpsc-week">Week '+P.week+' · '+P.mode+'</span>'
+        +'<span class="wpsc-sub">State: '+P.state+' · Mode: '+P.mode+'</span>'
+        +'<span class="wpsc-dates">'+P.dates+'</span></div>';
+      h+='<div class="wpsc-grade"><span class="wpsc-grade-val g'+gr.g+'">'+gr.g+'</span>'
+        +'<span class="wpsc-grade-lbl">Week grade</span><span class="wpsc-grade-why">'+gr.why+'</span></div>';
+      h+='<div class="wpsc-binary"><span class="wpsc-binary-lbl">Binary — passes at '+P.anchorFloor+' shipped</span>'
+        +'<span class="wpsc-binary-val" style="color:'+(pass?'var(--green)':'var(--amber)')+'">'+shipped+' / '+P.anchorFloor+' shipped</span>'
+        +'<span class="wpsc-binary-sub">'+(pass?'week passes its binary':(P.anchorFloor-shipped)+' more to pass · '+(P.slots-shipped)+' slots live')+'</span></div>';
+      h+='</div>';
+
+      h+='<div class="wpsc-card"><div class="wpsc-chdr"><span class="wpsc-ctitle">Capacity · week sizes itself</span><span class="wpsc-cmeta">'+nrow+'d logged · declared '+declMix+' = '+baseline.toFixed(1)+'</span></div><div class="wpsc-cap">';
+      h+='<div class="wpsc-capc"><div class="cl">Baseline ED (floor)</div><div class="cv">'+baseline.toFixed(1)+'</div><div class="cs">'+capF+' full × 8.5 + '+capL+' limp × 4.25</div></div>';
+      h+='<div class="wpsc-capc"><div class="cl">Pool so far</div><div class="cv" style="color:'+(totED>=baseline?'var(--green)':'var(--text)')+'">'+totED.toFixed(1)+'</div><div class="cs">all declared days</div></div>';
+      h+='<div class="wpsc-capc"><div class="cl">To baseline</div><div class="cv" style="color:'+(need<=0?'var(--green)':'var(--amber)')+'">'+(need<=0?'met':need.toFixed(1))+'</div><div class="cs">'+(need<=0?'baseline cleared':need.toFixed(1)+' ED to go')+'</div></div>';
+      h+='<div class="wpsc-capc"><div class="cl">Days logged</div><div class="cv" style="font-size:15px;">'+loggedFull+'F · '+loggedLimp+'L</div><div class="cs">vs declared '+declMix+'</div></div>';
+      h+='</div></div>';
+
+      var inBand=0, engRows='';
+      P.engines.forEach(function(g){
+        var v=eng[g.key], share=engTot>0?v/engTot*100:0;
+        var okFloor=v>=g.floor, okCap=v<=g.cap, ok=okFloor&&okCap; if(ok)inBand++;
+        var c=ok?'var(--green)':(!okFloor?'var(--amber)':'var(--red)');
+        var scaleMax=g.cap*1.35, fillPct=Math.min(100,v/scaleMax*100);
+        var inLeft=g.floor/scaleMax*100, inRight=g.cap/scaleMax*100;
+        var status=okFloor?(okCap?'✓ in band':'↑ over cap'):'↓ below floor';
+        engRows+='<div class="wpsc-eng"><div class="wpsc-eng-top"><span>'+g.name+' <small>'+g.tag+'</small></span>'
+          +'<span style="color:'+c+'">'+f1(v)+' · '+share.toFixed(0)+'% '+status+'</span></div>'
+          +'<div class="wpsc-band"><div class="wpsc-band-in" style="left:'+inLeft.toFixed(1)+'%;right:'+(100-inRight).toFixed(1)+'%;"></div>'
+          +'<div class="wpsc-band-fill" style="width:'+fillPct.toFixed(1)+'%;background:'+c+';"></div></div>'
+          +'<div class="wpsc-band-sc"><span>floor '+g.floor+'</span><span>'+g.shareLo+'–'+g.shareHi+'% share</span><span>cap '+g.cap+'</span></div></div>';
+      });
+      h+='<div class="wpsc-card"><div class="wpsc-chdr"><span class="wpsc-ctitle">Engines · floor · cap · share</span><span class="wpsc-cmeta">'+inBand+'/'+P.engines.length+' in band</span></div>'+engRows+'</div>';
+
+      function idxCell(label,val,floor,graded,fmt){
+        var disp=val==null?'—':fmt(val);
+        var ok=val!=null&&val>=floor;
+        var c=val==null?'var(--text3)':(ok?'var(--green)':'var(--red)');
+        var max=floor*2, fillPct=val!=null?Math.min(100,val/max*100):0, markPct=Math.min(100,floor/max*100);
+        return '<div class="wpsc-idxc"><div class="il">'+label+(graded?'':' <span class="wpsc-ng">rec</span>')+'</div>'
+          +'<div class="iv" style="color:'+c+'">'+disp+'</div>'
+          +'<div class="wpsc-idxbar"><i style="width:'+fillPct.toFixed(0)+'%;background:'+c+'"></i><span class="mk" style="left:'+markPct.toFixed(0)+'%"></span></div>'
+          +'<div class="is">floor '+floor+(graded?' · graded':' · not graded')+'</div></div>';
+      }
+      h+='<div class="wpsc-card"><div class="wpsc-chdr"><span class="wpsc-ctitle">Indices · weekly health</span><span class="wpsc-cmeta">Index Avg graded · R/LF/Yield recorded</span></div><div class="wpsc-idx">';
+      h+=idxCell('Index Avg',+soma.toFixed(1),P.somaFloor,true,function(v){return v.toFixed(1);});
+      h+=idxCell('R Index',rIdxV,P.rFloor,false,function(v){return v.toFixed(1);});
+      h+=idxCell('LF Index',lfV,P.lfFloor,false,function(v){return v.toFixed(1);});
+      h+=idxCell('Yield',yieldV,P.yieldFloor,false,function(v){return v.toFixed(2);});
+      h+='</div><div class="wpsc-leg">Index Avg graded console-style = (MM + RWR + PS + FITT) ÷ 4, excludes LF. R / LF / Yield are recorded but do not move the letter (mirrors the console\'s pending grader).</div></div>';
+
+      var g22=rows.filter(function(r){return r.rwr===5;}).length, g09=rows.filter(function(r){return r.mm===5;}).length;
+      h+='<div class="wpsc-card"><div class="wpsc-chdr"><span class="wpsc-ctitle">Gates &amp; bonuses</span><span class="wpsc-cmeta">time-gates inferred from level-5</span></div>';
+      h+='<div class="wpsc-chips" style="margin-bottom:8px;">';
+      h+='<div class="wpsc-chip"><span class="ck">00:00 hard stop</span><span>logged '+nrow+'d</span></div>';
+      h+='<div class="wpsc-chip"><span class="ck">22:00 → RWR 5</span><span style="color:'+(g22>0?'var(--green)':'var(--text3)')+'">'+g22+'/'+nrow+'d</span></div>';
+      h+='<div class="wpsc-chip"><span class="ck">09:30 → MM 5</span><span style="color:'+(g09>0?'var(--green)':'var(--text3)')+'">'+g09+'/'+nrow+'d</span></div>';
+      h+='</div>';
+      var bShoot=tot(rows.map(function(r){return r.lev;})), bBuild=tot(rows.map(function(r){return r.anc;})), bClutch=tot(rows.map(function(r){return r.clu;}));
+      h+='<div class="wpsc-chips">';
+      h+='<div class="wpsc-chip"><span class="ck">Shooter</span><span>'+bShoot.toFixed(0)+'</span></div>';
+      h+='<div class="wpsc-chip"><span class="ck">Builder</span><span>'+bBuild.toFixed(0)+'</span></div>';
+      h+='<div class="wpsc-chip"><span class="ck">Clutch</span><span>'+bClutch.toFixed(0)+'</span></div>';
+      h+='</div></div>';
+
+      var ancRows='';
+      P.anchors.forEach(function(a){
+        var goal=+a.doroGoal||4, done=+a.doroSoFar||0;
+        var progPct=a.ship?100:Math.min(100,goal>0?done/goal*100:0);
+        var ready=!a.ship&&done>=goal;                      // hit the Doro threshold but not marked shipped
+        var shipCls=a.ship?'ship-yes':(ready?'ship-hold':'ship-no');
+        var shipTxt=a.ship?'◆ SHIPPED':(ready?'◆ ready':'◆ live');
+        var barCol=a.ship?'#1D9E75':(ready?'#BA7517':'#378ADD');
+        var sub=a.ship?'shipped · '+done+' Doros':(done+' / '+goal+' Doros'+(ready?' · ready to ship':''));
+        ancRows+='<div class="wpsc-anc"><div class="wpsc-anc-top"><span class="wpsc-anc-name">'+a.name+' <small>'+a.eng+(a.tag?' · '+a.tag:'')+'</small></span>'
+          +'<span class="wpsc-ship '+shipCls+'">'+shipTxt+'</span></div>'
+          +'<div class="wpsc-anc-def">'+a.def+'</div>'
+          +'<div class="wpsc-anc-prog"><i style="width:'+progPct.toFixed(0)+'%;background:'+barCol+';"></i><span class="dg" style="left:100%"></span></div>'
+          +'<div class="wpsc-anc-ps">'+sub+' · anchor = '+goal+'+ Doros</div></div>';
+      });
+      if(P.slots>P.anchors.length){
+        ancRows+='<div class="wpsc-anc"><div class="wpsc-anc-top"><span class="wpsc-anc-name">Slot '+(P.anchors.length+1)+' <small>held</small></span><span class="wpsc-ship ship-hold">◆ held</span></div><div class="wpsc-anc-def">reserved</div></div>';
+      }
+      h+='<div class="wpsc-card"><div class="wpsc-chdr"><span class="wpsc-ctitle">Anchors · '+P.slots+' slots · floor '+P.anchorFloor+' shipped · anchor = 4+ Doros</span><span class="wpsc-cmeta">'+shipped+' shipped</span></div>'+ancRows
+        +'<div class="wpsc-leg">◆ manual — bump <b>doroSoFar</b> as you work and set <b>ship:true</b> when shipped, in WEEK_PLAN.anchors. Bar turns amber ("ready") at '+ '4+' +' Doros, green when shipped. Only shipped anchors count toward the binary; unshipped never lower the grade.</div></div>';
+
+      host.innerHTML=h;
+      var dv=document.getElementById('wp-divider'); if(dv)dv.textContent='Week '+P.week+' · this week';
     })();
 
     // ── Monthly Plan panel — July MP KRs, week-by-week (2026-07-06) ──
@@ -1647,37 +1816,7 @@ async function init(){
       if(meta)meta.textContent=M.label+' · PS '+(ps!==null?f2(ps):'—')+' · log '+loggedCount+'/'+exp.length;
     })();
 
-    // ── Intelligence ──────────────────────────────────
-    (function renderW26(){
-      var host=document.getElementById('csec-w26-body'); if(!host) return;
-      var CAP=6, SOM=2.5;
-      var klok=tot(wtdRows.map(function(r){return r.eVau;}));
-      var font=tot(wtdRows.map(function(r){return r.eOn;}));
-      var pool=tot(wtdRows.map(function(r){return r.doros;}));
-      var nd=wtdRows.length;
-      var floorDays=wtdRows.filter(function(r){return r.doros>=WEEK_REQ.edDayMin;}).length;
-      var somDays=wtdRows.filter(function(r){return r.idxAvg!=null&&r.idxAvg>=SOM;}).length;
-      var gates=wtdRows.filter(function(r){return r.mm===5||r.rwr===5;}).length;
-      var w10=closedFlat.slice(-10).map(function(r){return r.doros;});
-      var mu=w10.length?w10.reduce(function(s,x){return s+x;},0)/w10.length:0;
-      var sd=w10.length?Math.sqrt(w10.reduce(function(s,x){return s+(x-mu)*(x-mu);},0)/w10.length):0;
-      function bar(v){var p=Math.min(100,v/CAP*100);var c=v>=CAP?'#1D9E75':v>0?'#BA7517':'#E24B4A';return '<div style="height:9px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;margin:4px 0;"><i style="display:block;height:100%;width:'+p.toFixed(0)+'%;background:'+c+';border-radius:2px;"></i></div>';}
-      function row(name,eng,v){var s=v>=CAP?'<span style="color:#1D9E75">capped '+f1(v)+'/6</span>':v>0?'<span style="color:#BA7517">airtime '+f1(v)+'/6</span>':'<span style="color:#E24B4A">cold 0/6</span>';return '<div style="padding:7px 0;border-top:.5px solid var(--border);"><div style="display:flex;justify-content:space-between;font-size:12px;"><span>'+name+' <span style="color:var(--text3);font-size:10px;">'+eng+'</span></span>'+s+'</div>'+bar(v)+'</div>';}
-      var h='';
-      h+=row('Klok','Vault',klok);
-      h+=row('Fontein','Onf',font);
-      h+='<div style="padding:7px 0;border-top:.5px solid var(--border);font-size:12px;"><div style="display:flex;justify-content:space-between;"><span>Namforce <span style="color:var(--text3);font-size:10px;">Inf</span></span><span style="color:var(--text3)">needs anchor column</span></div><div style="color:var(--text3);font-size:10px;margin-top:3px;">shares Infont&eacute;in with client migrations &mdash; not separable from the log.</div></div>';
-      h+='<div style="margin-top:10px;padding-top:8px;border-top:.5px solid var(--border);display:flex;gap:16px;flex-wrap:wrap;font-size:11px;">';
-      h+='<span><b style="font-size:14px;color:var(--text);">'+pool.toFixed(0)+'/'+WEEK_REQ.poolMax.toFixed(0)+'</b> <span style="color:var(--text3)">pool</span></span>';
-      h+='<span><b style="font-size:14px;color:var(--text);">'+floorDays+'/'+nd+'</b> <span style="color:var(--text3)">days &ge;8.5</span></span>';
-      h+='<span><b style="font-size:14px;color:var(--text);">'+somDays+'/'+nd+'</b> <span style="color:var(--text3)">days &ge;2.5 som</span></span>';
-      h+='<span><b style="font-size:14px;color:var(--text);">'+sd.toFixed(1)+'</b> <span style="color:var(--text3)">&sigma; 10d</span></span>';
-      h+='<span><b style="font-size:14px;color:var(--text);">'+gates+'/'+nd+'</b> <span style="color:var(--text3)">gates (MM/RWR=5)</span></span>';
-      h+='</div>';
-      h+='<div style="margin-top:8px;color:var(--text3);font-size:10px;line-height:1.5;">Binary ships (log manually &mdash; not in data): Klok app live + agreements &middot; Fontein pricing live + boosted &middot; Namforce look-and-feel link sent.</div>';
-      host.innerHTML=h;
-      var m=document.getElementById('csec-w26-meta'); if(m) m.textContent='Klok '+f1(klok)+'/6 · Fontein '+f1(font)+'/6 · σ '+sd.toFixed(1);
-    })();
+    // ── renderW26 removed 2026-07-20 — superseded by renderW30Scorecard (Week Plan Scorecard) ──
 
     (function renderWeekend(){
       var host=document.getElementById('csec-weekend-body'); if(!host) return;
