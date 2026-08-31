@@ -2432,14 +2432,28 @@ async function init(){
         const failLabels=failed.map(p=>p.lbl).join(' · ');
         // Naive projection for 10D averages only
         let projText='Falling short on: '+failLabels+'. ';
-        if(l10idxA!==null&&l10idxA<3.00&&todayRow.idxAvg!==null&&todayRow.idxAvg>=3.00){
+        // A plain mean climbs when today beats the day rolling OUT of the window —
+        // not when today clears 3.00. Guard corrected 2026-08-31 to match the maths
+        // two lines below it, which already used exactly this quantity.
+        if(l10idxA!==null&&l10idxA<3.00&&todayRow.idxAvg!==null&&todayRow.idxAvg>l10idxA){
           // days to lift 10D avg to 3.00 at today's IdxAvg
           const target=3.00;
           const stepImprove=Math.max(todayRow.idxAvg-l10idxA,0.01);
           const daysIdx=Math.ceil(Math.max((target-l10idxA)/(stepImprove/10),1));
           projText+='At current trajectory, 10D Idx Avg reaches 3.00 in ~'+daysIdx+' day'+(daysIdx===1?'':'s')+'.';
-        } else if(todayRow.idxAvg===null||todayRow.idxAvg<3.00){
-          projText+='Today\'s Idx Avg below 3.00 — rolling average cannot climb until today closes ≥3.00.';
+        } else {
+          /* WAS: "rolling average cannot climb until today closes >=3.00" — false under
+             a plain mean, which is the ruling of 2026-08-31. The 10D average climbs when
+             today beats the day ROLLING OUT of the window, whatever 3.00 says. 3.00 is
+             the daily gate (pillar 5); it is not the condition for the average to move.
+             State the two separately. */
+          var _tv = todayRow.idxAvg;
+          var _out = closedFlat.length>=10 ? closedFlat[closedFlat.length-10].idxAvg : null;
+          projText += 'Today\'s Idx Avg ' + (_tv===null?'—':f2(_tv)) + ' is below the 3.00 daily gate';
+          if(_tv===null){ projText += '.'; }
+          else if(_out===null){ projText += ', and the 10-day window is not full yet — today adds to it rather than replacing a day.'; }
+          else if(_tv>_out){ projText += ', but it still lifts the 10-day average: it beats the ' + f2(_out) + ' rolling out of the window.'; }
+          else { projText += ', and it lowers the 10-day average — the day rolling out is ' + f2(_out) + '.'; }
         }
         proj.textContent=projText;
       }
